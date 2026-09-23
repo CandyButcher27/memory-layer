@@ -46,19 +46,28 @@ a correct outcome.
 | A bug found or fixed | `ISSUES.md` | Append in the file's existing entry format. With none, use `## ISS-<n> — <title>` with `Symptom:` (exact text), `Cause:`, `Fix:` (commit hash, or `uncommitted: <files>`), `Test:`, `Status:` |
 | A choice someone could argue again | `decisions.md` | Next `DEC-<n>`: `Why:`, `Rejected:`, `Reverse if:`, `Date:`. If it replaces an older entry, mark that one `Superseded by DEC-<n>` and leave its reasoning intact |
 | A correction to something memory already says | Wherever the old value lives | Grep every memory file for the old value and fix it in place, in all of them. Never add the new value beside the old one |
-| An external fact, a measurement, a trap, a non-obvious why | `memory/<topic>.md` | Under its own `##` heading, named the way a future task would describe it (error text, library, table, command), not by topic. Cite a commit, issue ID, command, or date with sample size. Set `Last verified:` to today |
+| An external fact, a measurement, a trap, a non-obvious why | `memory/<topic>.md` | Under its own `##` heading, named the way a future task would describe it (error text, library, table, command), not by topic. Cite a commit, issue ID, command, or date with sample size. Set `Last verified:` to today only if this session actually checked the file's facts; otherwise leave the date |
 
 - Pick the existing memory file whose index line fits. Create a new `memory/<topic>.md` only when no
   file fits. Split by external boundary or subsystem, never by code folder, and add its line to the
   `CLAUDE.md` index.
 - A fact with nothing checkable behind it goes to the user as a question in the report, not into a
-  file.
+  file. The same goes for something only inferred from what the user said: ask, do not edit memory.
 - A short code comment next to the code is also valid memory for a non-obvious why that belongs to one
   line of code. Do not duplicate it into `memory/`.
 
-## 4. Overwrite `STATE.md`
+## 4. Index
 
-Rewrite it entirely. Do not append.
+```bash
+python "$ML" index .
+```
+
+Run it now, before `STATE.md` is written, so `git status` below already includes the `CLAUDE.md` change
+`index` makes.
+
+## 5. Overwrite `STATE.md`
+
+Rewrite it entirely, keeping the header comment under `# State`. Do not append.
 
 - `Goal:` one line, unchanged unless the goal changed.
 - `Deployed`: what is deployed and where, or `unknown`.
@@ -68,24 +77,21 @@ Rewrite it entirely. Do not append.
 - `Last updated:` today.
 - `## Last session (<today>)`, about 10 lines, rewritten every time:
   - `Branch:` the current branch.
-  - `Uncommitted:` the files from `git status --short`, or `none`.
+  - `Uncommitted:` the files from `git status --short`, run now, or `none`.
   - `Stopped at:` the task in one line: which steps are done and which step is next.
-  - `Tried, failed:` approaches this session ruled out, each with the reason. These are the only
-    record of dead ends, so never drop one the user mentioned. Write `none` if there were none.
+  - `Tried, failed:` approaches that were actually tried this session, or that the user said were
+    tried, each with the reason. These are the only record of dead ends, so never drop one the user
+    mentioned. Write `none` if there were none.
   - `Resume with:` the first concrete action for the next session, such as a command or a file to
     open.
 
+`STATE.md` says what is happening, not what is known. A fact already written to `memory/`,
+`decisions.md` or `ISSUES.md` is referenced there by file (`see memory/client-db.md`), not repeated.
 Remove anything finished. Stay within 60 lines. Only claim something works if it ran in this session.
 A plan the user gave for multi-step work stays in `Stopped at` and `Next 3` until it is done.
 
-## 5. Index and check
-
-```bash
-python "$ML" index .
-python "$ML" check .
-```
-
-Fix every line `check` prints, then run it again until it prints `memory layer clean`.
+Then run `python "$ML" check .`, fix every line it prints, and run it again until it prints
+`memory layer clean`.
 
 ## 6. Verify
 
