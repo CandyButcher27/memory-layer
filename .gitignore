@@ -1,0 +1,14 @@
+__pycache__/
+.pytest_cache/
+
+# Raw agent transcripts, diffs and state snapshots quote the evaluated projects' code and notes.
+# Only scripts, task files, verdicts and written summaries are kept.
+eval/results*/**/*.jsonl
+eval/results*/**/*.txt
+eval/results*/**/*.diff
+eval/results*/**/*.md
+eval/results*/**/bad_judge*/
+eval/results_local_partial/
+eval/*_memory.diff
+eval/stress/*/*/
+eval/stress/**/*.jsonl
