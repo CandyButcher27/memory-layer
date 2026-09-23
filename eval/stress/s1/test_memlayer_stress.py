@@ -122,7 +122,7 @@ def test_s1_04_unusual_headings_idempotent(tmp_path, head):
 def test_s1_04b_heading_with_memory_path_keeps_check_clean(tmp_path):
     root = project(tmp_path)
     add_memory(root, "x.md", "## moved from `memory/old.md`\n")
-    assert memlayer.check(root) == []
+    assert memlayer.check(root) == ["CLAUDE.md: index lines are stale, run index"]
     memlayer.index(root)
     assert memlayer.check(root) == [], memlayer.check(root)
 
@@ -274,6 +274,35 @@ def test_s1_13b_non_ascii_names_printed_by_check(tmp_path):
     rc, out = cli("check", root)
     assert "Traceback" not in out, out
     assert rc == 1 and "not in the CLAUDE.md index" in out, out
+
+
+def test_s4_1_conflict_markers_reported(tmp_path):
+    root = project(tmp_path)
+    (root / "STATE.md").write_text("# State\n<<<<<<< HEAD\nGoal: a\n=======\nGoal: b\n>>>>>>> other\n", encoding="utf-8")
+    assert "STATE.md: contains git conflict markers" in memlayer.check(root)
+
+
+def test_s4_2_autoload_byte_cap(tmp_path):
+    root = project(tmp_path)
+    for i in range(40):
+        add_memory(root, f"t{i:02d}.md", "".join(f"## trap {j:02d}: `SomeError` when calling endpoint\n" for j in range(15)), when=f"Area {i:02d}")
+    memlayer.index(root)
+    assert any("load into every session" in p for p in memlayer.check(root))
+
+
+def test_s4_3_renamed_heading_flags_stale_index(tmp_path):
+    root = project(tmp_path)
+    add_memory(root, "x.md", "## old name\n")
+    memlayer.index(root)
+    (root / "memory/x.md").write_text(f"# x\nLast verified: {TODAY}\n## new name\n", encoding="utf-8")
+    assert memlayer.check(root) == ["CLAUDE.md: index lines are stale, run index"]
+
+
+def test_script_path_is_not_machine_absolute(tmp_path):
+    root = project(tmp_path)
+    block = (root / "CLAUDE.md").read_text(encoding="utf-8")
+    if Path(memlayer.__file__).resolve().is_relative_to(Path.home()):
+        assert '"$HOME/' in block and str(Path.home()).replace("\\", "/") not in block
 
 
 def test_s1_14_check_without_init(tmp_path):
