@@ -21,7 +21,11 @@ grepping.
 
 `memlayer.py` sits next to this file. `init` creates missing files and appends a managed block to
 `CLAUDE.md` between `<!-- memory-layer:start -->` markers. It never overwrites anything, so it is
-safe on any project, any number of times. `check` reports rot and exits 1 when it finds any.
+safe on any project, any number of times. `index` refreshes the index lines inside the block.
+`check` reports rot and exits 1 when it finds any: files over their line cap, an auto-loaded
+`CLAUDE.md` + `STATE.md` over 16 KB, a stale or broken index, missing or bad `Last verified:` dates,
+incomplete `## ISS-` entries, and git conflict markers. Memory files may sit in subfolders of
+`memory/` (`memory/sub/x.md`), but a flat folder is easier to scan, so `check` notes them.
 
 Pick the mode:
 
@@ -63,9 +67,20 @@ toward the topic, so the symptom words come from the file itself:
    - finished work, session narration, descriptions of how the code works → drop
 4. Every written fact cites something checkable: commit, issue ID, command, or date with sample size.
    A claim with nothing behind it goes to the user as a question, not into a file.
+   - `Last verified:` is the date a fact was last checked, not the date it was copied. Keep the source's
+     date, or write today only for facts you re-checked in this run.
+   - A quirk of the machine you are running on (a temp directory, a tool missing from this shell) is
+     not a project fact. Record it only if it holds for everyone who works on the project.
 5. Do not delete or rewrite the old sources. Report to the user: what moved where, what was dropped
-   and why, which old files now look redundant. Delete only what the user approves.
+   and why, which old files now look redundant. Delete only what the user approves, and only files
+   whose sole purpose is agent memory: the old `CLAUDE.md` content (rewritten, not deleted), `memory/`,
+   `.harness/`, and notes addressed to the agent (`AGENT_NOTES.md` and the like). Project documentation
+   is never deleted or edited, even when its facts moved into memory: `README*`, `CONTRIBUTING*`,
+   `docs/`, `.docs/`, design specs, plans, task lists and anything a person reads.
 6. Run `index`, then `check` until it prints `memory layer clean`.
+7. Check `.gitignore`: the layer's files are either all tracked or all ignored. A project that ignores
+   `CLAUDE.md` and `memory/` but not `STATE.md`, `ISSUES.md` and `decisions.md` commits half the layer.
+   Report a mismatch to the user; do not change `.gitignore` yourself.
 
 ## Check
 
