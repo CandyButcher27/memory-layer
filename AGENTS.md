@@ -39,12 +39,20 @@ python memlayer.py check [dir]   # report rot, exit 1 if any
 python memlayer.py selftest      # prints SELFTEST_OK
 ```
 
-`check` flags:
+`check` flags (all covered by `eval/stress/s1/test_memlayer_stress.py`):
 - `CLAUDE.md` over 100 lines, or `STATE.md` over 60
-- a memory file over 150 lines
-- a memory file missing from the index, or an index line pointing to a missing file
-- a `Last verified:` date that is missing or more than 90 days old
-- a `## ISS-` issue entry without `Symptom:` or `Cause:`
+- `CLAUDE.md` + `STATE.md` over 16 KB together, since both load into every session
+- a memory file over 150 lines, or in a subfolder of `memory/` (allowed, but noted)
+- a memory file missing from the index, an index line pointing to a missing file, or index lines
+  gone stale since the headings changed
+- a `Last verified:` date that is missing, malformed, in the future, duplicated, or more than 90
+  days old
+- a `## ISS-` issue entry without `Symptom:` or `Cause:` (code blocks inside an entry are ignored)
+- git conflict markers in any layer file
+
+The script keeps each file's own line endings, only touches text inside its managed block, and writes
+its own path as `$HOME/...`, so the block works on any machine. Errors are reported as one line, never
+as a traceback.
 
 ## Closing a session: `/session-close`
 
@@ -58,9 +66,10 @@ python memlayer.py selftest      # prints SELFTEST_OK
 4. Routes each surviving fact to exactly one place: a bug to `ISSUES.md`, a choice to
    `decisions.md`, a correction edited in place everywhere the old value appears, an external fact,
    measurement or trap to `memory/<topic>.md` under a heading named after the trap.
-5. Rewrites `STATE.md` to show only what is true now, including the `## Last session` handoff. Its
-   `Tried, failed:` line keeps dead ends the user mentioned from being retried.
-6. Runs `index`, then `check` until clean.
+5. Runs `index` first, so the `CLAUDE.md` change it makes is already in `git status`.
+6. Rewrites `STATE.md` to show only what is true now, including the `## Last session` handoff. Its
+   `Tried, failed:` line keeps dead ends the user mentioned from being retried. It points to facts
+   already in `memory/` instead of repeating them. Then it runs `check` until clean.
 7. Verifies that no fact is duplicated and no corrected value survives as current.
 8. Reports what was written, corrected and dropped, the open questions and the `check` result. It
    does not commit unless asked.
