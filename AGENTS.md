@@ -1,0 +1,133 @@
+# Memory Layer Agent
+
+A project-memory agent for coding agents such as Claude Code. It gives every session a small, trusted
+place to look before grepping the repository. It sets that place up on a new project, builds it from
+what already exists on an old one, keeps it from rotting, and decides what is worth remembering.
+
+It is a skill (`SKILL.md`), a stdlib-only script (`memlayer.py`) and a set of templates (`templates/`).
+It needs no server, no database and no dependencies.
+
+## What it maintains in a project
+
+| File | Holds | Cap | Updated |
+|---|---|---|---|
+| `CLAUDE.md` (managed block) | Map: where to look for what, hard rules, the memory index | ~100 lines | When the layout changes |
+| `STATE.md` | Now only: goal, deployed, broken, open threads, next 3, and a `## Last session` handoff (branch, uncommitted, stopped at, tried and failed, resume with) | 60 lines | Overwritten every session |
+| `ISSUES.md` | Every bug: exact symptom, cause, fix commit, test | Append-only | Per bug |
+| `decisions.md` | Choices someone would argue again: why, what was rejected, what reverses it | Short entries | Per decision |
+| `memory/<topic>.md` | Only what the code cannot tell you: external-system quirks, measured numbers with date and sample, traps, non-obvious whys | 150 lines each | When that topic changes |
+
+`CLAUDE.md` imports `STATE.md` (`@STATE.md`), so each session starts with the current state already
+loaded. The index lines in `CLAUDE.md` say which file answers which question, and `memlayer.py index`
+appends each memory file's `##` headings to its line. That lets a task that names a symptom find the
+right file without searching.
+
+## Modes
+
+| Mode | When | What it does |
+|---|---|---|
+| **New** | Fresh project | `memlayer.py init`, asks for the one-line goal, stops. Memory grows from real events, not guesses |
+| **Adopt** | Existing project | `init`, then gathers candidates from the old `CLAUDE.md`, `memory/`, `.harness/`, README, `git log`, issues and deploy config. Keeps only what passes the one-minute test and routes each fact to its file. Reports what moved and what was dropped. Deletes old sources only with approval |
+| **Check** | Any time | `memlayer.py check` reports mechanical rot. The agent also looks for duplicates, lines that repeat the code, and headings that name a topic instead of a trap |
+
+## Commands
+
+```bash
+python memlayer.py init  [dir]   # create missing files, add the CLAUDE.md block; never overwrites
+python memlayer.py index [dir]   # refresh index lines from each memory file's ## headings; idempotent
+python memlayer.py check [dir]   # report rot, exit 1 if any
+python memlayer.py selftest      # prints SELFTEST_OK
+```
+
+`check` flags:
+- `CLAUDE.md` over 100 lines, or `STATE.md` over 60
+- a memory file over 150 lines
+- a memory file missing from the index, or an index line pointing to a missing file
+- a `Last verified:` date that is missing or more than 90 days old
+- a `## ISS-` issue entry without `Symptom:` or `Cause:`
+
+## Closing a session: `/session-close`
+
+`commands/session-close.md` is a slash command to run at the end of every work session. It:
+
+1. Stops if the project has no memory-layer block. It never creates the files itself.
+2. Gathers candidates from the conversation, git status and diff, this session's commits, and the
+   memory files the work touched.
+3. Drops anything the code or git already shows, plus narration and descriptions of how the code
+   works.
+4. Routes each surviving fact to exactly one place: a bug to `ISSUES.md`, a choice to
+   `decisions.md`, a correction edited in place everywhere the old value appears, an external fact,
+   measurement or trap to `memory/<topic>.md` under a heading named after the trap.
+5. Rewrites `STATE.md` to show only what is true now, including the `## Last session` handoff. Its
+   `Tried, failed:` line keeps dead ends the user mentioned from being retried.
+6. Runs `index`, then `check` until clean.
+7. Verifies that no fact is duplicated and no corrected value survives as current.
+8. Reports what was written, corrected and dropped, the open questions and the `check` result. It
+   does not commit unless asked.
+
+Tested on a scratch copy of the production project:
+- A new external fact got its own trap-named heading.
+- A corrected cost figure was replaced everywhere it appeared, while a dated decision record kept the
+  old figure on purpose.
+- Numbers with no source became questions.
+- `check` was clean, and nothing was committed.
+- A second run with nothing new wrote nothing.
+- One close cost about $0.70.
+
+To install it, copy `commands/session-close.md` to `~/.claude/commands/`. In Git Bash, `claude -p
+"/session-close"` gets the leading `/` rewritten into a Windows path. Type the command inside Claude
+Code instead, or set `MSYS_NO_PATHCONV=1`.
+
+## Rules the agent follows
+
+- **Write only what the code cannot tell you.** The test for every line: could someone learn this in
+  under a minute from the code or a command? If yes, don't write it.
+- **Every fact needs something checkable behind it:** a commit, an issue ID, a command, or a date with
+  sample size.
+- **A wrong line gets fixed or deleted, never a correct one added beside it.**
+- **A code change alone writes nothing.** Git has it.
+- **Each trap gets its own `##` heading**, named the way a task would describe it (error text, library,
+  table, command). Run `index` after every memory edit.
+- **Split `memory/` by external boundary or subsystem**, not by code folder, and only after a real miss.
+- **Never overwrite prose a user wrote.** Never delete old memory sources without approval.
+
+## How it was evaluated
+
+The full method and results are in `EVALUATION.md`. It ran on one real project (a private project, 171
+commits), comparing no memory, the current `.harness/` + `memory/` setup, and this layer.
+
+| Metric | What it measures |
+|---|---|
+| Accuracy | Fraction of answer-key points a blind Sonnet judge finds in the answer. Keys come from commits, code, or facts given in the task, never from either memory system |
+| Wrong claims | Claims the judge marks false or contradicting the key |
+| Tool calls, search calls | How much the agent had to dig, where search calls are Grep and Glob |
+| Input tokens, cost, time | What each answer cost to produce |
+| Memory lines written | Growth of the memory after the same work sessions |
+| Files per fact | Duplication: in how many files each fact was written |
+| Correction handling | Whether a corrected fact was edited in place or left beside the old one |
+| Restraint | Whether a session with nothing durable in it wrote memory anyway |
+
+**Headline results:**
+
+| | Current setup | This layer |
+|---|---|---|
+| Retrieval accuracy (12 past-incident tasks × 2) | 0.93 | 0.93 (0.88 before `index` existed) |
+| Memory size after adopting the same project | ~4,600 lines | 744 lines |
+| Memory lines written in 6 identical sessions | +208 | +83 |
+| Recall accuracy of facts learned in those sessions | 0.97 | 0.97 |
+| Per recall answer: tool calls / searches / cost | 4.4 / 2.6 / $0.08 | 3.0 / 1.1 / $0.06 |
+| Wrong claims per recall answer | 0.20 | 0.07 |
+
+Handoff test (3 runs per arm): with or without the `## Last session` section, every run resumed the
+right task at the right step. With the section, the dead end the user had mentioned was written into
+`STATE.md` 3 of 3 times. Without it, 1 of 3, and one run went on to reopen that closed choice.
+
+It matches the current setup on accuracy, writes less than half as much, and reads back more cheaply.
+There is no evidence it is more accurate. The evidence covers one project with small samples.
+
+## Status
+
+Built and evaluated, but not installed and not the default. `/harness` and `/wrapup` still build the old
+setup. Switching means four steps: copy this folder to `~/.claude/skills/memory-layer/`, copy
+`commands/session-close.md` to `~/.claude/commands/`, point `/harness` and `/wrapup` at them, then
+run Adopt project by project.
