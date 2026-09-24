@@ -305,6 +305,20 @@ def test_script_path_is_not_machine_absolute(tmp_path):
         assert '"$HOME/' in block and str(Path.home()).replace("\\", "/") not in block
 
 
+def test_empty_files_marked_in_index_until_they_hold_entries(tmp_path):
+    root = project(tmp_path)
+    block = (root / "CLAUDE.md").read_text(encoding="utf-8")
+    assert "`decisions.md` — empty" in block and "`memory/external.md` — empty" in block
+    (root / "decisions.md").write_text("# Decisions\n## DEC-1 — use uv\nWhy: speed\n", encoding="utf-8")
+    ext = root / "memory/external.md"
+    ext.write_text(ext.read_text(encoding="utf-8") + "\nThe staging bucket is read-only on Fridays.\n", encoding="utf-8")
+    assert memlayer.check(root) == ["CLAUDE.md: index lines are stale, run index"]
+    memlayer.index(root)
+    block = (root / "CLAUDE.md").read_text(encoding="utf-8")
+    assert "`decisions.md` — empty" not in block and "`memory/external.md` — empty" not in block
+    assert memlayer.check(root) == []
+
+
 def test_s1_14_check_without_init(tmp_path):
     root = tmp_path / "raw"
     root.mkdir()

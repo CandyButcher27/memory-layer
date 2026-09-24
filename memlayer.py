@@ -16,7 +16,8 @@ STALE_DAYS = 90
 VERIFIED = re.compile(r"Last verified:\s*(\S+)")
 COMMENT = re.compile(r"<!--.*?-->", re.S)
 FENCE = re.compile(r"^```.*?^```[^\n]*$", re.S | re.M)
-INDEX_LINE = re.compile(r"^(- .*?→ `(memory/[^`]+\.md)`)(?: — contains: .*)?$", re.M)
+INDEX_LINE = re.compile(r"^(- .*?→ `(memory/[^`]+\.md)`)(?: — (?:contains: .*|empty))?$", re.M)
+TOP_LINE = re.compile(r"^(- .*?→ `(ISSUES\.md|decisions\.md)`.*?)(?: — empty)?$", re.M)
 HEADING = re.compile(r"^#{2,3} (.+)$", re.M)
 ISSUE = re.compile(r"^#{2,3} (ISS-.*)$", re.M)
 CONFLICT = re.compile(r"^(<{7}|>{7})( |$)", re.M)
@@ -52,6 +53,11 @@ def render(name: str) -> str:
     return text.replace("{today}", date.today().isoformat()).replace("{memlayer}", script_path())
 
 
+def is_empty(text: str) -> bool:
+    body = COMMENT.sub("", text)
+    return not any(l.strip() and not l.startswith("# ") and not l.startswith("Last verified:") for l in body.splitlines())
+
+
 def block_span(text: str) -> tuple[int, int] | None:
     start = text.find(START)
     if start < 0:
@@ -78,6 +84,7 @@ def init(root: Path) -> list[str]:
         sep = "\n\n" if text.strip() else ""
         save(claude, text.rstrip() + sep + render("CLAUDE-block.md"), eol)
         done.append("added memory block to CLAUDE.md")
+    index(root)
     return done
 
 
@@ -87,11 +94,17 @@ def indexed(root: Path, text: str) -> str:
         return text
 
     def fill(m: re.Match) -> str:
-        heads = HEADING.findall(COMMENT.sub("", read(root / m[2])))
-        return m[1] + (f" — contains: {'; '.join(h.strip() for h in heads)}" if heads else "")
+        body = COMMENT.sub("", read(root / m[2]))
+        heads = HEADING.findall(body)
+        if heads:
+            return m[1] + f" — contains: {'; '.join(h.strip() for h in heads)}"
+        return m[1] + (" — empty" if is_empty(body) else "")
+
+    def mark(m: re.Match) -> str:
+        return m[1] + (" — empty" if is_empty(read(root / m[2])) else "")
 
     a, b = span
-    return text[:a] + INDEX_LINE.sub(fill, text[a:b]) + text[b:]
+    return text[:a] + TOP_LINE.sub(mark, INDEX_LINE.sub(fill, text[a:b])) + text[b:]
 
 
 def index(root: Path) -> bool | None:
@@ -174,8 +187,11 @@ def selftest() -> None:
         assert any("not a YYYY-MM-DD" in p for p in check(root))
         (root / "memory/db.md").unlink()
         (root / "ISSUES.md").write_text("# Issues\n## ISS-1 — x\nSymptom: boom\n```\n# comment\n```\nCause: y\n## ISS-2 — z\nSymptom: a\n", encoding="utf-8")
+        assert "CLAUDE.md: index lines are stale, run index" in check(root)
+        assert index(root) and "`ISSUES.md` (search the exact error text)\n" in read(root / "CLAUDE.md")
         assert check(root) == ["ISSUES.md: 'ISS-2 — z' needs Symptom: and Cause:"], check(root)
         (root / "ISSUES.md").write_text("# Issues\n", encoding="utf-8")
+        assert index(root) and "(search the exact error text) — empty" in read(root / "CLAUDE.md")
         ext = root / "memory/external.md"
         ext.write_text(read(ext) + "\n## stripe sends duplicate webhooks\n", encoding="utf-8")
         assert check(root) == ["CLAUDE.md: index lines are stale, run index"], check(root)
