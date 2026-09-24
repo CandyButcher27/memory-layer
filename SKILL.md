@@ -42,7 +42,10 @@ toward the topic, so the symptom words come from the file itself:
 - Each trap in a memory file gets its own `##` heading, named the way a task would describe it:
   `## Stripe sends the same webhook event twice`, not `## Webhooks`.
 - `python memlayer.py index <project>` appends every file's headings to its index line as
-  `— contains: …`. Run it after any memory edit. It is idempotent.
+  `— contains: …`, and marks a memory file, `ISSUES.md` or `decisions.md` that holds nothing yet as
+  `— empty` so a task skips it. Run it after any memory edit, then `check`. It is idempotent.
+- The block tells the agent that a memory miss is not an answer: with nothing recorded, it falls back
+  to `git log --grep` and the code. A thin memory must never read as "no known issue".
 
 ## New
 
@@ -59,7 +62,8 @@ toward the topic, so the symptom words come from the file itself:
    - `gh issue list --state all --limit 50` if a GitHub remote exists
    - config and deploy files (`Dockerfile`, CI workflows, `.env.example`, `railway.json` and the like) for external systems
 3. Route each candidate through this test: could someone learn it in under a minute by reading the
-   code or running a command? If yes, drop it. If no:
+   code or running a command? If yes, drop it. Apply it to each fact on its own; a number, date,
+   decision or constraint a person stated is never "in the code". If no:
    - bug with a known symptom → `ISSUES.md`, citing the fix commit
    - deliberate choice with a reason → `decisions.md`
    - external quirk, measured number, trap, non-obvious "why" → `memory/<topic>.md`, plus an index line in the `CLAUDE.md` block (see *Index lines*)

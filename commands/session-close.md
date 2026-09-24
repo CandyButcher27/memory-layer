@@ -31,7 +31,11 @@ Collect candidates from three sources:
 ## 2. Filter
 
 For each candidate, ask: *could someone learn this in under a minute by reading the code or running a
-command?* If yes, drop it. Also drop:
+command?* If yes, drop it. Ask it of each fact on its own, not of the message the fact came in. A number,
+date, measurement, deadline, decision or constraint that a person stated is never derivable from the
+code, even when the code touches the same topic: "CI runs Oracle 19c on a self-hosted runner with a
+45-minute timeout" keeps the runner and the timeout even though the code shows 19c is supported. Also
+drop:
 - session narration ("today we looked at…")
 - descriptions of how the code works
 - finished work that git already records
