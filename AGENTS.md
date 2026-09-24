@@ -102,7 +102,7 @@ Code instead, or set `MSYS_NO_PATHCONV=1`.
 
 ## How it was evaluated
 
-The full method and results are in `EVALUATION.md`. It ran on one real project (a private project, 171
+The full method and results are in `docs/EVALUATION.md`. It ran on one real project (a private project, 171
 commits), comparing no memory, the current `.harness/` + `memory/` setup, and this layer.
 
 | Metric | What it measures |

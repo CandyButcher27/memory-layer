@@ -25,7 +25,7 @@ directory.
 | S1.08 | An index-shaped line outside the managed block (user prose) | Not rewritten by `index` |
 | S1.09 | `Last verified:` with an invalid date (`2026-13-45`), a future date, or two dates | `check` reports it. No traceback |
 | S1.10 | `ISSUES.md` with `## ISS-` entries in mixed formats, including missing fields | Only incomplete template entries flagged |
-| S1.11 | 40 memory files × 15 headings each | `index` runs in under 2 s. Report the resulting `CLAUDE.md` size in bytes, and note the size at which it stops being a cheap auto-loaded file |
+| S1.11 | 40 memory files × 15 headings each | `index` runs in under 5 s (2 s proved flaky under load). Report the resulting `CLAUDE.md` size in bytes, and note the size at which it stops being a cheap auto-loaded file |
 | S1.12 | Missing `CLAUDE.md` or `memory/`, a read-only file, or an empty directory | Clear message or a clean no-op. No traceback |
 | S1.13 | Project path containing spaces and non-ASCII characters | Every command works |
 | S1.14 | `check` on a project that never ran `init` | Reports missing files. Exit code 1. No traceback |

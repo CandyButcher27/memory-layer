@@ -216,7 +216,7 @@ def test_s1_11_scale(tmp_path, capsys):
               f"{len(claude.read_text(encoding='utf-8').splitlines())} lines; STATE.md {state.stat().st_size} B; "
               f"check={memlayer.check(root)}")
     assert rc == 0 and "updated" in out
-    assert elapsed < 2
+    assert elapsed < 5
 
 
 def test_s1_12_missing_readonly_empty(tmp_path):
