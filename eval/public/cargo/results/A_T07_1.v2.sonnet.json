@@ -1,0 +1,1 @@
+{"hits": [true, false, false], "wrong": 1, "note": "Correct verdict but misses the resolver-table design rationale and contradicts the revert history by framing the ignore-behavior as having always existed."}

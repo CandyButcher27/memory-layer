@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Answer independently identifies the double-unref flaw but never mentions the fix was actually merged and then reverted."}

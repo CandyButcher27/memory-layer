@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 0, "note": "Answer treats the fix as a novel proposal and never mentions it was actually merged and then reverted for double-unref reasons, though it does independently flag a similar double-unref risk."}

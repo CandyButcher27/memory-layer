@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Gives 60 minutes as the hard job timeout and never mentions 45, though it questions whether an internal runner exists."}

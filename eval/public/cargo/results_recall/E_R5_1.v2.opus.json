@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Explains the file-lock race after linking but misses the corporate Defender policy's roughly 2-second lock on target/ executables."}

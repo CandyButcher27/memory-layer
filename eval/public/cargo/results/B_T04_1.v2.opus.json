@@ -1,0 +1,1 @@
+{"hits": [true, false, true], "wrong": 1, "note": "The answer gets the WouldBlock leak and the fix right, but misses the drop/try_lock detail and wrongly says the mutate lock wasn't really held."}

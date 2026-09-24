@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 2, "note": "Answer reframes the issue as already solved by upstream Go 1.21 runtime behavior and casts GODEBUG=disablethp=1 as a deprecated stopgap rather than the deliberate fleet-wide decision described in the key points."}

@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "All three key points are stated accurately with matching detail (EBADF/kqueue bug, EBADF treated like ENOENT to skip entry and continue loop citing #80143, and error message now includes entry name)."}

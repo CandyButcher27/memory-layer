@@ -1,0 +1,1 @@
+{"hits": [false, false, true], "wrong": 2, "note": "Answer denies the premise entirely (claims no bug exists, unreproducible) and misses the repo_set_gitdir/odb mechanism, though it happens to quote the correct guard condition from point 3."}

@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 0, "note": "Covers the CL, the revert reason and the issue number, but never says a different design would be needed instead of reapplying."}

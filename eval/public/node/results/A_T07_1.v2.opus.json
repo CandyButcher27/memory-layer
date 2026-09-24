@@ -1,0 +1,1 @@
+{"hits": [true, false, true], "wrong": 0, "note": "The answer gets the default of 0 and the setMaxListeners opt-in right but never gives the isomorphic-code reason."}

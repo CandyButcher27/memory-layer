@@ -1,0 +1,16 @@
+arm    n         score         wrong         tools        search          bash         reads  input_tokens          cost       seconds
+A     20          0.82          0.15          5.30          1.50          2.65          1.15     136981.40          0.07         20.50
+B     20          0.80          0.20          7.85          2.65          3.05          2.15     209463.60          0.11         32.51
+D     20          0.77          0.20          7.55          2.00          3.85          1.70     209788.00          0.10         33.03
+
+per task score (A / B / D):
+T01 recurring-bug    0.67 / 0.67 / 0.67
+T02 recurring-bug    1.00 / 1.00 / 1.00
+T03 recurring-bug    1.00 / 1.00 / 1.00
+T04 recurring-bug    1.00 / 0.50 / 1.00
+T05 decision         0.50 / 0.83 / 0.33
+T06 decision         0.00 / 0.00 / 0.17
+T07 decision         1.00 / 1.00 / 0.50
+T08 platform-quirk   1.00 / 1.00 / 1.00
+T09 platform-quirk   1.00 / 1.00 / 1.00
+T10 code-control     1.00 / 1.00 / 1.00

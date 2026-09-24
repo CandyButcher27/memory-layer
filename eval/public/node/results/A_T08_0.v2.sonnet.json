@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 2, "note": "Answer claims no AIX special-casing exists in fs internals, directly contradicting both key points about the AIX EEXIST/EACCES issue and the RmSync #ifdef _AIX handling in src/node_file.cc."}

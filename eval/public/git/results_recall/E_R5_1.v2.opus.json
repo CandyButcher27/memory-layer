@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 1, "note": "The answer mentions 60 minutes but dismisses it and says no self-hosted limit is confirmed, pointing to the GitLab 2h/6h timeouts instead."}

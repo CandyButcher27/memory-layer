@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Covers cause and fix; omits the drop/try_lock detail explaining why the lock was never released elsewhere."}

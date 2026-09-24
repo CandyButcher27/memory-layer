@@ -1,0 +1,1 @@
+{"hits": [true, false, false], "wrong": 0, "note": "Gets the 'no' and the code mechanism right, but misses the local-development-only design reason and the reversion of earlier behaviour."}

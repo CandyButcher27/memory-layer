@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Answer explains the general mechanism and W002 check correctly but never confirms/asserts that staging MySQL actually lacks strict mode, treating it as something to verify rather than a known fact."}

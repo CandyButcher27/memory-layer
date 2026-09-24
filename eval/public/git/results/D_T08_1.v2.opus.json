@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Covers the Dash 0.5.13 cause, the missing 'progress checkpoint' line that makes the test hang, and the command-substitution workaround; the endless wait is only implied."}

@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer says the fix was merged and reverted, and that the revert was because it could unref the handle more than once."}

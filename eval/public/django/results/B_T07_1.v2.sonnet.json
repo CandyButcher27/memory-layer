@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "Answer argues the duplicate index is intentional design and never mentions the #28646 fix, its revert, or the Oracle crash reason."}

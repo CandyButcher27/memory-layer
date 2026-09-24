@@ -1,0 +1,1 @@
+{"hits": [false, false, true], "wrong": 2, "note": "Answer denies any default flip and misses the write.c compact-default and older-Git-die() history, contradicting key points 1 and 2, though it does mention mixed-consumer breakage risk generally aligned with point 3."}

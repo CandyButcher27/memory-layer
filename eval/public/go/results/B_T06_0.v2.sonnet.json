@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "Answer claims RowsColumnScanner is a currently-existing, usable hook, directly contradicting the fact that this API was reverted and the issue reopened."}

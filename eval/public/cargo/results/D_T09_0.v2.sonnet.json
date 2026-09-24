@@ -1,0 +1,1 @@
+{"hits": [false, true, false], "wrong": 1, "note": "Answer misattributes the cause to a Rust-toolchain libcurl bump instead of curl-sys 0.4.84 and omits FreeBSD versions/ca_root_nss, and claims the fix is still pending in Rust 1.95 rather than already resolved via curl-sys 0.4.86."}

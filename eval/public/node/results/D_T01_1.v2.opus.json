@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Explains both the corked Writev path versus HexDecode and the fix of removing the CHECK in favour of integer division."}

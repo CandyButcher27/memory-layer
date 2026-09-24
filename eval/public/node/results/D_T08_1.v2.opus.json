@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer covers both the libc++ EEXIST bug on AIX and the #ifdef _AIX workaround in RmSync."}

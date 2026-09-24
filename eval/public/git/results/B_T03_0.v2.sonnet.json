@@ -1,0 +1,1 @@
+{"hits": [false, false, true], "wrong": 2, "note": "Answer denies the bug exists/reproduces at all, contradicting the double-setup and repo_set_gitdir mechanism, though it incidentally quotes the fixed guard condition matching point 3."}

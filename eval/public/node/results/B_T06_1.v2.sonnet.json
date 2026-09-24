@@ -1,0 +1,1 @@
+{"hits": [false, true, true], "wrong": 0, "note": "Answer covers Docker and icupkg blockers but omits that slim was actually tried and reverted."}

@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Answer covers the cause, why the lock stayed held, and the decrement fix; it only omits the try_lock/LockAcquired detail."}

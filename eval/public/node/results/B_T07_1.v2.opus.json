@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "All three points are covered, but the reason is framed as a normal many-listeners pattern and never mentions isomorphic code."}

@@ -1,0 +1,29 @@
+== B
+   52 CLAUDE.md
+   22 memory/README.md
+   19 memory/cli-and-ops.md
+   43 memory/compilation.md
+   27 memory/config.md
+   24 memory/diagnostics.md
+   43 memory/manifest-and-workspace.md
+   31 memory/resolver.md
+   29 memory/sources.md
+   26 memory/testing.md
+  316 total
+autoload bytes: 3103
+== D
+  25 CLAUDE.md
+  22 ISSUES.md
+  28 STATE.md
+  14 decisions.md
+   5 memory/external.md
+  94 total
+autoload bytes: 2592
+== D check
+memory layer clean
+exit 0
+
+build cost/turns/duration (opus, result event):
+B success turns=34 cost=$1.052 duration=156s
+D success turns=14 cost=$0.328 duration=60s
+B autoload = CLAUDE.md only (no STATE.md in B); D autoload = CLAUDE.md + STATE.md

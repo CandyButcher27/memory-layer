@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Answer correctly states DefaultMaxIdleConnsPerHost=2 and locates the decision in transport.go's maxIdleConnsPerHost() method."}

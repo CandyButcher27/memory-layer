@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer states the 64 KiB default and the rule that only allocations under 32 KiB use the pool, with no contradictions."}

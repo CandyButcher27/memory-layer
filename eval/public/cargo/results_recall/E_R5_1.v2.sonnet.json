@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 1, "note": "Answer attributes the issue to a generic OS/AV file-lock / upstream cargo bug rather than the specific corporate Defender ~2-second lock policy."}

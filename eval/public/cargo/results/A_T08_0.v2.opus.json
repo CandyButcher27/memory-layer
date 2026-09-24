@@ -1,0 +1,1 @@
+{"hits": [true, false, true], "wrong": 0, "note": "Correct and cites zfs#809/#13838, but omits why hard-linking beats retrying the copy (retries can take ~4 seconds)."}

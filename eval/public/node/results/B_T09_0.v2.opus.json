@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer covers both points: uv_random uses the blocking /dev/random on AIX, so Node falls back to OpenSSL, which seeds from /dev/urandom."}

@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers all three points: the change was done and reverted, the reason was performance, and the max_length guard was kept for security."}

@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 2, "note": "Answer misses the actual revert (b7d6f23a171) and even claims the choice was never revisited, contradicting the true history; none of the three key points are captured."}

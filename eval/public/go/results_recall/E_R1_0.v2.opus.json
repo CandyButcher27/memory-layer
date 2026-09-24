@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Answer says seccomp blocks pidfd_open with EPERM and that process handling falls back to the non-pidfd path; the leading 'Yes' is qualified in the same sentence."}

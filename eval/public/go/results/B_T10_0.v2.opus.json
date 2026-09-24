@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer covers both key points: the default is 2, and transport.go's maxIdleConnsPerHost() falls back to it when the field is 0."}

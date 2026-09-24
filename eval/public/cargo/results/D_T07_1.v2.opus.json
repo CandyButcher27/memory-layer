@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 0, "note": "Correctly says no and cites the design intent, but omits that this reverted earlier behaviour that used and required the configured lockfile."}

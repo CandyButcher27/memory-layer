@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 0, "note": "Answer covers points 1 and 2 well but omits the workaround/goroutine tradeoff and PID-1-no-op-rejected discussion entirely."}

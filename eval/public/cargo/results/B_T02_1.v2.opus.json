@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the rustc 1.90 .rmeta skip, the mtime loop that never ends, and the force-mtime workaround for check mode in rustc()."}

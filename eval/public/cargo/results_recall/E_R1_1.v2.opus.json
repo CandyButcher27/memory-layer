@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 1, "note": "Answer says 'Yes' about cargo honoring Retry-After instead of stating the mirror never sends it; describes the fallback backoff correctly but only as a condition."}

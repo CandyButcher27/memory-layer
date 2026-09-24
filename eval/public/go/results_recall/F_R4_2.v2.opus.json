@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer states both the 512 MB tmpfs cap and the GOTMPDIR=/scratch/gotmp fix."}

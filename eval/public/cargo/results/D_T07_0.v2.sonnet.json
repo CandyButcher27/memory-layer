@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "All three key points are directly stated and supported with specifics (commit hash, quote about [resolver] design, and mention of reverting bf37cf7f3's earlier lockfile-honoring behavior)."}

@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 2, "note": "The answer says the reverted RowsColumnScanner hook exists and should be used, missing the revert, why it happened, and the reopened design work."}

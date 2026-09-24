@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the TOCTOU cause, the fchmodat2 fix and the O_PATH /proc fallback, with the CVE and issue number."}

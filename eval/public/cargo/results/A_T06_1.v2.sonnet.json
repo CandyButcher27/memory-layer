@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 2, "note": "Answer misses all three key points and substitutes a different, unverified mechanism (cfg(false) workaround) instead of the actual transitive-dependency exemption and reverted-allowlist/RFC-3920 history."}

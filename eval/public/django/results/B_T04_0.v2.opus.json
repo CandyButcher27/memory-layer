@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 1, "note": "Covers integer storage and the feature-flag generalisation, but gets the regression mechanism wrong (CASE WHEN rather than an omitted comparison) and leaves out the NOT (= false) limitation."}

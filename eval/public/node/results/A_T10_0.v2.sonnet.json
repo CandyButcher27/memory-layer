@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Both key points (64 KiB default poolSize, and pooling threshold of size < poolSize>>>1 i.e. <32 KiB for allocUnsafe/from/concat) are explicitly stated and match."}

@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the cause, the endless re-check loop, and the check-mode mtime workaround in rustc() correctly."}

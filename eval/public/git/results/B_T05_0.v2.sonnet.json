@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "Answer recommends the exact fix that was already tried in dd3693eb08 and reverted, without mentioning the revert, the shell-wrapping zombie issue, or the mksh deadlock regression."}

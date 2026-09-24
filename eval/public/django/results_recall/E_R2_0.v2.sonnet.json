@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Answer denies the premise and gives GitHub Actions timeout (60 min) instead of confirming an internal CI runner's hard timeout, but doesn't contradict either key point."}

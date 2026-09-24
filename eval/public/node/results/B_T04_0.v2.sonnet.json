@@ -1,0 +1,1 @@
+{"hits": [false, true, true], "wrong": 1, "note": "Answer gets the P2718R0 mechanism and vector fix right but claims shipped code already avoids the range-for pattern, contradicting the premise that this is the actual cause of the hang."}

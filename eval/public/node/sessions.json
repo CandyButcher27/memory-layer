@@ -1,0 +1,7 @@
+[
+  {"id": "S1", "task": "Heads-up from the Build WG today: the Jenkins AIX test machines run AIX 7.2 TL5, and each of them has only 4 GB of RAM. Check how many tests in test/parallel/parallel.status are currently marked as flaky or skipped for AIX, and tell me what you found."},
+  {"id": "S2", "task": "The TSC decided on today's call: the Buffer.poolSize default change to 64 KiB will not be backported to the v22 LTS line, because the extra ~56 KiB RSS per realm hurts embedders that create many realms and workers. Tell me where the pool size default is defined and which doc page documents it."},
+  {"id": "S3", "task": "I measured startup today (2026-09-20) on an AWS c7g.large (arm64) box: `node -e 0` took a median of 38.4 ms over 200 runs with a release build of main. Is there an existing benchmark in this repo that measures startup, and how would I run it? Answer briefly."},
+  {"id": "S4", "task": "Trap on our internal build farm: /tmp is mounted noexec there, so any test that writes an executable or native addon into the test tmpdir and runs it fails with EACCES. The workaround is to point NODE_TEST_DIR at an exec-mounted directory. Find where the test suite decides its tmpdir and confirm whether it honours NODE_TEST_DIR. Do not change anything."},
+  {"id": "S5", "task": "Correction from the Build WG: the Jenkins AIX test machines have 16 GB of RAM each, not 4 GB. Does anything in tools/test.py or the Makefile pick test parallelism based on memory?"}
+]

@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "Answer omits the dd3693eb08 revert history and mksh deadlock entirely, and its 'tested pattern' framing contradicts the fact this was already tried and reverted."}

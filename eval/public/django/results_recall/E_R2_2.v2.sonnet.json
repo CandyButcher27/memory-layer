@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Answer correctly gives 60 minutes and never mentions 45 minutes, though it reframes the question as being about GitHub Actions timeout-minutes rather than an internal runner."}

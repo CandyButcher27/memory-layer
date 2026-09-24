@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Covers the revert, shell-reaping failure and mksh deadlock correctly, but omits the alternative (cleverer approach or letting PID 1 reap)."}

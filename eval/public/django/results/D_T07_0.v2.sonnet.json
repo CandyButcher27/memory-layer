@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "Answer misses the actual commit/revert history (#28646, Oracle crash, restored logic) and instead argues current behavior is intentional by design."}

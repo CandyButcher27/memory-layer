@@ -1,0 +1,7 @@
+[
+  {"id": "S1", "task": "Fact from our infra team today: our self-hosted CI runners for this fork run Alpine Linux 3.20 (musl libc, not glibc), and each job is hard-killed after 45 minutes. Check whether anything in ci/ assumes glibc or a specific distro, and tell me briefly what you found."},
+  {"id": "S2", "task": "Maintainer decision for our fork, agreed today: we will NOT make the reftable ref backend the default in our builds this year, because our backup tooling rsyncs .git/refs/ and packed-refs directly and would silently back up nothing under reftable. Show me where the default ref storage format is decided in the code, without changing it."},
+  {"id": "S3", "task": "I measured `git status` on our monorepo (2.1 million tracked files) on 2026-09-20: median 1.8 s over 15 runs with fsmonitor off, and 0.4 s median over 15 runs with core.fsmonitor=true. Is there an existing perf test in t/perf that covers status with fsmonitor? Answer briefly."},
+  {"id": "S4", "task": "Heads-up: our corporate HTTP proxy strips the Git-Protocol request header, so every HTTPS fetch from our internal mirror silently falls back to protocol v0. Find where the client sends that header over HTTP, and tell me what v2-only behaviour we lose. Do not change anything."},
+  {"id": "S5", "task": "Correction from the infra team: the CI job limit on our self-hosted runners is 60 minutes, not 45. The Alpine/musl part is still right. Does anything in ci/ set its own timeout that would matter?"}
+]

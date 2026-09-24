@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 0, "note": "Answer correctly covers the revert, commit hashes, and mksh deadlock, but omits the stated alternative (cleverer approach or letting PID 1 reap zombies)."}

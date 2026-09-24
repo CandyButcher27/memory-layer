@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer gives the correct 64 KiB default and the correct under-half-pool-size (32 KiB) pooling rule."}

@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 2, "note": "Answer fabricates a cfg(false) workaround instead of describing the actual transitive-dep exemption, add/revert history, or the curl/RFC-3920 punt."}

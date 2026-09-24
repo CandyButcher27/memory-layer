@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 1, "note": "The answer covers the cause and the downgrades, but it misses the deliberate bump to 0.4.86 and implies 0.4.86 is also broken."}

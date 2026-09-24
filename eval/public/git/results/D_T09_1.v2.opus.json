@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 0, "note": "The answer found no known cause and missed both the sudo-rs --preserve-env problem and the update-alternatives fix."}

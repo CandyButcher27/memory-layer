@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the revert and its reason, the feature-dependent default with the midx.version override, and the cross-version compatibility concern."}

@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer says seccomp makes pidfd_open return EPERM and that process handling falls back to the non-pidfd path."}

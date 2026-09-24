@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 2, "note": "The answer says the RowsColumnScanner hook exists and is usable, but it was reverted and issue #67546 was reopened."}

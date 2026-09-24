@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 0, "note": "Answer claims no Oracle CI job exists at all, contradicting the expected finding of Oracle 19c on a self-hosted runner."}

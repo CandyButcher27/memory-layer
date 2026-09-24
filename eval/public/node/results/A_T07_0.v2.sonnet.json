@@ -1,0 +1,1 @@
+{"hits": [false, false, true], "wrong": 1, "note": "Answer claims AbortSignal warns by default (kMaxEventTargetListeners=10 via defaultMaxListeners), directly contradicting key points 1 and 2, which state the actual default was deliberately set to 0 to disable the warning."}

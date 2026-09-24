@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Covers the CL, the revert, the documentation reason and #76961; it only implies that a different design is needed."}

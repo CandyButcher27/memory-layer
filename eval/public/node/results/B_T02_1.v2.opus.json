@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Answer correctly identifies the synchronous drain race and the writableNeedDrain check fix in adapters.js."}

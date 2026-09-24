@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer explains the cork-to-Writev-to-StorageSize CHECK path and gives the fix of removing the CHECK."}

@@ -1,0 +1,5 @@
+repo django/django @ 951d13c77bc120be385c46fc701a1ad93694edd1 (34949 commits, 7091 files); base commit 9061125ac6 "eval: strip agent instructions" (removed .github/copilot-instructions.md)
+arm  cost_usd  turns  memory_lines                                   autoloaded_bytes(CLAUDE.md+STATE.md)  check
+B    0.796     35     276 (CLAUDE.md 48 + memory/ 7 files 228)        2733 (CLAUDE.md only)                 n/a
+D    0.240     10     85 (CLAUDE.md 25, STATE 28, ISSUES 15, decisions 8 empty, memory/external.md 9)  2584  "memory layer clean"
+after sessions (E=B copy, F=D copy): E +39/-2 memory lines (4 files); F +3/-3 (STATE.md only, 3 commits)

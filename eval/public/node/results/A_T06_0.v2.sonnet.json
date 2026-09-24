@@ -1,0 +1,1 @@
+{"hits": [false, false, true], "wrong": 0, "note": "Answer covers icupkg and openssl-Docker points but omits the tried-and-reverted history and misattributes tools.yml's Docker need to corepack/nixpkgs instead of the undici script."}

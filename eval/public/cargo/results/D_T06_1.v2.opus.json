@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "The answer misses the revert history, the transitive-dependency exemption and the RFC punt, and it wrongly implies transitive deps are still flagged."}

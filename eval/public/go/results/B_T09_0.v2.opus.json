@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "All three points are covered correctly; the probe fallback for an unparseable uname string is extra detail, not a contradiction."}

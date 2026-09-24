@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Covers the cause, the lasting deadlock and the fix, but skips the CacheLock::drop/try_lock detail."}

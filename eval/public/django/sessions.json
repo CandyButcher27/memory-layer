@@ -1,0 +1,7 @@
+[
+  {"id": "S1", "task": "Our company's internal CI runs this Django checkout's test suite against Oracle 19c on a self-hosted runner, and that runner kills any job after a hard 45-minute timeout. Check which Oracle versions this Django version supports, and tell me whether 19c is still supported."},
+  {"id": "S2", "task": "Decision from today's platform meeting: every internal project built on this checkout keeps DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField', because our orders table overflowed a 32-bit integer primary key in March. Find where the project template and the startapp template set the default auto field, and tell me what they use. Do not change any file."},
+  {"id": "S3", "task": "I timed the full test suite on SQLite on my laptop on 2026-09-20: 18,412 tests ran in 6 minutes 40 seconds with --parallel 8, median of 3 runs. How does tests/runtests.py decide the number of parallel processes when --parallel is not given? Answer briefly."},
+  {"id": "S4", "task": "Heads-up from our DBA: the staging MySQL server runs without STRICT_TRANS_TABLES in sql_mode, so over-long CharField values are silently truncated instead of raising an error. Find what in Django warns about this, and describe it. Do not fix anything."},
+  {"id": "S5", "task": "Correction from the CI team: the self-hosted runner's hard job timeout is 60 minutes, not 45. Does anything in this repository's own GitHub Actions workflows set a job timeout? Just report what you find."}
+]

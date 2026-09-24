@@ -1,0 +1,1 @@
+{"hits": [false, true, false], "wrong": 1, "note": "Answer incorrectly claims older Git gracefully ignores bad MIDXs (contradicts the die() behavior) and omits the make-default-then-revert history and mixed-version-repo rationale."}

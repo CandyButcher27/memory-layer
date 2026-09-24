@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer gives the fork's decision against reftable and the reason: the rsync backup would silently stop working."}

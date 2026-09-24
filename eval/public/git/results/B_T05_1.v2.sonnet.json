@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 3, "note": "Answer never mentions dd3693eb08, the shell/mksh deadlock issue, or the revert history; it instead recommends implementing clean_on_exit as if untried, contradicting all three key points."}

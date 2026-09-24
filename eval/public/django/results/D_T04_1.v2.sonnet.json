@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 2, "note": "Answer concludes no Django SQL-generation change occurred and blames SQLite's planner/stats instead, directly contradicting the key points about a Django regression and its fix; the NOT-false planner issue is unmentioned."}

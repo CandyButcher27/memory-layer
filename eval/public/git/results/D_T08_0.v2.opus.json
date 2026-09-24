@@ -1,0 +1,1 @@
+{"hits": [false, true, false], "wrong": 2, "note": "Correctly describes the hang but blames bash and the shared fifo instead of the Dash 0.5.13 bug, and denies the workaround exists."}

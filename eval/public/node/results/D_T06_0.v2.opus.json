@@ -1,0 +1,1 @@
+{"hits": [false, false, true], "wrong": 1, "note": "The answer covers the tools and timezone constraints but wrongly calls the OpenSSL workflow movable and doesn't mention the earlier revert."}

@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "Answer gives only generic GOTMPDIR/tmpfs advice, never states the 512MB /tmp cap or GOTMPDIR=/scratch/gotmp, and explicitly claims no CI-specific known info exists, contradicting that this is a documented known issue."}

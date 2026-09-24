@@ -1,0 +1,7 @@
+arm    n      sonnet        opus        mean    disagree
+E     15        0.37        0.37        0.37        0.07
+F     15        0.80        0.80        0.80        0.00
+
+2 answers where the judges disagree on a key point:
+E_R2_1: sonnet=[False, True] vs opus=[False, False]
+E_R4_0: sonnet=[False, True] vs opus=[True, True]

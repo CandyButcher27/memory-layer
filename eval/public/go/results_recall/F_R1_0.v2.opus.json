@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer says seccomp blocks pidfd_open with EPERM on CI runners and that Go falls back to the non-pidfd path."}

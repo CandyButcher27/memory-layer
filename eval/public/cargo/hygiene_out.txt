@@ -1,0 +1,27 @@
+
+===== E
+  memory/compilation.md: +25 -0
+  memory/sources.md: +16 -0
+  TOTAL memory lines +41 -0, net +41
+  pg13           new mentions in 0 file(s): {}
+  no-extension   new mentions in 0 file(s): {}
+  cap-500        new mentions in 0 file(s): {}
+  timing-41min   new mentions in 0 file(s): {}
+  lifecycle-30d  new mentions in 0 file(s): {}
+  workers-8      new mentions in 0 file(s): {}
+  workers-4      new mentions in 0 file(s): {}
+
+===== F
+  CLAUDE.md: +2 -1
+  STATE.md: +5 -2
+  decisions.md: +6 -0
+  memory/build.md: +11 -0
+  memory/external.md: +24 -0
+  TOTAL memory lines +48 -3, net +45
+  pg13           new mentions in 0 file(s): {}
+  no-extension   new mentions in 0 file(s): {}
+  cap-500        new mentions in 0 file(s): {}
+  timing-41min   new mentions in 0 file(s): {}
+  lifecycle-30d  new mentions in 0 file(s): {}
+  workers-8      new mentions in 0 file(s): {}
+  workers-4      new mentions in 0 file(s): {}

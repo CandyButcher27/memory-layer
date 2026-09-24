@@ -1,0 +1,24 @@
+
+===== E
+  memory/README.md: +1 -1
+  memory/testing.md: +33 -1
+  TOTAL memory lines +34 -2, net +32
+  aix-7.2-tl5    new mentions in 0 file(s): {}
+  ram-4gb        new mentions in 1 file(s): {'memory/testing.md': 1}
+  ram-16gb       new mentions in 1 file(s): {'memory/testing.md': 1}
+  no-backport-v22 new mentions in 0 file(s): {}
+  startup-38.4ms new mentions in 0 file(s): {}
+  noexec-tmp     new mentions in 1 file(s): {'memory/testing.md': 1}
+
+===== F
+  CLAUDE.md: +1 -1
+  STATE.md: +2 -2
+  decisions.md: +6 -0
+  memory/external.md: +26 -0
+  TOTAL memory lines +35 -3, net +32
+  aix-7.2-tl5    new mentions in 1 file(s): {'memory/external.md': 1}
+  ram-4gb        new mentions in 2 file(s): {'STATE.md': 1, 'memory/external.md': 2}
+  ram-16gb       new mentions in 2 file(s): {'STATE.md': 1, 'memory/external.md': 3}
+  no-backport-v22 new mentions in 1 file(s): {'decisions.md': 1}
+  startup-38.4ms new mentions in 0 file(s): {}
+  noexec-tmp     new mentions in 2 file(s): {'CLAUDE.md': 1, 'memory/external.md': 2}

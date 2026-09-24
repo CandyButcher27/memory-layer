@@ -1,0 +1,12 @@
+[
+  {"id": "R1", "kind": "external-fact", "task": "Can the Go programs and tests we run on our internal CI runners use pidfd-based process handling, and what happens there?",
+   "gold": ["The CI runners' seccomp profile blocks the pidfd_open syscall (it returns EPERM)", "So pidfd is not usable there and os process handling must fall back to the non-pidfd path"]},
+  {"id": "R2", "kind": "decision", "task": "Our services on hosts with transparent huge pages set to 'always' are showing RSS growth. What have we decided to do about it and why?",
+   "gold": ["Every service built from our fork runs with GODEBUG=disablethp=1", "Because production hosts have THP set to 'always' and services showed RSS growth after the Go upgrade; the runtime default is deliberately not patched"]},
+  {"id": "R3", "kind": "measurement", "task": "How long does a cold-cache ./make.bash take on our build box, and how solid is that number?",
+   "gold": ["Median 2m41s on the 32-core build box", "Measured on 2026-09-20 over 5 cold-cache runs"]},
+  {"id": "R4", "kind": "external-trap", "task": "A go test job on our CI runners fails with 'no space left on device' while writing temp files. Anything known about this?",
+   "gold": ["/tmp on the CI runners is a tmpfs capped at 512 MB", "Set GOTMPDIR=/scratch/gotmp on those runners (GOTMPDIR controls where cmd/go puts its temporary files)"]},
+  {"id": "R5", "kind": "corrected-fact", "task": "What Linux kernel version do our internal CI runners run?",
+   "gold": ["Linux kernel 5.15", "Does not present 5.4 as the current version (5.4 was an earlier figure the infra team corrected)"]}
+]

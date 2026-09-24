@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the synchronous-channel sendLock, the second lock of the same mutex in unlockAndRun, and the fix for issue 76052."}

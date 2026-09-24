@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 1, "note": "Gets the integer-storage cause and the feature-flag fix, but misdescribes the regression as CASE WHEN wrapping since 2019 and omits the NOT(= false) limitation."}

@@ -1,0 +1,1 @@
+{"hits": [true, false], "wrong": 1, "note": "Correctly blames the proxy stripping the header, but says the fallback is to v1 instead of v0."}

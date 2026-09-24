@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 0, "note": "Explains the PID 1 fall-through and the exit(128+sig) fix but omits the workaround and rejected alternatives."}

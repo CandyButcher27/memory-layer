@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "The answer covers only gc.autoDetach, misses maintenance.autoDetach and the test env var, and wrongly says tests don't change the detach behavior."}

@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 1, "note": "All points covered, but the warning class is misnamed as RemovedInDjango2028Warning instead of RemovedInDjango70Warning."}

@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "Answer claims no fix exists/was found, missing the committed-then-reverted #28646 fix, the Oracle crash reason, and the restored simpler PostgreSQL logic."}

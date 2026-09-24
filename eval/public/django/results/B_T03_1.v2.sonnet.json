@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 1, "note": "Warning class name given (RemovedInDjango2028Warning) contradicts/misstates the actual Django-style deprecation warning name, though the substance of the warning is correct."}

@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the double lock of sendLock and the #76052 fix, and it only omits the Go 1.23 synchronous-channel background."}

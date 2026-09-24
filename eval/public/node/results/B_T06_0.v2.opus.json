@@ -1,0 +1,1 @@
+{"hits": [false, true, true], "wrong": 0, "note": "The answer correctly names the Docker and icupkg blockers but doesn't say the switch was already tried and reverted."}

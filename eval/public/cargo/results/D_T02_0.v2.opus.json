@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the cause, the endless re-check, and the forced .rmeta mtime bump in compiler/mod.rs for check builds."}

@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 0, "note": "Answer explains the PID1 kernel-signal mechanism and correctly describes the exit(128+sig) fix, but omits the runc-specific rejection of signal-handler workarounds and the dropped 'do nothing' proposal."}

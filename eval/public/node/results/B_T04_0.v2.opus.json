@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer explains the P2718R0 lock-lifetime deadlock and the local-vector fix correctly, though it treats the buggy code as hypothetical."}

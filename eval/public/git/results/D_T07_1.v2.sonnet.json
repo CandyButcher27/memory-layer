@@ -1,0 +1,1 @@
+{"hits": [true, false, true], "wrong": 0, "note": "Answer covers points 1 and 3 accurately but omits point 2 (that delta-compression gains are achievable via the existing object-list mechanism)."}

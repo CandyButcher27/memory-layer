@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the O(N^2) cause, the fix that skips the duplicate check, and the fixing commit with its perf test."}

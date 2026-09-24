@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the Dash bug and its upstream fix, the infinite wait loop, and the command-substitution workaround."}

@@ -1,0 +1,1 @@
+{"hits": [true, false, false], "wrong": 1, "note": "Answer confirms cargo install ignores resolver.lockfile-path, but omits the design rationale (resolver table only for local dev) and its commit account contradicts rather than confirms the 'reverted earlier behavior' narrative."}

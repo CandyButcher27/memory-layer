@@ -15,3 +15,4 @@ eval/stress/**/*.jsonl
 
 eval/public/*/results*/**/*.jsonl
 eval/public/*/results*/**/*.txt
+eval/public/**/*.jsonl

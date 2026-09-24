@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer states the 64 KiB default and the under-half-pool threshold correctly, including which APIs use the pool."}

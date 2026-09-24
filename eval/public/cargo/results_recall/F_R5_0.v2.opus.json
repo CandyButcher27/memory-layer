@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer covers both the Defender ~2s lock on new .exe files under target/ and the resulting Access is denied error when the binary runs right away."}

@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Covers the implementation, the revert, the >23.3 crash and the current UNION fallback; the opening 'Yes' is confusing but doesn't contradict anything."}

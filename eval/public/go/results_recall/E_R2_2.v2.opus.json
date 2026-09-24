@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 0, "note": "The answer covers upstream Go docs and offers the flag as an option, but never states the team's decision to run all fork-built services with disablethp=1 or the reasons for it."}

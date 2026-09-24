@@ -131,7 +131,16 @@ Handoff test (3 runs per arm): with or without the `## Last session` section, ev
 right task at the right step. With the section, the dead end the user had mentioned was written into
 `STATE.md` 3 of 3 times. Without it, 1 of 3, and one run went on to reopen that closed choice.
 
-It matches the current setup on accuracy, writes less than half as much, and reads back more cheaply.
+**Five large public repos** (git, django, cargo, node, go; details in `docs/EVALUATION.md`, Experiment 7):
+
+| | No memory | Current setup | This layer |
+|---|---|---|---|
+| Retrieval of past incidents, mean | 0.81 | 0.81 | 0.76 |
+| Recall of facts people stated, mean | – | 0.29 | **0.79** (won on all 5) |
+| Recall cost per answer | – | $0.07 | $0.03 |
+
+It is much better at keeping what people tell it. It is slightly worse at finding past incidents on repos
+whose commit history already explains them, and Experiment 7 lists the fixes.
 There is no evidence it is more accurate. The evidence covers one project with small samples.
 
 ## Status

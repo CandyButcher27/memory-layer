@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Answer correctly explains the W002/truncation mechanism but never asserts that staging actually lacks STRICT_TRANS_TABLES, leaving that as an open question rather than a stated fact."}
