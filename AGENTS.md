@@ -96,7 +96,11 @@ Code instead, or set `MSYS_NO_PATHCONV=1`.
 - **A wrong line gets fixed or deleted, never a correct one added beside it.**
 - **A code change alone writes nothing.** Git has it.
 - **Each trap gets its own `##` heading**, named the way a task would describe it (error text, library,
-  table, command). Run `index` after every memory edit.
+  table, command). After every memory edit, run `index`, then `check` until clean.
+- **Apply the one-minute test to each fact on its own.** A number, date, decision or constraint that a
+  person stated is never in the code.
+- **A memory miss is not an answer.** Files marked `— empty` are skipped. When memory has nothing,
+  fall back to `git log --grep` and the code.
 - **Split `memory/` by external boundary or subsystem**, not by code folder, and only after a real miss.
 - **Never overwrite prose a user wrote.** Never delete old memory sources without approval.
 
@@ -140,7 +144,7 @@ right task at the right step. With the section, the dead end the user had mentio
 | Recall cost per answer | – | $0.07 | $0.03 |
 
 It is much better at keeping what people tell it. It is slightly worse at finding past incidents on repos
-whose commit history already explains them, and Experiment 7 lists the fixes.
+whose commit history already explains them. Experiment 7 lists the four fixes for that; they are now applied but not yet re-evaluated.
 There is no evidence it is more accurate. The evidence covers one project with small samples.
 
 ## Status
