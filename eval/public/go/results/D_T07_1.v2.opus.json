@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 0, "note": "The answer says no for a different reason (CVE-2021-36221) and misses the CL 722160 attempt, its revert, and the Close-unblocks-Read contract."}

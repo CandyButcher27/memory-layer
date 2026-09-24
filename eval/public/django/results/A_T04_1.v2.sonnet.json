@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 1, "note": "Covers the SQLite integer-storage/index-use mechanism and the generalized fix via has_native_boolean_field, but cites a different ticket number (#25367) than the key point's #32691 for the original MySQL-only logic, and omits the separate WHERE NOT limitation entirely."}

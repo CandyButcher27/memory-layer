@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer covers both the corked Writev/StorageSize CHECK versus HexDecode difference and the fix of removing the CHECK."}

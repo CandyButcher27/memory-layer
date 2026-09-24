@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers all three key points: the redundant setup, the double repo_set_gitdir call becoming a BUG after the odb commondir change, and the !repo guard fix."}

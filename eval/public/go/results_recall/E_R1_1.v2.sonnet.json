@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "Answer hedges/declines to confirm the CI-specific seccomp EPERM block as fact, instead calling it an unverified memory-file claim, and leads with a general 'Yes' rather than confirming the CI fallback."}

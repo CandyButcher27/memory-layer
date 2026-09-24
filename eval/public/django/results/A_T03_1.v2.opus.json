@@ -1,0 +1,1 @@
+{"hits": [true, false, false], "wrong": 1, "note": "Explains why the TypeError happens but misses the per-query signature fallback and the deprecation warning, and wrongly says Django always passes fetch_mode."}

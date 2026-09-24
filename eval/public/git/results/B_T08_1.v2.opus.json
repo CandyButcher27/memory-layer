@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 1, "note": "Diagnoses the Dash bug and the endless loop correctly, but does not describe the command-substitution workaround and implies the hang can still happen with it in place."}

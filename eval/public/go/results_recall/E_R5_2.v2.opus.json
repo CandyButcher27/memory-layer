@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "The answer says it can't find the kernel version, so it misses 5.15, and it never presents 5.4 as current."}

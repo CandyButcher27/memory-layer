@@ -1,0 +1,2 @@
+B: cost 0.771 turns 31 secs 154; memory lines 286 (CLAUDE.md 47 + memory/ 239 in 8 files); auto-loaded CLAUDE.md 2756 bytes
+D: cost 0.299 turns 14 secs 66; lines 101 (CLAUDE.md 25, STATE.md 28, ISSUES.md 15, decisions.md 8, memory/external.md 25); auto-loaded CLAUDE.md+STATE.md 2983 bytes; check: memory layer clean

@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 2, "note": "The answer says the driver Scan hook exists and should be used, missing that it was reverted and the issue reopened for redesign."}

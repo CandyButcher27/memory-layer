@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "Answer misidentifies the vulnerability mechanism (claims AT_SYMLINK_NOFOLLOW works on Linux, when the bug is that it's silently ignored) and omits both the fchmodat2 and O_PATH/proc workaround fix details."}

@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 3, "note": "Answer attributes the hang to flock-on-NFS blocking, not to CacheState::lock/mutate_lock failing to release on WouldBlock as described in the key points; none of the three key points are addressed."}

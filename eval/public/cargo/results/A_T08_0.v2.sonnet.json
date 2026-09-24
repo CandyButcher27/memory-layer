@@ -1,0 +1,1 @@
+{"hits": [true, false, true], "wrong": 0, "note": "Answer covers the EAGAIN fallback mechanism and file location correctly, and cites the right GitHub issues, but omits the ~4 second retry-delay detail from point 2."}

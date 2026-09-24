@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the kqueue EBADF bug, skipping the entry like ENOENT, and the error message that now names the entry."}

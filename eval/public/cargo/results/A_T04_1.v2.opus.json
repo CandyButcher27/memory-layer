@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "All three points are covered; point 2 is paraphrased and omits the drop/try_lock details, but it does explain the leaked mutate lock and the deadlock."}

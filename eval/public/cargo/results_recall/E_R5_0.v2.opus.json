@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Blames a generic Windows replace/rename issue (cargo#5481) instead of the corporate Defender policy's ~2s lock on new .exe files, but does link the error to running a freshly linked binary."}

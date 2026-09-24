@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the implementation, the revert and its reason, and the current UNION-of-SELECTs approach."}

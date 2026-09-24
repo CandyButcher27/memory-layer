@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 0, "note": "Correctly describes the cause and the 0.4.83 downgrade and re-downgrade, but omits the later bump to 0.4.86 that skipped 0.4.84."}

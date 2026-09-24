@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers all three key points: the synchronous-channel sendLock, the double lock through unlockAndRun, and the fix for #76052."}

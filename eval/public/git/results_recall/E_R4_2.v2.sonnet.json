@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Answer hedges ('it depends') and never confirms the proxy actually strips the header, though it does state the silent v0 fallback."}

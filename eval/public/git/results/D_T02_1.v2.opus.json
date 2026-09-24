@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the v0 HEAD advertisement, the NULL peer_ref dereference in update_remote_refs, and the guard fix in 1034ad383f."}

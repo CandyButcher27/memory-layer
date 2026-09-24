@@ -1,0 +1,1 @@
+{"hits": [false, true, false], "wrong": 1, "note": "Answer correctly identifies v1-default/compaction-triggers-v2 behavior but misreads the history as v2 never being promoted, missing the make-default-then-revert story and the old-Git die()/mixed-version compatibility rationale entirely."}

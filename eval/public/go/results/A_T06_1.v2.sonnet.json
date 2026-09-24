@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "Answer describes current internal architecture and extension points but never mentions CL 588435/Go 1.26, the revert, the efficiency/difficulty rationale, or issue #67546, and implies no such API was ever proposed."}

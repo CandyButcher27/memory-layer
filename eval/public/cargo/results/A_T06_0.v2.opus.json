@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "Misses the reverted ignore list, the transitive-dependency fix, and the RFC deferral, and wrongly claims no allowlist history exists."}

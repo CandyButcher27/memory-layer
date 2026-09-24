@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer gives the limit as 120 req/min per IP and correctly treats 60 as the outdated figure."}

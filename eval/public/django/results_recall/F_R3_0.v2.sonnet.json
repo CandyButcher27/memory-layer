@@ -1,0 +1,1 @@
+{"hits": [true, false], "wrong": 1, "note": "Correctly identifies BigAutoField but invents a Django-6.0-default-change rationale instead of the actual platform-meeting/orders-table-overflow reason."}

@@ -1,0 +1,1 @@
+{"hits": [true, false, true], "wrong": 0, "note": "Answer covers the revert and the partial-clone caveat but omits that delta-compression gains are still achievable via the existing object-list mechanism."}

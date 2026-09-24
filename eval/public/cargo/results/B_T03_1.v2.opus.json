@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Covers all three points; the 1.96 cause is given as a regression and a header rejection, without naming the HeaderValue refactor."}

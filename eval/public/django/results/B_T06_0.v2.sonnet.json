@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "All three key points are stated: the feature was implemented per #35295 then reverted, the revert was due to crashes on Oracle versions newer than 23.3 (ticket #35655), and the UNION-of-SELECTs is confirmed as the current behavior."}

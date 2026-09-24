@@ -1,0 +1,1 @@
+{"hits": [false, true, false], "wrong": 2, "note": "Answer misattributes the root cause (missing SMTPUTF8 feature vs. Python's incorrect rfc2047 encoding bug) and cites wrong ticket/bug numbers, missing the feature-detection test detail."}

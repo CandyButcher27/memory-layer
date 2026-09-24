@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Covers the sendLock double-lock, the immediate-run path for bubbled timers and the fix; it leaves out the Go 1.23 synchronous-channel context."}

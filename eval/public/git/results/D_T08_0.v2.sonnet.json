@@ -1,0 +1,1 @@
+{"hits": [false, true, false], "wrong": 1, "note": "Answer invents an incorrect bash/fifo-seeking explanation instead of the actual Dash v0.5.13 read bug, and omits the command-substitution workaround."}

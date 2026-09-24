@@ -1,0 +1,1 @@
+{"hits": [false, false, true], "wrong": 1, "note": "Answer misses the tried-and-reverted history and wrongly claims the OpenSSL workflow doesn't need Docker and could be moved to ubuntu-slim."}

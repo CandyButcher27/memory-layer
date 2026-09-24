@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 0, "note": "Explains the PID 1 cause and the exit(128+sig) fix correctly but leaves out the handler workaround and the rejected alternatives."}

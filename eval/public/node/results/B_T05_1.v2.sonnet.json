@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 0, "note": "Answer gives its own technical critique of the fix but never mentions the fix was actually merged and reverted, nor the multiple-unref reason."}

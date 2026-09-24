@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer explains the corked Writev path, the StorageSize CHECK and the silent drop in HexDecode, and gives the fix of removing the CHECK in favour of floor division."}

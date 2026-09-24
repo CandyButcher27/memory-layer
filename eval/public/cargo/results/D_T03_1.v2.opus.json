@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the cause, the HeaderValue rejection since 1.96, and the fix in adaptor.rs correctly."}

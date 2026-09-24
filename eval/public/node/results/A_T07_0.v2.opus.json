@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "The answer wrongly says AbortSignal warns by default; the default was deliberately set to 0 to disable the warning."}

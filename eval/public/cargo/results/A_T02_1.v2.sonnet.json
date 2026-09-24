@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "All three key points are stated accurately with correct attribution to rustc #114669 and the rustc() function mtime fix in mod.rs."}

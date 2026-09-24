@@ -3,12 +3,16 @@ __pycache__/
 
 # Raw agent transcripts, diffs and state snapshots quote the evaluated projects' code and notes.
 # Only scripts, task files, verdicts and written summaries are kept.
-eval/results*/**/*.jsonl
-eval/results*/**/*.txt
-eval/results*/**/*.diff
-eval/results*/**/*.md
-eval/results*/**/bad_judge*/
-eval/results_local_partial/
-eval/*_memory.diff
+eval/the production project/results*/**/*.jsonl
+eval/the production project/results*/**/*.txt
+eval/the production project/results*/**/*.diff
+eval/the production project/results*/**/*.md
+eval/the production project/results*/**/bad_judge*/
+eval/the production project/results_local_partial/
+eval/the production project/reports/*_memory.diff
 eval/stress/*/*/
 eval/stress/**/*.jsonl
+
+eval/public/*/results*/**/*.jsonl
+eval/public/*/results*/**/*.txt
+eval/public/**/*.jsonl

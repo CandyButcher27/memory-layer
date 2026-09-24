@@ -1,0 +1,1 @@
+{"hits": [true, false, true], "wrong": 0, "note": "The answer gets the fallback, the bug references and the file right, but leaves out that retrying can take about 4 seconds while hard-linking works immediately."}

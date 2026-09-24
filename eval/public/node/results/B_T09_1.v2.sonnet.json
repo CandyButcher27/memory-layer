@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Answer correctly states AIX's uv_random() blocks on /dev/random and Node falls back to OpenSSL which seeds from /dev/urandom on AIX."}

@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Covers the P2718R0 lifetime extension, the re-entrant post deadlock and the local-variable fix, but doesn't name the functions or file that were changed."}

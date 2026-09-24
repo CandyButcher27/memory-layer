@@ -1,0 +1,1 @@
+{"hits": [false, true, false], "wrong": 1, "note": "Gets the current feature-gated default right, but misses the revert history and wrongly says older Git tolerates v2 MIDXs, when it actually dies."}

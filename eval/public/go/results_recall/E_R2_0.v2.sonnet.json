@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 1, "note": "Answer describes disablethp as an opt-in Go runtime flag rather than stating the fork applies it to every service by default."}

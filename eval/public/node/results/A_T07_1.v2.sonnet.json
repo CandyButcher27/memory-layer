@@ -1,0 +1,1 @@
+{"hits": [true, false, true], "wrong": 0, "note": "Answer confirms default-0 and per-instance opt-in with setMaxListeners, but never states the isomorphic-library-code rationale."}

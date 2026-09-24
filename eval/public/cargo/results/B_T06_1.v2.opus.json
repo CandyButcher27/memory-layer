@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 0, "note": "The answer argues against an allowlist on general grounds but misses the add-then-revert history, the transitive-dep fix and the RFC deferral."}

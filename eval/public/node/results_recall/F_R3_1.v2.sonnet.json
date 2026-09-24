@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 2, "note": "Answer claims no measurement exists at all, directly contradicting both key points which state a specific measurement (38.4 ms, 2026-09-20) on a specific machine (AWS c7g.large arm64) exists."}

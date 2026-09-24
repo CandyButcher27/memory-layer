@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer states both the default value of 2 and the fallback in maxIdleConnsPerHost() in transport.go."}

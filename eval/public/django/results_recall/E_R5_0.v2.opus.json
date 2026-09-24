@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Explains truncation and W002 correctly but only treats the missing strict mode as a possibility, never saying staging lacks it."}

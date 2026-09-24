@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the stray force_str regression, its removal from PBKDF2, and the MD5 force_bytes concatenation fix."}

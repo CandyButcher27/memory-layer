@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers all three key points: the default of 0, the isomorphic-library reason, and the per-instance setMaxListeners opt-in."}

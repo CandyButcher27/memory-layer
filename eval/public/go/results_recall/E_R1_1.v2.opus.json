@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "The answer explains the generic fallback but dismisses the seccomp block on the CI runners as unverified and answers 'Yes', which contradicts the expected conclusion."}

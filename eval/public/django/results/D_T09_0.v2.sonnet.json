@@ -1,0 +1,1 @@
+{"hits": [false, true, true], "wrong": 1, "note": "Answer misses the rfc2047/undeliverable-encoding root cause and cites a different (likely wrong) CPython issue number than gh-122476."}

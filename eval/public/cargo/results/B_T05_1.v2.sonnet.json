@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "Answer claims no such feature/PRs exist at all, directly contradicting the key points that it was added (#16742) and reverted (#16999) with a specific confusing-semantics rationale."}

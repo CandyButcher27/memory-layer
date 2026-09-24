@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "All three key points are stated accurately, with matching file path/line, EAGAIN/35 fallback logic, and reference to the ZFS bug and cargo issue #13838."}

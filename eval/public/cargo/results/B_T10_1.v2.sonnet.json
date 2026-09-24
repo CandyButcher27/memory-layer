@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 1, "note": "Answer claims Retry-After is only respected for HTTP 429/503, which contradicts/adds an unverified restriction not in the key point, and doesn't clearly confirm the general 'used when present' behavior applies broadly."}

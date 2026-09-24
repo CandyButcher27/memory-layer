@@ -1,0 +1,1 @@
+{"hits": [true, false], "wrong": 1, "note": "Answer asserts fallback to v1 instead of v0, contradicting the second key point."}

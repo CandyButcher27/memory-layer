@@ -1,0 +1,5 @@
+arm  builder                    turns  cost_usd  secs  memory_lines                                                         autoload_bytes  check
+B    harness SKILL (opus)       27     0.69      113   220 (CLAUDE.md 50, memory/README 22, 4 component files 148)          2427 (CLAUDE.md)  n/a
+D    memlayer Adopt (opus)      11     0.35      62    114 (CLAUDE.md 25, STATE 28, ISSUES 29, decisions 14, external 18)   2686              memory layer clean
+A    none                       -      -         -     0                                                                    0                 n/a
+Source: build_B.jsonl / build_D.jsonl result events. Neither build was committed (memory files untracked in the arm).

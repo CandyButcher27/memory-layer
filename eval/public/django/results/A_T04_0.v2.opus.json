@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 0, "note": "Covers why the index is skipped and the feature-flag fix, but omits the separate unfixed NOT (= false) planner limitation."}

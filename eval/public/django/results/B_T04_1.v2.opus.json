@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 1, "note": "Gets the integer storage, the explicit comparison, and the feature-flag generalisation, but wrongly blames CASE wrapping and omits the NOT (field = false) limitation."}

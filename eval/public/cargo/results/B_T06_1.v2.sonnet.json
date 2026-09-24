@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 0, "note": "Answer never mentions the added-then-reverted ignore list, the transitive-dependency suppression fix, or the curl/RFC-3920 punt; it substitutes independent, unverified analysis instead."}

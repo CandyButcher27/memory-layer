@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Point 2 is loosely covered (mentions 1.96 regression and header rejection) but doesn't explicitly cite the http::HeaderValue/registry refactor mechanism."}

@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Answer captures all three core facts but omits the re-bump/re-downgrade cycle and the specific FreeBSD 13.5/14.3 + ca_root_nss detail."}

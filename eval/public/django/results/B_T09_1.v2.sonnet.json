@@ -1,0 +1,1 @@
+{"hits": [false, true, true], "wrong": 0, "note": "Answer omits the rfc2047 mis-encoding explanation, substituting an SMTPUTF8-negotiation rationale, but correctly covers the ValueError workaround and the Python 3.15 fix/test feature-detection."}

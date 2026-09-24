@@ -1,0 +1,1 @@
+{"hits": [true, false, true], "wrong": 0, "note": "The answer is correct and cites both issues, but it leaves out why cargo hard-links instead of retrying (a retry can take about 4 seconds)."}

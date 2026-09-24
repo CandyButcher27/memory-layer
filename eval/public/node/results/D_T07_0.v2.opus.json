@@ -1,0 +1,1 @@
+{"hits": [true, false, false], "wrong": 0, "note": "Correctly says the default is 0 and the warning is disabled, but gives no reason and never says setMaxListeners can turn it back on."}

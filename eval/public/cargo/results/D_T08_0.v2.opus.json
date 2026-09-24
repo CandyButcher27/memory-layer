@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the EAGAIN fallback, both issue references and the location, but leaves out that a retry could take about 4 seconds."}

@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 2, "note": "Answer describes current lint/cfg(false) workaround from a hypothetical code read, but never mentions the actual history (allowlist added then reverted, transitive-dependency exemption, curl/RFC 3920 punt)."}

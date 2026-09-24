@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the P2718R0 lifetime extension, the deadlock, and the local-vector fix in both functions."}

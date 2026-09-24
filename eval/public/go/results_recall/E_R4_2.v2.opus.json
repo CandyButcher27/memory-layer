@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Suggests GOTMPDIR generically but misses the 512 MB tmpfs /tmp fact and the specific /scratch/gotmp path."}

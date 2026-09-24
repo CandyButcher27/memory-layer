@@ -1,0 +1,1 @@
+{"hits": [false, false, true], "wrong": 1, "note": "Answer correctly identifies current UNION-based implementation but fabricates a different rationale and denies the actual implement-then-revert history (#35295, crash on Oracle >23.3)."}

@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the early return on a nil dial context, the missing decConnsPerHost call that leaked the count, and the fix for #65705."}

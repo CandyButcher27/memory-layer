@@ -1,0 +1,1 @@
+{"hits": [false, true, true], "wrong": 0, "note": "Answer correctly identifies Docker and icupkg blockers but omits that ubuntu-slim was actually tried and reverted."}

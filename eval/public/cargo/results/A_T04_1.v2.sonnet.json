@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "All three key points are substantively covered, though point 2's specific code-path detail (error path/Drop/try_lock-on-LockAcquired) is only loosely paraphrased rather than stated explicitly."}

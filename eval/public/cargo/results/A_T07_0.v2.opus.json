@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Covers all three points; it leaves out that the earlier behaviour required the lockfile to exist."}

@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Correctly describes the fresh-binary timing failure but only guesses at AV generically, missing the specific corporate Defender policy and ~2s lock."}

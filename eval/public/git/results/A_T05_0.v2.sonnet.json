@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "Answer recommends the exact fix that was already tried and reverted, without mentioning the revert, shell-wrapping issue, or mksh deadlock at all."}

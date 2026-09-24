@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 1, "note": "Answer misidentifies the cause as an unexported NODE_TEST_DIR defaulting to a possibly-noexec test/.tmp dir, rather than /tmp itself being noexec on the farm, though it correctly gives the NODE_TEST_DIR workaround."}

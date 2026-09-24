@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "All three key points are substantively covered, though point 2's mechanism detail (CacheLock::drop, try_lock/LockAcquired) is only partially reproduced."}

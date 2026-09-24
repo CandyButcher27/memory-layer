@@ -1,0 +1,1 @@
+{"hits": [false, true, false], "wrong": 1, "note": "Answer gives a plausible but different root-cause explanation (SMTPUTF8/protocol constraint) instead of the rfc2047 mis-encoding bug, and misses the test feature-detection detail while citing a mismatched CPython issue number."}

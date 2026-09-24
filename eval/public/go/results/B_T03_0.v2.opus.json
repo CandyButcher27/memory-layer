@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the early return, the missed decrement that leaks the per-host count, and the fix for issue 65705."}

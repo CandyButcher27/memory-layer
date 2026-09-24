@@ -1,0 +1,12 @@
+[
+  {"id": "R1", "kind": "external-fact", "task": "What AIX version do the Jenkins AIX test machines run?",
+   "gold": ["AIX 7.2 TL5"]},
+  {"id": "R2", "kind": "decision", "task": "Can we backport the Buffer.poolSize 64 KiB default to the v22 LTS line?",
+   "gold": ["No, the TSC decided not to backport it to v22", "Because the extra ~56 KiB RSS per realm hurts embedders that create many realms and workers"]},
+  {"id": "R3", "kind": "measurement", "task": "What is the most recent startup time measurement we have for `node -e 0`, and on what machine?",
+   "gold": ["Median 38.4 ms over 200 runs, measured 2026-09-20", "On an AWS c7g.large (arm64) with a release build of main"]},
+  {"id": "R4", "kind": "external-trap", "task": "A new test compiles a small helper executable into the test tmpdir and runs it. It passes locally. Anything to worry about on our internal build farm?",
+   "gold": ["/tmp on the internal build farm is mounted noexec, so executing it from the tmpdir fails with EACCES", "Workaround: set NODE_TEST_DIR to an exec-mounted directory"]},
+  {"id": "R5", "kind": "corrected-fact", "task": "How much RAM does each Jenkins AIX test machine have?",
+   "gold": ["16 GB each", "Does not present 4 GB as the current value (4 GB was an earlier figure that was corrected)"]}
+]

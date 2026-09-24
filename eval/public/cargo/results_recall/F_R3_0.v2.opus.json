@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Both key points are covered: keep the default at 3 rather than 5, because extra retries hid a 40-minute mirror outage from alerts."}

@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the P2718R0 lifetime extension, the deadlock on the non-recursive mutex, and the local-vector fix, with nothing contradicting them."}

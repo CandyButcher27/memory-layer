@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "All three key points are stated correctly, with plausible extra detail about Retry-After being limited to 429/503 responses that doesn't contradict the key points."}

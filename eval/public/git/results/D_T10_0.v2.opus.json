@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the config fallback chain, the env var default and the test-lib.sh override correctly."}

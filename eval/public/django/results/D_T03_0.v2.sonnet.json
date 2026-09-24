@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 1, "note": "answer cites an incorrect deprecation warning class name (RemovedInDjango2028Warning) instead of RemovedInDjango70Warning"}

@@ -1,0 +1,1 @@
+{"hits": [false, false, true], "wrong": 1, "note": "Blames missing SMTPUTF8 support instead of Python's rfc2047 misencoding bug; mentions the 3.15 fix but not the feature detection in tests."}

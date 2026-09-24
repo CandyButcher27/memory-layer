@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 0, "note": "Covers the root cause and the repeated downgrade to 0.4.83, but omits the eventual deliberate bump to 0.4.86 skipping 0.4.84 (curl-rust#632)."}

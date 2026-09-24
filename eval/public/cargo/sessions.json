@@ -1,0 +1,7 @@
+[
+  {"id": "S1", "task": "The infra team told us today about the internal Artifactory mirror of crates.io that our CI points cargo at: it rate-limits each IP to 60 requests per minute, and its 429 responses never include a Retry-After header. Check how cargo decides how long to wait after an HTTP 429, and tell me what you found."},
+  {"id": "S2", "task": "Decision from today's team meeting: for the cargo we build and ship internally we keep the default net.retry at 3 and will not raise it to 5, because last quarter the extra retries hid a 40-minute mirror outage from our alerts. Find where the default retry count is defined and confirm its value. Do not change any code."},
+  {"id": "S3", "task": "I timed a clean `cargo build --release` of this repository on our CI runner (8 vCPU) today, 2026-09-22: 6 minutes 41 seconds, the median of 5 runs. Where is the release profile for this workspace configured, and is there anything in it that would obviously slow the build? Answer briefly."},
+  {"id": "S4", "task": "Heads-up from IT: on our Windows build agents, the corporate Defender policy locks every newly written .exe under target/ for about 2 seconds, so running a freshly linked test binary right away can fail with 'Access is denied. (os error 5)'. Find where cargo spawns test binaries during `cargo test` and describe it. Do not fix anything."},
+  {"id": "S5", "task": "Correction from the infra team: the Artifactory mirror's limit is 120 requests per minute per IP, not 60. Does anything in this repository depend on that number?"}
+]

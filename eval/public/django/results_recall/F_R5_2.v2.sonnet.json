@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Answer states strict mode is off on staging and cites the W002 truncation-vs-error mechanism, matching both key points."}

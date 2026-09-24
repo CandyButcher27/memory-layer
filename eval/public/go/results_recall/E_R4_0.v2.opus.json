@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 0, "note": "The answer gets the GOTMPDIR mechanism right but misses the 512 MB tmpfs cap and the /scratch/gotmp path."}

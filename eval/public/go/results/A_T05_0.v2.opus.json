@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 0, "note": "The answer reaches the right conclusion from the tests but misses the history: the CL, the revert, the documentation reason and the issue number."}

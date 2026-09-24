@@ -1,0 +1,5 @@
+repo: https://github.com/nodejs/node  pinned a2c8da59f2e319860985ff1275d66a6d16d611b0 (+2 local strip commits: AGENTS.md, deps/v8/GEMINI.md)
+commits 48620, files 51849 (git ls-files), clone --filter=blob:none, arms via cp -a on /tmp (106 GB free; home had 19 GB)
+arm B (harness skill, opus): cost $1.13, 43 turns; CLAUDE.md 43 lines + memory/ 328 lines (8 files) = 371; auto-loaded CLAUDE.md 2644 bytes (no STATE.md)
+arm D (memory layer Adopt, opus): cost $0.36, 12 turns; CLAUDE.md 26 + STATE.md 27 + ISSUES.md 71 (9 issues) + decisions.md 8 (empty template) + memory/embedding.md 26 + memory/external.md 5 = 163; auto-loaded 2921 bytes; check: "memory layer clean"
+after write sessions: F check -> "memory/external.md: 2 'Last verified:' lines, keep one"

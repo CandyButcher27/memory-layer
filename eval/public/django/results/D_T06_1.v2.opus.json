@@ -1,0 +1,1 @@
+{"hits": [false, false, true], "wrong": 1, "note": "The answer correctly says the UNION workaround remains, but it misses the implement-then-revert history and the >23.3 crash, and it implies 23c was never evaluated."}

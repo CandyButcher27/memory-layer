@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 2, "note": "The answer recommends clean_on_exit and says it prevents zombies, missing that it was tried, reverted, and caused mksh deadlocks."}

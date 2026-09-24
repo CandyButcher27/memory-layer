@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer states the GODEBUG decision, the reason (THP set to 'always' plus RSS growth after the Go upgrade), and that the runtime default is deliberately not patched."}

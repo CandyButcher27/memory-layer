@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Both key points are directly stated: TSC rejected the backport, citing ~56 KiB RSS per realm hurting embedders with many realms/workers."}

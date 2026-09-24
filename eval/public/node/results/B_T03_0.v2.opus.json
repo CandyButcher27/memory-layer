@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "All three points are covered; it only leaves out that O_NONBLOCK doesn't affect regular-file reads."}

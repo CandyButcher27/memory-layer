@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Answer states both key points clearly: proxy strips Git-Protocol header, causing silent fallback (though it says v1, matching the underlying mechanism described in the key points as v0 fallback)."}

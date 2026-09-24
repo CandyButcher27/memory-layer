@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 1, "note": "The mechanism and fallback are right, but it names the wrong warning class (RemovedInDjango2028Warning instead of RemovedInDjango70Warning) and never says the check runs once per query."}

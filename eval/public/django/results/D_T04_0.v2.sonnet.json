@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 0, "note": "Covers the SQLite integer-storage/index cause and the feature-flag-based fix well, but omits the separate unfixed WHERE NOT case."}

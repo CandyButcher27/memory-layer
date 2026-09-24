@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 0, "note": "Answer says 'no' but for unrelated reasons (wrong commit/CVE), never mentioning CL 722160, the Close-unblocks-Read contract, or issues #75933/#78973/#80085."}

@@ -1,0 +1,1 @@
+{"hits": [false, true, false], "wrong": 0, "note": "The answer gets the current compaction-only v2 default right but misses the revert and the reason for it: older Git dies on a v2 midx."}

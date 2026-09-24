@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "The answer says a backport is possible and undecided, missing the TSC's decision not to backport and the reason about embedders creating many realms and workers."}

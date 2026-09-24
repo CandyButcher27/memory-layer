@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Covers the CRLF cause, the 1.96 header-value regression and the adaptor.rs fix, though it doesn't name HeaderValue or the refactor."}

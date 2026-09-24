@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Answer covers all three key points accurately, including retry count/config, backoff formula with jitter and cap, and Retry-After handling capped at 10s."}

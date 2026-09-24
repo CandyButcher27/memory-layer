@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers all three key points: the CRLF cause, the HeaderValue rejection after the 1.96 refactor, and the fix that strips the trailing \\r in adaptor.rs."}

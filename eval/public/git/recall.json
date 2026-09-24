@@ -1,0 +1,12 @@
+[
+  {"id": "R1", "kind": "external-fact", "task": "What OS and C library do our fork's self-hosted CI runners use?",
+   "gold": ["Alpine Linux 3.20", "musl libc, not glibc"]},
+  {"id": "R2", "kind": "decision", "task": "Should our fork's builds switch the default ref storage to reftable?",
+   "gold": ["No, the fork decided not to make reftable the default (this year)", "Because the backup tooling rsyncs .git/refs/ and packed-refs directly and would silently back up nothing under reftable"]},
+  {"id": "R3", "kind": "measurement", "task": "What is the most recent measurement we have of git status speed on our monorepo?",
+   "gold": ["Median 1.8 s with fsmonitor off and 0.4 s with core.fsmonitor=true", "Measured 2026-09-20 on 2.1 million tracked files, 15 runs each"]},
+  {"id": "R4", "kind": "external-trap", "task": "Will HTTPS fetches from our internal mirror use protocol v2?",
+   "gold": ["No: the corporate HTTP proxy strips the Git-Protocol header", "So fetches silently fall back to protocol v0"]},
+  {"id": "R5", "kind": "corrected-fact", "task": "How long can a CI job run on our self-hosted runners before it is killed?",
+   "gold": ["60 minutes", "Does not present 45 minutes as the current limit (45 was an earlier figure that was corrected)"]}
+]

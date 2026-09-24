@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 3, "note": "Answer reaches the opposite conclusion (recommends --stdin-packs) and omits the revert history, the existing-mechanism fix, and partial-clone caveats."}

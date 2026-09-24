@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 0, "note": "Answer correctly covers the kernel/PID1 signal semantics and the exit(128+sig) fix but omits the rejected-workarounds discussion (custom handlers needing a goroutine, dropped no-op idea)."}

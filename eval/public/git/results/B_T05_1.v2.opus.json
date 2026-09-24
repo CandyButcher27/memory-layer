@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 2, "note": "The answer recommends the approach that was already tried and reverted, and misses both the shell-wrapping problem and the mksh deadlock."}

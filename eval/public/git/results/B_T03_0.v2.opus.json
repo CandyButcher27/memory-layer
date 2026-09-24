@@ -1,0 +1,1 @@
+{"hits": [false, false, true], "wrong": 1, "note": "The answer describes the fixed code but denies the bug and never explains the double setup or the repo_set_gitdir BUG."}

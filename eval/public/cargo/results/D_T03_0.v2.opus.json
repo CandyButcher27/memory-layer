@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Covers all three points; the 1.96 header-validation cause is paraphrased without naming the network refactor or http::HeaderValue."}

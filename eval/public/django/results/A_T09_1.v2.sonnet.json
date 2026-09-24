@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Answer covers all three points with correct core mechanics, but omits the specific detail that Django's tests feature-detect the Python 3.15 fix rather than gating on version number, and cites a possibly different CPython issue number."}

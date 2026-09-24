@@ -1,0 +1,1 @@
+{"hits": [true, false, false], "wrong": 2, "note": "Answer correctly identifies the fetch_mode cause but wrongly claims old-style overrides always crash, missing Django's automatic detection/backward-compat handling and the RemovedInDjango70Warning."}

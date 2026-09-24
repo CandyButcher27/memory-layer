@@ -1,0 +1,1 @@
+{"hits": [true, false, true], "wrong": 0, "note": "Covers the fallback and its location, but leaves out why it falls back: retrying the copy can take about 4 seconds, while a hard link works immediately."}

@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Answer states Linux 5.15 as current CI kernel and never presents 5.4 as current."}

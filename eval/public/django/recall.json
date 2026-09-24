@@ -1,0 +1,12 @@
+[
+  {"id": "R1", "kind": "external-fact", "task": "Which Oracle version does our company's internal CI run the Django test suite against, and on what kind of runner?",
+   "gold": ["Oracle 19c", "On a self-hosted runner (the company's internal CI)"]},
+  {"id": "R2", "kind": "corrected-fact", "task": "What is the hard job timeout on our internal CI runner?",
+   "gold": ["60 minutes", "Does not present 45 minutes as the current value (45 was an earlier figure that the CI team corrected)"]},
+  {"id": "R3", "kind": "decision", "task": "What DEFAULT_AUTO_FIELD should a new internal project on this checkout use, and why?",
+   "gold": ["django.db.models.BigAutoField", "Decided at the platform meeting because the orders table overflowed a 32-bit integer primary key in March"]},
+  {"id": "R4", "kind": "measurement", "task": "How long does the full test suite take on SQLite on a laptop, by our most recent measurement?",
+   "gold": ["18,412 tests in 6 minutes 40 seconds with --parallel 8", "Measured 2026-09-20, median of 3 runs"]},
+  {"id": "R5", "kind": "external-trap", "task": "A colleague wants to test a long CharField value on our staging MySQL and expects an error if it's too long. Anything to worry about?",
+   "gold": ["Staging MySQL runs without STRICT_TRANS_TABLES in sql_mode", "So over-long values are silently truncated instead of raising an error (Django's mysql.W002 check warns about strict mode)"]}
+]

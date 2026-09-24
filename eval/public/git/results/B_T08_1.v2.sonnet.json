@@ -1,0 +1,1 @@
+{"hits": [true, true, false], "wrong": 0, "note": "Answer nails the Dash bug attribution and the infinite-loop mechanism but never explains what the actual workaround does."}

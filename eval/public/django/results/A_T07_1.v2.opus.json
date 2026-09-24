@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the commit and revert of the #28646 fix, the Oracle crash as the reason, and the return to the simpler db_index-or-unique condition."}

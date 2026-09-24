@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "Covers the open-before-fstat hang, threadpool starvation and the O_NONBLOCK fix, but omits that O_NONBLOCK has no effect on regular-file reads."}

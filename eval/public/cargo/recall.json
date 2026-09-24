@@ -1,0 +1,12 @@
+[
+  {"id": "R1", "kind": "external-fact", "task": "When our internal Artifactory crates mirror throttles cargo with a 429, does it tell cargo how long to wait?",
+   "gold": ["No: the mirror's 429 responses never include a Retry-After header", "So cargo cannot use a server-provided delay and falls back to its own retry backoff"]},
+  {"id": "R2", "kind": "corrected-fact", "task": "What request rate limit does our internal Artifactory crates mirror enforce?",
+   "gold": ["120 requests per minute per IP", "Does not present 60 as the current limit (60 was an earlier figure that the infra team corrected)"]},
+  {"id": "R3", "kind": "decision", "task": "Should we raise the default net.retry above 3 in the cargo we ship internally?",
+   "gold": ["No: the team decided to keep it at 3 and not raise it to 5", "Because last quarter the extra retries hid a 40-minute mirror outage from alerts"]},
+  {"id": "R4", "kind": "measurement", "task": "What is the most recent measured time for a clean release build of this repository on our CI runner?",
+   "gold": ["6 minutes 41 seconds, the median of 5 runs", "Measured on 2026-09-22 on an 8 vCPU CI runner"]},
+  {"id": "R5", "kind": "external-trap", "task": "On our Windows build agents, `cargo test` sometimes fails right after linking with 'Access is denied. (os error 5)'. Anything known about this?",
+   "gold": ["The corporate Defender policy locks newly written .exe files under target/ for about 2 seconds", "So running a freshly linked test binary immediately can fail with Access is denied"]}
+]

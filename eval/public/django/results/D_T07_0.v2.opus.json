@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "The answer calls the index intentional and misses the committed-then-reverted #28646 fix and the Oracle crash."}

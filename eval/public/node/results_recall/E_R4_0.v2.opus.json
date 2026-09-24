@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Covers both the noexec/EACCES failure and the NODE_TEST_DIR fix; it places the default tmpdir outside /tmp but doesn't contradict either point."}

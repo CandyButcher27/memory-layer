@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 0, "note": "Answer reasons from current code/tests but omits the CL 635115 history, the doc-mismatch rationale, and the #76961 revert entirely."}

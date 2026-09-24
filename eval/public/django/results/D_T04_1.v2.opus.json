@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 2, "note": "The answer says Django changed nothing and blames SQLite's planner statistics, missing the removed boolean comparison and its feature-flag fix."}

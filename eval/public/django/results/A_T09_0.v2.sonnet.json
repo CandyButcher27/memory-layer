@@ -1,0 +1,1 @@
+{"hits": [false, true, false], "wrong": 1, "note": "Answer misattributes the root cause to missing SMTPUTF8 support instead of Python's rfc2047 mis-encoding bug, and omits the test feature-detection point."}

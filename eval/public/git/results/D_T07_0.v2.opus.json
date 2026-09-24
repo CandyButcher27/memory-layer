@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 2, "note": "The answer recommends switching to --stdin-packs without knowing it was tried and reverted, and wrongly says the object list can't give the delta improvement."}

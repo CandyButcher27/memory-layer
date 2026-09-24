@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the kernel bug, the EBADF-as-ENOENT skip and the error message change correctly."}

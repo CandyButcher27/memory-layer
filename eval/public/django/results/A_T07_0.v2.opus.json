@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 1, "note": "The answer treats the duplicate index as intentional design and misses the committed-then-reverted #28646 fix and the Oracle crash."}

@@ -1,0 +1,1 @@
+{"hits": [false, true, false], "wrong": 2, "note": "Answer fabricates a currently-present replacement hook and claims the issue was fixed, contradicting the fact that no hook exists and the issue is merely reopened"}

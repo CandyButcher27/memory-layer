@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Correctly explains W002 and silent truncation without strict mode, but never confirms staging actually lacks STRICT_TRANS_TABLES \u2014 treats it as a hypothetical to check rather than a stated fact."}

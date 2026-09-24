@@ -1,0 +1,1 @@
+{"hits": [false, true, true], "wrong": 0, "note": "Answer misses that Python before 3.15 wrongly encodes local parts with RFC 2047, but it covers the ValueError guard and the Python 3.15 removal plan."}

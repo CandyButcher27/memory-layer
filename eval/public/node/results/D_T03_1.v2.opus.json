@@ -1,0 +1,1 @@
+{"hits": [true, true, true], "wrong": 0, "note": "The answer covers the open-before-fstat ordering, the threadpool starvation, and the O_NONBLOCK fix, with nothing contradicting the key points."}

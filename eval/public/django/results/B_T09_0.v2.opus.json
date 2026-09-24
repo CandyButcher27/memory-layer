@@ -1,0 +1,1 @@
+{"hits": [false, false, true], "wrong": 1, "note": "Answer blames an SMTP/RFC protocol limit instead of Python's rfc2047 encoding bug, though it does link the change to Python 3.15."}

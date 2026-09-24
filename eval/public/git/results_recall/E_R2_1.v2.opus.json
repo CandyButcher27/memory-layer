@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer says no to reftable and gives the reason: the rsync backup would silently back up nothing."}

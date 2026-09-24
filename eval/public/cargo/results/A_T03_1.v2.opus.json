@@ -1,0 +1,1 @@
+{"hits": [true, false, true], "wrong": 1, "note": "The answer blames a 1.96 change to the adaptor instead of the 1.96 network refactor that switched to http::HeaderValue."}

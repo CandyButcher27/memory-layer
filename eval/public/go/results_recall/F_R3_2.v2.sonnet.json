@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Both key points (median 2m41s, 32-core box, 5 cold-cache runs on 2026-09-20) are stated explicitly; the solidity caveat is an honest extra assessment, not a contradiction."}

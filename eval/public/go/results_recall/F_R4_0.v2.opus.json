@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer states the 512 MB tmpfs cause and the GOTMPDIR=/scratch/gotmp fix, and nothing in it contradicts either point."}

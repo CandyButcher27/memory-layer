@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer covers both key points: the default of 2 and where maxIdleConnsPerHost() in transport.go makes that choice."}

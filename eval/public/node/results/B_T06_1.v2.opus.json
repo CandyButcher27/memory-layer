@@ -1,0 +1,1 @@
+{"hits": [false, true, true], "wrong": 0, "note": "Covers the Docker and icupkg blockers correctly but never says the move was tried and reverted."}

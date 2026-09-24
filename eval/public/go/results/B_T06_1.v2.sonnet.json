@@ -1,0 +1,1 @@
+{"hits": [false, false, false], "wrong": 2, "note": "Answer asserts the reverted API is merged and usable, contradicting the actual revert and reopened-issue status."}

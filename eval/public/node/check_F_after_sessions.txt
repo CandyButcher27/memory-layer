@@ -1,0 +1,1 @@
+memory/external.md: 2 'Last verified:' lines, keep one

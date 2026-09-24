@@ -1,0 +1,1 @@
+{"hits": [true, false], "wrong": 0, "note": "The answer gets BigAutoField right but gives the framework default as the reason, not the platform-meeting decision after the orders table overflowed a 32-bit key."}
