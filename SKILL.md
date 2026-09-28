@@ -1,9 +1,9 @@
 ---
-name: memory-layer
-description: Set up, adopt, or audit a project's memory layer (CLAUDE.md map, STATE.md, ISSUES.md, decisions.md, memory/<topic>.md) so the agent checks memory before grepping the repo. Use when the user says "/memory-layer", "set up memory", "add the memory layer to this project", "adopt memory layer", "check memory for rot", or starts a new project.
+name: mimi
+description: Set up, adopt, or audit a project's memory layer (CLAUDE.md map, STATE.md, ISSUES.md, decisions.md, memory/<topic>.md) so the agent checks memory before grepping the repo. Use when the user says "/mimi", "mimi", "set up memory", "add the memory layer to this project", "adopt memory layer", "check memory for rot", or starts a new project.
 ---
 
-# memory-layer
+# mimi
 
 Five kinds of file, one of each:
 

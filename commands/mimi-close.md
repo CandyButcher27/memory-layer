@@ -3,7 +3,7 @@ description: Close a work session by writing what this session learned into the 
 allowed-tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 
-# /session-close
+# /mimi-close
 
 Bring the project's memory up to date with this session before it ends. Follow every step in order.
 Write only what this session actually produced. Never write something because a file has an empty
@@ -12,7 +12,7 @@ section.
 ## 0. Preconditions
 
 - Read `CLAUDE.md`. If it has no `<!-- memory-layer:start -->` block, stop and tell the user to set the
-  project up first with the memory-layer skill (New or Adopt). Do not create files here.
+  project up first with `/mimi-start`. Do not create files here.
 - Find `memlayer.py`: its path is on the `Find rot:` line of that block. Call it `$ML` below.
 - Leave any legacy `.harness/` directory untouched.
 

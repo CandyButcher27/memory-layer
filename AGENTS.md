@@ -1,4 +1,4 @@
-# Memory Layer Agent
+# mimi, the memory layer agent
 
 A project-memory agent for coding agents such as Claude Code. It gives every session a small, trusted
 place to look before grepping the repository. It sets that place up on a new project, builds it from
@@ -54,9 +54,9 @@ The script keeps each file's own line endings, only touches text inside its mana
 its own path as `$HOME/...`, so the block works on any machine. Errors are reported as one line, never
 as a traceback.
 
-## Closing a session: `/session-close`
+## Closing a session: `/mimi-close`
 
-`commands/session-close.md` is a slash command to run at the end of every work session. It:
+`commands/mimi-close.md` is a slash command to run at the end of every work session. It:
 
 1. Stops if the project has no memory-layer block. It never creates the files itself.
 2. Gathers candidates from the conversation, git status and diff, this session's commits, and the
@@ -83,8 +83,8 @@ Tested on a scratch copy of the production project:
 - A second run with nothing new wrote nothing.
 - One close cost about $0.70.
 
-To install it, copy `commands/session-close.md` to `~/.claude/commands/`. In Git Bash, `claude -p
-"/session-close"` gets the leading `/` rewritten into a Windows path. Type the command inside Claude
+To install it, copy `commands/mimi-*.md` to `~/.claude/commands/`. In Git Bash, `claude -p
+"/mimi-close"` gets the leading `/` rewritten into a Windows path. Type the command inside Claude
 Code instead, or set `MSYS_NO_PATHCONV=1`.
 
 ## Rules the agent follows
@@ -150,6 +150,6 @@ There is no evidence it is more accurate. The evidence covers one project with s
 ## Status
 
 Built and evaluated, but not installed and not the default. `/harness` and `/wrapup` still build the old
-setup. Switching means four steps: copy this folder to `~/.claude/skills/memory-layer/`, copy
-`commands/session-close.md` to `~/.claude/commands/`, point `/harness` and `/wrapup` at them, then
+setup. Switching means four steps: copy this folder to `~/.claude/skills/mimi/`, copy
+`commands/mimi-*.md` to `~/.claude/commands/`, point `/harness` and `/wrapup` at them, then
 run Adopt project by project.
