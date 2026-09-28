@@ -18,7 +18,8 @@ MAP = f"{DIR}/MIMI.md"
 STATE = f"{DIR}/STATE.md"
 ISSUES = f"{DIR}/ISSUES.md"
 DECISIONS = f"{DIR}/decisions.md"
-POINTER = f"{START}\n@{MAP}\n{END}\n"
+AGENT_FILES = ("CLAUDE.md", "AGENTS.md", "GEMINI.md")
+POINTER = f"{START}\n@{MAP}\nIf {MAP} is not already in your context, read it and {STATE} before starting any task.\n{END}\n"
 SEEDED = ("MIMI.md", "STATE.md", "ISSUES.md", "decisions.md", "memory/external.md")
 CAPS = {MAP: 100, STATE: 60}
 MEMORY_CAP = 150
@@ -72,6 +73,15 @@ def is_empty(text: str) -> bool:
     return not any(l.strip() and not l.startswith("# ") and not l.startswith("Last verified:") for l in body.splitlines())
 
 
+def agent_files(root: Path) -> list[str]:
+    return [n for n in AGENT_FILES if (root / n).exists()] or ["CLAUDE.md"]
+
+
+def autoload(root: Path) -> int:
+    largest = max(len(read(root / n).encode("utf-8")) for n in agent_files(root))
+    return largest + sum(len(read(root / n).encode("utf-8")) for n in (MAP, STATE))
+
+
 def memory_files(root: Path) -> list[str]:
     return sorted(p.relative_to(root).as_posix() for p in (root / DIR / "memory").rglob("*.md"))
 
@@ -88,17 +98,17 @@ def init(root: Path) -> list[str]:
     if not ignore.exists():
         save(ignore, "*\n")
         done.append(f"created {DIR}/.gitignore (git ignores {DIR}/; delete this file to share memory through git)")
-    # ripgrep, behind Claude Code's Grep, skips git-ignored files; a .ignore whitelist lets it search mimi/ again
+    # ripgrep, behind most agents' search tools, skips git-ignored files; a .ignore whitelist lets it search mimi/ again
     unignore = root / DIR / ".ignore"
     if not unignore.exists():
         save(unignore, "!*\n")
-        done.append(f"created {DIR}/.ignore (lets Grep search {DIR}/ although git ignores it)")
-    claude = root / "CLAUDE.md"
-    text, eol = load(claude)
-    if START not in text:
-        sep = "\n\n" if text.strip() else ""
-        save(claude, text.rstrip() + sep + POINTER, eol)
-        done.append(f"added the {MAP} import to CLAUDE.md")
+        done.append(f"created {DIR}/.ignore (lets agent search tools see {DIR}/ although git ignores it)")
+    for name in agent_files(root):
+        text, eol = load(root / name)
+        if START not in text:
+            sep = "\n\n" if text.strip() else ""
+            save(root / name, text.rstrip() + sep + POINTER, eol)
+            done.append(f"added the {MAP} import to {name}")
     index(root)
     return done
 
@@ -136,15 +146,15 @@ def check(root: Path) -> list[str]:
             problems.append(f"{name}: missing, run init")
         elif (n := len(read(p).splitlines())) > cap:
             problems.append(f"{name}: {n} lines, cap {cap}")
-    if START not in read(root / "CLAUDE.md"):
-        problems.append(f"CLAUDE.md: does not import {MAP}, so memory never loads; run init")
+    for name in agent_files(root):
+        if START not in read(root / name):
+            problems.append(f"{name}: does not import {MAP}, so memory never loads; run init")
     if (root / DIR / ".gitignore").exists() and read(root / DIR / ".ignore") != "!*\n":
-        problems.append(f"{DIR}/.ignore: missing, so Grep cannot search {DIR}/; run init")
+        problems.append(f"{DIR}/.ignore: missing, so agent search tools cannot see {DIR}/; run init")
     mapped = read(root / MAP)
     refs = {m[2] for m in INDEX_LINE.finditer(mapped)}
-    autoload = sum(len(read(root / n).encode("utf-8")) for n in ("CLAUDE.md", MAP, STATE))
-    if autoload > AUTOLOAD_CAP:
-        problems.append(f"CLAUDE.md + {MAP} + {STATE}: {autoload:,} bytes load into every session, cap {AUTOLOAD_CAP:,}; merge memory files or shorten headings")
+    if (loaded := autoload(root)) > AUTOLOAD_CAP:
+        problems.append(f"instruction file + {MAP} + {STATE}: {loaded:,} bytes load into every session, cap {AUTOLOAD_CAP:,}; merge memory files or shorten headings")
     if mapped and indexed(root, mapped) != mapped:
         problems.append(f"{MAP}: index lines are stale, run index")
     for rel in memory_files(root):
@@ -224,6 +234,7 @@ def session(path: Path, root: Path) -> dict:
         s["tools"] += 1
         s["searches"] += t.get("name") in ("Grep", "Glob") or (t.get("name") == "Bash" and bool(SEARCH_CMD.search(cmd)))
         s["init"] |= "memlayer.py" in cmd and " init" in cmd
+        s["closes"] += t.get("name") == "Skill" and args.get("skill") == "mimi-close"
         if t.get("name") == "Read" and args.get("file_path"):
             try:
                 rel = (root / args["file_path"]).resolve().relative_to(root).as_posix()
@@ -245,7 +256,7 @@ def sessions(root: Path) -> list[dict]:
 def adopted(root: Path, found: list[dict]) -> datetime | None:
     dates = [s["start"] for s in found if s["init"]]
     try:
-        out = subprocess.run(["git", "log", "--reverse", "--format=%cI", "-S", START, "--", "CLAUDE.md"],
+        out = subprocess.run(["git", "log", "--reverse", "--format=%cI", "-S", START, "--", *AGENT_FILES],
                              cwd=root, capture_output=True, text=True).stdout.split()
     except OSError:
         out = []
@@ -265,7 +276,7 @@ def stats(root: Path) -> str:
     texts = {rel: read(root / rel) for rel in layer}
     lines = sum(len(t.splitlines()) for t in texts.values())
     size = sum(len(t.encode("utf-8")) for t in texts.values())
-    autoload = sum(len(read(root / n).encode("utf-8")) for n in ("CLAUDE.md", MAP, STATE)) // BYTES_PER_TOKEN
+    loaded = autoload(root) // BYTES_PER_TOKEN
     heads = {rel: len(HEADING.findall(COMMENT.sub("", t))) for rel, t in texts.items()}
     traps = sum(n for rel, n in heads.items() if rel.startswith(f"{DIR}/memory/"))
     readable = [rel for rel in layer if rel not in (MAP, STATE)]
@@ -276,14 +287,14 @@ def stats(root: Path) -> str:
         "",
         "Memory",
         f"  {len(layer)} files, {lines} lines, {size / 1000:.1f} KB",
-        f"  loaded into every session: CLAUDE.md + {MAP} + {STATE} ~ {autoload:,} tokens",
+        f"  loaded into every session: {'/'.join(agent_files(root))} + {MAP} + {STATE} ~ {loaded:,} tokens",
         f"  {heads.get(ISSUES, 0)} issues, {heads.get(DECISIONS, 0)} decisions, {traps} traps in {DIR}/memory/, {len(empty)} empty files",
         f"  {STATE} last updated: {closed[1] if closed else 'never'}",
     ]
     found = sessions(root)
     where = transcript_dir(root)
     if not found:
-        return "\n".join(out + ["", f"No Claude Code sessions found in {where}"])
+        return "\n".join(out + ["", f"No Claude Code sessions found in {where} (session numbers come from Claude Code logs only)"])
     since = adopted(root, found)
     before = [s for s in found if since and s["start"] < since]
     after = [s for s in found if not since or s["start"] >= since]
@@ -297,7 +308,7 @@ def stats(root: Path) -> str:
         f"  mimi adopted: {since.date() if since else 'unknown, no init in transcripts or git history'}",
         f"  since then: {len(after)} sessions, {total(after, 'prompts')} prompts, {total(after, 'closes')} /mimi-close runs",
         f"  tokens processed: {total(after, 'input'):,} input ({total(after, 'cached'):,} of them cache reads), {total(after, 'output'):,} output",
-        f"  spent loading memory: ~{autoload * len(after):,} tokens ({autoload:,} x {len(after)} sessions, today's size)",
+        f"  spent loading memory: ~{loaded * len(after):,} tokens ({loaded:,} x {len(after)} sessions, today's size)",
     ]
     if len(before) >= MIN_SESSIONS and len(after) >= MIN_SESSIONS:
         rows = [("input tokens", "input"), ("tool calls", "tools"), ("searches", "searches")]
@@ -358,6 +369,9 @@ def selftest() -> None:
         (root / "CLAUDE.md").write_text("# Mine\n", encoding="utf-8")
         assert check(root) == [f"CLAUDE.md: does not import {MAP}, so memory never loads; run init"], check(root)
         init(root)
+        (root / "AGENTS.md").write_text("# Agents\n", encoding="utf-8")
+        assert check(root) == [f"AGENTS.md: does not import {MAP}, so memory never loads; run init"], check(root)
+        assert init(root) == [f"added the {MAP} import to AGENTS.md"] and check(root) == [], check(root)
         saved_env = os.environ.get("CLAUDE_CONFIG_DIR")
         os.environ["CLAUDE_CONFIG_DIR"] = str(root / "cfg")
         try:
@@ -370,6 +384,7 @@ def selftest() -> None:
                 {"type": "user", "timestamp": "2026-01-01T00:00:00Z", "message": {"content": "fix the bug"}},
                 {"type": "assistant", "message": {"id": "m1", "usage": usage, "content": [grep]}},
                 {"type": "assistant", "message": {"id": "m1", "usage": usage, "content": [init_cmd]}},
+                {"type": "assistant", "message": {"id": "m3", "content": [{"type": "tool_use", "id": "t4", "name": "Skill", "input": {"skill": "mimi-close"}}]}},
             ]
             read_mem = {"type": "tool_use", "id": "t3", "name": "Read", "input": {"file_path": str(root / "mimi/memory/external.md")}}
             b = [
@@ -382,11 +397,12 @@ def selftest() -> None:
             for name, events in (("a", a), ("b", b)):
                 (tdir / f"{name}.jsonl").write_text("\n".join(map(json.dumps, events)) + "\nnot json\n", encoding="utf-8")
             first, second = sessions(root)
-            assert (first["input"], first["output"], first["tools"], first["searches"], first["init"], first["prompts"]) == (100, 5, 2, 1, True, 1), first
+            assert (first["input"], first["output"], first["tools"], first["searches"], first["init"], first["prompts"]) == (100, 5, 3, 1, True, 1), first
+            assert first["closes"] == 1, first
             assert (second["prompts"], second["closes"], dict(second["reads"])) == (1, 1, {"mimi/memory/external.md": 1}), second
             assert adopted(root, [first, second]) == first["start"]
             report = stats(root)
-            assert "mimi/memory/external.md             read 1x" in report and "1 /mimi-close runs" in report, report
+            assert "mimi/memory/external.md             read 1x" in report and "2 /mimi-close runs" in report, report
             assert read(save_stats(root, report)).startswith("mimi stats for")
         finally:
             if saved_env is None:
