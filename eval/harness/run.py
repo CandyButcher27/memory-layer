@@ -3,6 +3,8 @@ import os
 import re
 import subprocess
 import sys
+import threading
+from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -11,7 +13,7 @@ ARMS_ROOT = Path(sys.argv[2]) if len(sys.argv) > 2 else None
 RESULTS = HERE / os.environ.get("RESULTS", "results")
 TASKS = {t["id"]: t for t in json.loads((HERE / os.environ.get("TASKS", "tasks.json")).read_text(encoding="utf-8"))}
 ARMS = tuple(os.environ.get("ARMS", "ABC"))
-SUFFIX = (
+SUFFIX = os.environ.get("EVAL_SUFFIX") or (
     "\n\nAnswer from this repository. Do not modify any file, and do not connect to a database or"
     " the network. Keep the answer under 200 words and cite the files or commits you relied on."
 )
@@ -20,6 +22,7 @@ WRITE_SUFFIX = (
     " on the current branch. Before you finish, update this project's memory the way its CLAUDE.md says to."
 )
 SEARCH_TOOLS = {"Grep", "Glob"}
+ARM_LOCKS = defaultdict(threading.Lock)
 
 
 def arm_env(arm: str) -> dict:
@@ -31,20 +34,36 @@ def run_one(arm: str, tid: str, rep: int, write: bool = False) -> Path:
     out = RESULTS / f"{arm}_{tid}_{rep}.jsonl"
     if out.exists() and '"is_error":false' in out.read_text(encoding="utf-8"):
         return out
-    cmd = [
-        "claude", "-p", TASKS[tid]["task"] + (WRITE_SUFFIX if write else SUFFIX),
+    env = arm_env(arm)
+    task = TASKS[tid]
+    if "turns" in task:
+        prompts = task["turns"] + ([env["CLOSE_TURN"]] if env.get("CLOSE_TURN") else [])
+    else:
+        prompts = [task["task"] + (WRITE_SUFFIX if write else SUFFIX)]
+    base = [
         "--output-format", "stream-json", "--verbose",
-        "--allowedTools", ("Read Grep Glob Bash Edit Write Skill" if write else "Read Grep Glob Bash") + " " + arm_env(arm).get("EXTRA_TOOLS", ""),
+        "--allowedTools", ("Read Grep Glob Bash Edit Write Skill" if write else "Read Grep Glob Bash") + " " + env.get("EXTRA_TOOLS", ""),
         "--disallowedTools", ("" if write else "Edit Write ") + "NotebookEdit Agent Workflow WebFetch WebSearch",
         "--max-turns", "40",
     ] + (["--model", os.environ["MODEL"]] if os.environ.get("MODEL") else [])
-    with out.open("w", encoding="utf-8") as f:
-        subprocess.run(cmd, cwd=ARMS_ROOT / arm, env=arm_env(arm), stdin=subprocess.DEVNULL, stdout=f, stderr=subprocess.DEVNULL, timeout=1200)
+    with ARM_LOCKS[arm]:
+        if not write and os.environ.get("PRE_RUN"):
+            subprocess.run([*os.environ["PRE_RUN"].split(), arm], check=True, stdin=subprocess.DEVNULL, timeout=600)
+        session = None
+        with out.open("w", encoding="utf-8") as f:
+            for prompt in prompts:
+                cmd = ["claude", "-p", prompt, *base] + (["--resume", session] if session else [])
+                r = subprocess.run(cmd, cwd=ARMS_ROOT / arm, env=env, stdin=subprocess.DEVNULL, capture_output=True, text=True, encoding="utf-8", timeout=1800)
+                f.write(r.stdout)
+                session = next((json.loads(l).get("session_id") for l in r.stdout.splitlines() if '"type":"result"' in l), None)
+                if not session:
+                    break
     return out
 
 
 def metrics(path: Path) -> dict:
     tools, result = [], {}
+    totals = {"input_tokens": 0, "cost": 0.0, "seconds": 0.0}
     for line in path.read_text(encoding="utf-8").splitlines():
         try:
             ev = json.loads(line)
@@ -54,16 +73,17 @@ def metrics(path: Path) -> dict:
             tools += [c["name"] for c in ev["message"]["content"] if c.get("type") == "tool_use"]
         elif ev.get("type") == "result":
             result = ev
-    u = result.get("usage", {})
+            totals["cost"] += ev.get("total_cost_usd", 0.0)
+            totals["seconds"] += ev.get("duration_ms", 0) / 1000
+            u = ev.get("usage", {})
+            totals["input_tokens"] += u.get("input_tokens", 0) + u.get("cache_read_input_tokens", 0) + u.get("cache_creation_input_tokens", 0)
     return {
         "answer": result.get("result", ""),
         "tools": len(tools),
         "search": sum(t in SEARCH_TOOLS for t in tools),
         "bash": tools.count("Bash"),
         "reads": tools.count("Read"),
-        "input_tokens": u.get("input_tokens", 0) + u.get("cache_read_input_tokens", 0) + u.get("cache_creation_input_tokens", 0),
-        "cost": result.get("total_cost_usd", 0.0),
-        "seconds": result.get("duration_ms", 0) / 1000,
+        **totals,
     }
 
 
