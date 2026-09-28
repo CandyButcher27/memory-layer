@@ -382,15 +382,14 @@ docs/         EVALUATION.md, STRESS_TESTS.md
 eval/
   harness/    run.py (runner and dual judge), stage1.sh and pilot.sh (drivers), proxy.py (token
               logging proxy), tokens.py (token accounting), analyze.py (bootstrap analysis),
-              hygiene.py, build_d.py, handoff.sh
+              hygiene.py, build_d.py
   stage1/     pre-registrations, task files and results for the comparison with auto-memory
               and claude-mem
-  tasks/      retrieval, session, recall and handoff task files with answer keys
-  the production project/    production-project runs and reports
   public/     PROTOCOL.md, per-repository results (git, django, cargo, node, go), and the
               cargo competitor pilot
-  stress/     S1–S3 suites and results
+  stress/     the S1 script suite and its results
 ```
 
 Raw agent transcripts are not committed. The repository keeps the scripts, task files, per-answer judge
-verdicts, memory snapshots and written reports.
+verdicts, memory snapshots and written reports for the public-repository experiments. The production-project
+experiments and the S2–S3 stress runs used private code, so only their summaries are published.

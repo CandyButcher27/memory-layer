@@ -95,7 +95,7 @@ E wrote the facts, but its recall sessions opened memory in only 9 of 15 runs. O
 
 ## What broke or deviated
 - `run.py judge2` uses `ThreadPoolExecutor(6)`, which runs up to 6 `claude` processes at once. I changed my Codespace copy to 3 to respect the 3-process limit. The copied `run.py` shows the change.
-- `hygiene.py`'s fact regexes are specific to the production project, so every row reads 0. The fact routing above was checked by hand with grep.
+- `hygiene.py`'s fact regexes are specific to the production-project experiment, so every row reads 0. The fact routing above was checked by hand with grep.
 - D_T03_0 hit `--max-turns 40` and gave no answer. It is kept and scored 0.
 - Judge spend is not logged by `run.py`. I estimated it from one measured call per judge model: Sonnet $0.026, Opus $0.057.
 

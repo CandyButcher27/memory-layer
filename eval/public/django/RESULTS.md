@@ -55,7 +55,7 @@ Per question (Sonnet judge, E / F):
 | R5 staging MySQL non-strict | 0.50 | 0.83 |
 
 - **S5 correction:** E never wrote the 45-minute figure, so there was nothing to correct. F's `STATE.md` records "60 min, not 45" only because it was the last session and `STATE.md` gets overwritten. The correction happened by overwrite, not by editing a fact in place.
-- **`hygiene.py` fact tracking doesn't apply here.** Its fact patterns are hard-coded for the production project, so every fact row reads 0 for django. The facts were checked by hand with grep instead (see above). Its line counts are still valid.
+- **`hygiene.py` fact tracking doesn't apply here.** Its fact patterns are hard-coded for the production-project experiment, so every fact row reads 0 for django. The facts were checked by hand with grep instead (see above). Its line counts are still valid.
 
 ## Transcript check (tasks where the arms differ: T03, T04, T06, T07, T09)
 - **D:** every D run except one opened `ISSUES.md` and `decisions.md` (and `memory/`). They held nothing relevant to any task, so the reads added about 2.5 extra Bash/Read calls and roughly 43% more input tokens than A. They did not help.

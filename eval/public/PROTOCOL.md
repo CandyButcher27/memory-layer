@@ -5,7 +5,7 @@ model-driven runs on a GitHub Codespace, never on the local Windows machine, whi
 
 - **Local output folder:** `eval/public/<repo>/` in this repository
   (`<repo>` like `django`)
-- **Bundle:** a local `pubbundle.tgz`
+- **Bundle:** a local `pubbundle.tgz` (the skill, `run.py`, `hygiene.py`, `setup.sh` and example task files)
 
 It unpacks to `pub/`:
 
@@ -23,7 +23,7 @@ It unpacks to `pub/`:
 Run these from the Bash tool (Git Bash). Call it `CS`.
 
 ```bash
-CS=$(gh codespace create -R CandyButcher27/host-repo -b main -m standardLinux32gb --display-name ml-<repo> --idle-timeout 240m | tail -1)
+CS=$(gh codespace create -R <any-repo-you-own> -b main -m standardLinux32gb --display-name ml-<repo> --idle-timeout 240m | tail -1)
 gh codespace cp -c "$CS" "<bundle path>" remote:/tmp/pub.tgz
 gh codespace ssh -c "$CS" -- 'mkdir -p ~/w && tar xzf /tmp/pub.tgz -C ~/w && sudo npm install -g @anthropic-ai/claude-code >/dev/null 2>&1; python3 -c "import json,shlex; v=json.load(open(\"/workspaces/.codespaces/shared/user-secrets-envs.json\"))[\"CLAUDE_CODE_OAUTH_TOKEN\"].strip(); open(\"/home/codespace/w/env.sh\",\"w\").write(\"export CLAUDE_CODE_OAUTH_TOKEN=\"+shlex.quote(v)+\"\n\")" && chmod 600 ~/w/env.sh && . ~/w/env.sh && cd ~/w/pub && bash setup.sh'
 ```

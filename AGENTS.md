@@ -92,7 +92,7 @@ as a traceback.
 8. Reports what was written, corrected and dropped, the open questions and the `check` result. It
    does not commit unless asked.
 
-Tested on a scratch copy of the production project:
+Tested on a scratch copy of a private production project:
 - A new external fact got its own trap-named heading.
 - A corrected cost figure was replaced everywhere it appeared, while a dated decision record kept the
   old figure on purpose.
@@ -124,7 +124,7 @@ Code instead, or set `MSYS_NO_PATHCONV=1`.
 
 ## How it was evaluated
 
-The full method and results are in `docs/EVALUATION.md`. It ran on one real project (a private project, 171
+The full method and results are in `docs/EVALUATION.md`. It ran on one real, private project (171
 commits), comparing no memory, the current `.harness/` + `memory/` setup, and this layer.
 
 | Metric | What it measures |

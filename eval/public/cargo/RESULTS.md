@@ -69,7 +69,7 @@ Per-task scores use the Sonnet judge (`report_main.txt`):
 - **Codespace:** the create call was blocked by the 2-running-Codespace limit for a long time. I retried until a slot opened.
 - **`env.sh`:** writing `~/w/env.sh` was blocked by the permission classifier, so every model command ran through `bash -lc`.
 - **`judge2`:** I patched `judge2` from 6 threads to 3. The first `judge2` pass crashed on one verdict: the greedy regex matched two JSON objects (`Extra data`). A rerun, which reuses cached verdicts, completed all 60 × 2.
-- **`hygiene.py`:** its fact patterns are the production project-specific (they all show 0), so the fact placement above was checked by hand with grep.
+- **`hygiene.py`:** its fact patterns are specific to the production-project experiment (they all show 0), so the fact placement above was checked by hand with grep.
 - **Spend:**
 
   | Item | Cost |

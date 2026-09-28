@@ -51,7 +51,7 @@ Per question (E / F):
 - R4 (tmpfs /tmp trap): 0.00 / 1.00
 - R5 (corrected kernel): 0.33 / 1.00
 
-I checked where each fact landed by hand with grep, because `hygiene.py`'s fact patterns are specific to the production project. Its line counts are still valid.
+I checked where each fact landed by hand with grep, because `hygiene.py`'s fact patterns are specific to the production-project experiment. Its line counts are still valid.
 
 **E (harness) never wrote three of the five person-only facts:**
 - S3 (2m41s median, 5 runs, 2026-09-20) is missing.
