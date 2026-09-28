@@ -1,0 +1,96 @@
+[
+ {
+  "id": "R1",
+  "kind": "external",
+  "task": "Where should our ingest service create its SQLite databases, and why?",
+  "gold": [
+   "Under /tmp",
+   "Because it runs on AWS Lambda, where only /tmp is writable"
+  ]
+ },
+ {
+  "id": "R2",
+  "kind": "corrected-measurement",
+  "task": "How long does our nightly CSV insert take?",
+  "gold": [
+   "6 min 10 s for the 1.2M-row CSV",
+   "Does not present 4 min 10 s as the current figure (it was an earlier figure that was corrected)"
+  ]
+ },
+ {
+  "id": "R3",
+  "kind": "decision",
+  "task": "Can the reporting service move to the sqlite-utils 4.x API now?",
+  "gold": [
+   "No: it stays on the 3.x API until Q1 2027",
+   "Because the dashboard team's code depends on the old upsert behaviour"
+  ]
+ },
+ {
+  "id": "R4",
+  "kind": "trap",
+  "task": "A vendor CSV import put every field into a single column. Is anything known about that?",
+  "gold": [
+   "The vendor's CSV exports use semicolons (and a UTF-8 BOM)",
+   "So the import needs --delimiter ';', or each row lands in one column"
+  ]
+ },
+ {
+  "id": "R5",
+  "kind": "person",
+  "task": "Who should I contact about a bug in sqlite-utils-geo?",
+  "gold": [
+   "Dmitri",
+   "He maintains that internal plugin"
+  ]
+ },
+ {
+  "id": "R6",
+  "kind": "deadline",
+  "task": "When is the ingest database schema freeze?",
+  "gold": [
+   "2026-11-01"
+  ]
+ },
+ {
+  "id": "R7",
+  "kind": "review-rule",
+  "task": "Can I use `sqlite-utils insert --replace` for the production ingest?",
+  "gold": [
+   "No: the team never uses --replace in production (it once wiped the enrichment columns)",
+   "Use --upsert with an explicit --pk instead"
+  ]
+ },
+ {
+  "id": "R8",
+  "kind": "infrastructure",
+  "task": "Can we use SpatiaLite in production?",
+  "gold": [
+   "No",
+   "Because of the Lambda layer size limit"
+  ]
+ },
+ {
+  "id": "C1",
+  "kind": "continuity-feature",
+  "task": "Let's pick the --sample work back up. Before changing anything: where are we, what's already done, and exactly what's next?",
+  "gold": [
+   "Step 1 is done: a sample parameter was added to Table.rows_where() in sqlite_utils/db.py",
+   "Next is step 2: add a --sample option to the rows CLI command in sqlite_utils/cli.py",
+   "--sample and --order must be mutually exclusive in the CLI, with an error if both are given",
+   "Use order by random() limit N, not the random-offset approach (already tried; duplicates and no WITHOUT ROWID support)",
+   "Keep it backwards compatible (sample keyword-only, defaulting to None) or add no new dependencies"
+  ]
+ },
+ {
+  "id": "C2",
+  "kind": "continuity-investigation",
+  "task": "Back to that zip-code report from yesterday. Where did we get to, and what's next?",
+  "gold": [
+   "The --alter path is ruled out (it happens without --alter)",
+   "SQLite column affinity is ruled out (the value is already an int before it reaches SQLite)",
+   "The next suspect is the per-column type guessing in TypeTracker",
+   "The next action is to write a failing test first"
+  ]
+ }
+]

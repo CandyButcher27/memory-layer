@@ -1,0 +1,97 @@
+[
+ {
+  "id": "R1",
+  "kind": "corrected-fact",
+  "task": "Can our CI runners download crates directly from crates.io, and since when has that been the case?",
+  "gold": [
+   "No: CI is blocked from reaching crates.io directly and goes through the internal mirror",
+   "The block started in July (does not present August as the start; August was an earlier figure that was corrected)"
+  ]
+ },
+ {
+  "id": "R2",
+  "kind": "trap",
+  "task": "A CI build that worked on Friday fails on Monday to resolve a crate version pinned in Cargo.lock. Is there anything we know that could explain it?",
+  "gold": [
+   "The internal mirror prunes yanked crates every Sunday night",
+   "So a lockfile that pins a yanked version can stop resolving on Monday"
+  ]
+ },
+ {
+  "id": "R3",
+  "kind": "person",
+  "task": "I want to bump the workspace MSRV. Who do I need to talk to?",
+  "gold": [
+   "Priya Raman owns MSRV bumps",
+   "Any MSRV change needs her sign-off"
+  ]
+ },
+ {
+  "id": "R4",
+  "kind": "measurement",
+  "task": "How long does a full cargo test run take on our CI?",
+  "gold": [
+   "23 minutes, the median of the last 20 runs",
+   "As of 2026-09-20"
+  ]
+ },
+ {
+  "id": "R5",
+  "kind": "infrastructure",
+  "task": "What's the compiler cache setup on our CI runners?",
+  "gold": [
+   "sccache",
+   "With a 50 GB local cache limit per runner"
+  ]
+ },
+ {
+  "id": "R6",
+  "kind": "decision",
+  "task": "Should we turn on -Zbuild-std for our internal builds?",
+  "gold": [
+   "No: the team decided against it",
+   "Because it doubled the runners' cache size, from 40 GB to 80 GB"
+  ]
+ },
+ {
+  "id": "R7",
+  "kind": "deadline",
+  "task": "Is there a deadline for rebasing our internal fork onto upstream?",
+  "gold": [
+   "Yes: before 2026-10-15",
+   "Because that is when the release branch is cut"
+  ]
+ },
+ {
+  "id": "R8",
+  "kind": "review-rule",
+  "task": "I have a small change to the resolver ready. Are there any review requirements?",
+  "gold": [
+   "It needs a second reviewer",
+   "From the platform team"
+  ]
+ },
+ {
+  "id": "C1",
+  "kind": "continuity-feature",
+  "task": "Let's pick the retry max-delay work back up. Before changing anything: where are we, what's already done, and exactly what's next?",
+  "gold": [
+   "Step 1 is done: a retry_max_delay (net.retry-max-delay) field was added to CargoNetConfig in src/context/schema.rs",
+   "Next is step 2: use it in src/util/network/retry.rs (Retry::new, next_sleep_ms and/or the Retry-After cap) instead of MAX_RETRY_SLEEP_MS",
+   "After that, step 3: document it in the config reference and add a unit test",
+   "Do not read an env var directly with std::env::var (already tried; it bypasses cargo's config layering); go through net_config()",
+   "The default stays 10 seconds when unset, or the jitter logic stays untouched"
+  ]
+ },
+ {
+  "id": "C2",
+  "kind": "continuity-investigation",
+  "task": "Back to the cargo clean stale .rmeta issue from yesterday. Where did we get to, and what's next?",
+  "gold": [
+   "The release-profile directory logic is ruled out (it reproduces in debug builds too)",
+   "File locking is ruled out (it reproduces with a single cargo process)",
+   "The next suspect is how clean matches the package name against the renamed dependency's crate name in src/ops/cargo_clean.rs",
+   "The next action is to write a failing testsuite case with a renamed dependency first"
+  ]
+ }
+]

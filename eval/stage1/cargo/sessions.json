@@ -1,0 +1,38 @@
+[
+ {
+  "id": "S1",
+  "turns": [
+   "Morning! I'm working from the Lisbon office this week, so I might be slow to reply. Quick question: where does cargo apply `[source]` replacement when it works out where to download a crate from? Context, since you'll see it in our configs: CI can't reach crates.io directly anymore, the security team blocked it in August, so everything goes through our internal mirror.",
+   "Thanks. Related: the mirror team prunes yanked crates every Sunday night, so if a lockfile pins a yanked version it can suddenly fail to resolve on a Monday. That has bitten us twice. Does cargo treat yanked versions specially when a Cargo.lock already pins them? Short answer is fine."
+  ]
+ },
+ {
+  "id": "S2",
+  "turns": [
+   "Can you check what the minimum supported Rust version for this workspace is and where it's declared? Don't change it. Priya Raman owns MSRV bumps and any change needs her sign-off.",
+   "OK. While you're in there: a full `cargo test` on our CI takes 23 minutes, that's the median of the last 20 runs as of 2026-09-20, and most of it is the testsuite crate. Which test target is the big integration testsuite, and roughly how is it organised? Keep it brief.",
+   "Also, our CI runners use sccache with a 50 GB local cache limit per runner. Nothing to do now, just FYI. Does cargo set RUSTC_WRAPPER itself anywhere, or does it only read it?"
+  ]
+ },
+ {
+  "id": "S3",
+  "turns": [
+   "Correction on something I said Monday: the crates.io block for CI started in July, not August. Anyway, we decided against enabling -Zbuild-std for our internal builds because it doubled the cache size on the runners, from 40 GB to 80 GB. Where is build-std handled in the code, so I know where to look if it comes up again?",
+   "Last thing for today: our internal fork has to be rebased onto upstream before 2026-10-15, that's when the release branch gets cut. And anything touching the resolver needs a second reviewer from the platform team. Which directory holds the resolver?"
+  ]
+ },
+ {
+  "id": "T1",
+  "turns": [
+   "New task. I want the maximum retry backoff to be configurable with a new config key `net.retry-max-delay`, in seconds. Plan: (1) add a `retry_max_delay: Option<u64>` field to `CargoNetConfig` in src/context/schema.rs, (2) use it in src/util/network/retry.rs, in `Retry::new`, `next_sleep_ms` and the Retry-After cap, instead of `MAX_RETRY_SLEEP_MS`, (3) document it in the config reference and add a unit test. Do step 1 only for now. The default must stay 10 seconds when the key is unset, and don't touch the jitter logic.",
+   "Good. A note for step 2: I already tried reading an env var directly with `std::env::var(\"CARGO_NET_RETRY_MAX_DELAY\")` inside retry.rs. It bypasses cargo's config layering, so `--config` and config files don't work, and we go through `net_config()` instead. Let's stop here for today, I'll pick up step 2 tomorrow."
+  ]
+ },
+ {
+  "id": "T2",
+  "turns": [
+   "Different issue: someone reported that `cargo clean -p foo` leaves stale `.rmeta` files behind when `foo` is a renamed dependency (`bar = { package = \"foo\", ... }`). Can you look at how `cargo clean -p` decides which files belong to a package?",
+   "Thanks. For the record, I already ruled two things out this morning. It's not the release-profile directory logic: it reproduces in debug builds too. And it's not file locking: it reproduces with a single cargo process and nothing else running. My next suspect is how clean matches the package name against the renamed dependency's crate name in src/ops/cargo_clean.rs. Let's stop here; tomorrow I want to write a failing testsuite case with a renamed dependency first."
+  ]
+ }
+]

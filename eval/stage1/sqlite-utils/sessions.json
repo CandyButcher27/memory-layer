@@ -1,0 +1,38 @@
+[
+ {
+  "id": "S1",
+  "turns": [
+   "Hey. I'm looking at how `sqlite-utils insert` handles CSV files. Where is the CSV reading done? Background: our ingest service runs this on AWS Lambda, where only /tmp is writable, so all our databases get created under /tmp.",
+   "Got it. Our vendor's CSV exports use semicolons and start with a UTF-8 BOM, and if you forget `--delimiter ';'` the whole row lands in one column, which has happened more than once. Does sqlite-utils strip a BOM on its own? Short answer."
+  ]
+ },
+ {
+  "id": "S2",
+  "turns": [
+   "How does `--upsert` decide which rows match? By the way, we never use `--replace` in production: it once wiped our enrichment columns, so the rule is `--upsert` with an explicit `--pk`.",
+   "Performance-wise: our nightly 1.2M-row CSV takes 4 min 10 s to insert with default settings, median of 3 runs on 2026-09-18. Is there a batch size option for insert, and what's the default?",
+   "One more, about plugins. Dmitri maintains our internal plugin, sqlite-utils-geo, so plugin problems go to him. How does sqlite-utils discover plugins, and which file holds the hook specs?"
+  ]
+ },
+ {
+  "id": "S3",
+  "turns": [
+   "Correction to what I told you about the nightly insert: it's 6 min 10 s, not 4 min 10 s, I misread the dashboard. Separate topic: the reporting service stays on the 3.x API until Q1 2027, because the dashboard team's code depends on the old upsert behaviour. What changed in upsert between 3.x and 4.x, if the changelog says?",
+   "Last thing for today: the schema freeze for the ingest database is 2026-11-01. And we can't ship the SpatiaLite extension in production because of the Lambda layer size limit. Where does sqlite-utils look for SpatiaLite, just so I know?"
+  ]
+ },
+ {
+  "id": "T1",
+  "turns": [
+   "Let's add a `--sample N` option to `sqlite-utils rows` that returns N random rows. Plan: (1) add a `sample` parameter to `Table.rows_where()` in sqlite_utils/db.py, (2) wire a `--sample` option into the `rows` CLI command in sqlite_utils/cli.py, (3) add tests and a docs entry. Do step 1 only for now. Keep it backwards compatible: `sample` must be keyword-only and default to None. No new dependencies.",
+   "Good. Before step 2, a note: I already tried the random-offset approach last week (picking `offset abs(random()) % count` for each row). It returns duplicate rows and doesn't work for WITHOUT ROWID tables, so don't go that way; `order by random() limit N` is what we want. Also, `--sample` and `--order` should be mutually exclusive in the CLI, with an error if both are given. Let's stop here for today, I'll pick up step 2 tomorrow."
+  ]
+ },
+ {
+  "id": "T2",
+  "turns": [
+   "Different thing: a user reports that `sqlite-utils insert data.db items items.csv --csv` turned a zip-code column like 02134 into the integer 2134. Type detection is on by default now. Can you find where type detection happens for CSV imports?",
+   "OK. Two things I already ruled out this morning: it's not the `--alter` path, since it happens without it, and it's not SQLite column affinity, because the value is already an int before it reaches SQLite, I checked in a debugger. My next suspect is the per-column type guessing in TypeTracker. Let's stop there; tomorrow I want to write a failing test first."
+  ]
+ }
+]
