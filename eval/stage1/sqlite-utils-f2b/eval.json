@@ -1,0 +1,44 @@
+[
+ {
+  "id": "C3",
+  "kind": "continuity-changed-decision",
+  "task": "Picking up the insert_upsert_implementation cleanup: what's the plan now, and why?",
+  "gold": [
+   "No dataclass",
+   "Only type hints will be added to its signature",
+   "Because plugins call it directly, so it is effectively public",
+   "The change of plan came from talking to Simon"
+  ]
+ },
+ {
+  "id": "C4",
+  "kind": "continuity-experiments",
+  "task": "Any progress on the slow sqlite-utils memory report? Where are we and what's next?",
+  "gold": [
+   "--no-detect-types roughly halves the time",
+   "--encoding utf-8 makes no difference",
+   "Loading the file into an on-disk database with sqlite-utils insert is fast",
+   "Next step: get a py-spy profile of the memory command from the user"
+  ]
+ },
+ {
+  "id": "C5",
+  "kind": "continuity-review",
+  "task": "Where are we with Alex's review of the rows docs PR?",
+  "gold": [
+   "(a), the --where with -p example, is done",
+   "(b), the LIMIT -1 note for --offset without --limit, is left for the user to write",
+   "(c), the changelog entry, is skipped because the changelog is written at release time"
+  ]
+ },
+ {
+  "id": "C6",
+  "kind": "continuity-blocked",
+  "task": "Can we start on the nightly analyze-tables job now? What's the status?",
+  "gold": [
+   "It is blocked on security approving read access to the prod bucket (ticket SEC-2210)",
+   "Credentials will come from the IAM role ingest-analyzer-ro",
+   "Keys must never be hardcoded in the job"
+  ]
+ }
+]

@@ -1,0 +1,30 @@
+[
+ {
+  "id": "T3",
+  "turns": [
+   "Let's plan a cleanup of `insert_upsert_implementation` in sqlite_utils/cli.py: it takes a very long list of parameters, and my plan was to replace them with a dataclass. First, tell me how many parameters it takes and every place it's called from. Don't change anything yet.",
+   "OK. Change of plan after talking to Simon: no dataclass. Plugins call `insert_upsert_implementation` directly, so it's effectively public, and we'll only add type hints to its signature. Let's leave it there for now."
+  ]
+ },
+ {
+  "id": "T4",
+  "turns": [
+   "A user reports that `sqlite-utils memory data.csv \"select ...\"` is very slow on a 2 GB CSV. Where does the memory command load the files it's given?",
+   "Findings from the user so far: `--no-detect-types` roughly halves the time; adding `--encoding utf-8` changes nothing; and loading the same file into an on-disk database with `sqlite-utils insert` is fast. Next step is to ask them for a py-spy profile of the memory command. Stop here, I'll message them."
+  ]
+ },
+ {
+  "id": "T5",
+  "turns": [
+   "I have a PR improving the `rows` section of docs/cli.rst. The reviewer, Alex, asked for three things: (a) add an example using `--where` together with `-p`, (b) mention that `--offset` without `--limit` emits `LIMIT -1`, (c) add a changelog entry. Please do (a) now.",
+   "Thanks. I'll write (b) myself because the wording is subtle. And (c) we're skipping: Alex said the changelog is written at release time. That's it for this PR today."
+  ]
+ },
+ {
+  "id": "T6",
+  "turns": [
+   "We want a nightly job that runs `sqlite-utils analyze-tables` on the production ingest database and posts the result to Slack, but we're blocked: security hasn't approved read access to the prod bucket yet, that's ticket SEC-2210. Meanwhile, where is analyze-tables implemented and what does it output?",
+   "Thanks. Once it's approved, credentials will come from the IAM role ingest-analyzer-ro, and keys must never be hardcoded in the job. Let's park this until security responds."
+  ]
+ }
+]

@@ -1,0 +1,30 @@
+[
+ {
+  "id": "T3",
+  "turns": [
+   "Let's start a small cleanup: in src/util/network/retry.rs, `MAX_RETRY_SLEEP_S` is in seconds while `INITIAL_RETRY_SLEEP_BASE_MS` and the jitter are in milliseconds. My plan was to convert all of them to `Duration`. First, list every use of those constants across the codebase. Don't change anything yet.",
+   "OK. Change of plan after talking to Ana on the cargo team: we will NOT convert them to Duration. `MAX_RETRY_SLEEP_S` is public and other crates use it, so we'll only add doc comments that state the unit of each constant. Let's leave it there for now."
+  ]
+ },
+ {
+  "id": "T4",
+  "turns": [
+   "A user says `cargo fetch` hangs forever behind their corporate proxy. Where does cargo decide whether to use HTTP/2 multiplexing for downloads?",
+   "Findings from the user so far: setting `http.multiplexing = false` makes the hang go away; raising the timeout with `CARGO_HTTP_TIMEOUT=30` does not help; and it only happens through their proxy, never on a direct connection. Next step is to ask them for a `CARGO_LOG=network=trace` log. Stop here, I'll message them."
+  ]
+ },
+ {
+  "id": "T5",
+  "turns": [
+   "I have a PR improving the `net.retry` section of doc/book/src/reference/config.md. The reviewer, Weihang, asked for three things: (a) say explicitly that the default is 3, (b) mention that a server's Retry-After is capped at 10 seconds, (c) add a changelog entry. Please do (a) now.",
+   "Thanks. I'll write (b) myself tonight because I want to word it carefully. And (c) we're skipping: Weihang said changelog entries are generated at release time. That's it for this PR today."
+  ]
+ },
+ {
+  "id": "T6",
+  "turns": [
+   "We want to add a mirror health-check to our xtask tooling, but we're blocked: infra hasn't issued the read-only API token for the mirror yet, that's ticket INFRA-4821. Meanwhile, how are the xtask crates organised in this repo, so we know where a new one would go?",
+   "Thanks. Once the token arrives it will be provided as the CI secret MIRROR_RO_TOKEN, and it must never be printed in logs. Let's park this until infra responds."
+  ]
+ }
+]

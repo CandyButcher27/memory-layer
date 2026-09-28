@@ -1,0 +1,44 @@
+[
+ {
+  "id": "C3",
+  "kind": "continuity-changed-decision",
+  "task": "Picking up the retry constants cleanup: what's the plan now, and why?",
+  "gold": [
+   "The constants will not be converted to Duration",
+   "Only doc comments stating each constant's unit will be added",
+   "Because MAX_RETRY_SLEEP_S is public and used by other crates",
+   "The change of plan came from talking to Ana on the cargo team"
+  ]
+ },
+ {
+  "id": "C4",
+  "kind": "continuity-experiments",
+  "task": "Any update on the cargo fetch hang behind the proxy? Where are we and what's next?",
+  "gold": [
+   "Setting http.multiplexing = false makes the hang go away",
+   "Raising the timeout (CARGO_HTTP_TIMEOUT=30) does not help",
+   "It only happens through their proxy, not on a direct connection",
+   "Next step: get a CARGO_LOG=network=trace log from the user"
+  ]
+ },
+ {
+  "id": "C5",
+  "kind": "continuity-review",
+  "task": "Where are we with Weihang's review of the net.retry docs PR?",
+  "gold": [
+   "(a), stating the default of 3, is done",
+   "(b), the Retry-After 10-second cap, is left for the user to write",
+   "(c), the changelog entry, is skipped because changelog entries are generated at release time"
+  ]
+ },
+ {
+  "id": "C6",
+  "kind": "continuity-blocked",
+  "task": "Can we start on the mirror health-check xtask now? What's the status?",
+  "gold": [
+   "It is blocked on infra issuing the mirror's read-only API token (ticket INFRA-4821)",
+   "The token will come as the CI secret MIRROR_RO_TOKEN",
+   "The token must never be printed in logs"
+  ]
+ }
+]
