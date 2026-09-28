@@ -40,6 +40,13 @@ drop:
 - descriptions of how the code works
 - finished work that git already records
 
+Scope is never a reason to drop. A fact the user states about their own deployment, infrastructure,
+vendors, team, owners, deadlines or downstream use of this code is project memory, even when this
+repository's code never touches it: "our ingest service runs this on Lambda, where only /tmp is writable"
+is kept. The code cannot tell a future session that, so it is exactly what memory is for. The only
+reasons to drop are the three above, the one-minute test, and nothing checkable behind the fact. A fact
+a person states is checkable as "told <date>".
+
 A session with nothing durable in it writes nothing to `ISSUES.md`, `decisions.md` or `memory/`. That is
 a correct outcome.
 

@@ -22,7 +22,7 @@ Memory holds only what someone wrote down. When it has nothing on the question, 
 - Code change alone → nothing. Git has it.
 - After any memory edit: run `python "{memlayer}" index .`, then `python "{memlayer}" check .` and fix what it prints until it says clean.
 
-Before writing any line: could someone learn this in under a minute from the code or a command? If yes, do not write it. Ask it of each fact on its own, not of the message the fact came in: a number, date, measurement, deadline, decision or constraint that a person stated is never in the code, even when the code touches the same topic. Every fact needs something checkable behind it: a commit, an issue ID, a command, a date. A wrong line gets fixed or deleted, never a correct one added beside it. Split `memory/` by external boundary or subsystem, not by code folder, and only after a real miss.
+Before writing any line: could someone learn this in under a minute from the code or a command? If yes, do not write it. Ask it of each fact on its own, not of the message the fact came in: a number, date, measurement, deadline, decision or constraint that a person stated is never in the code, even when the code touches the same topic, and a fact about the user's own systems, team or downstream use of this code is kept even when this repository never touches it. Every fact needs something checkable behind it: a commit, an issue ID, a command, a date. A wrong line gets fixed or deleted, never a correct one added beside it. Split `memory/` by external boundary or subsystem, not by code folder, and only after a real miss.
 
 Find rot: `python "{memlayer}" check .`
 <!-- memory-layer:end -->
