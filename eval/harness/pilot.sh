@@ -13,8 +13,9 @@ for a in $ARMS_ALL; do
   export ARM_${a}_HOME=$W/home/$a
   export ARM_${a}_ANTHROPIC_BASE_URL=http://127.0.0.1:$(port $a)
 done
+export ARM_D_EXTRA_TOOLS="Skill" ARM_M_EXTRA_TOOLS="Skill mcp__plugin_claude-mem_mcp-search" ARM_L_EXTRA_TOOLS="Skill mcp__mem-lite"
 ADOPT="Follow the skill at $P/ml/SKILL.md in Adopt mode on this project (the current directory). Its script is $P/ml/memlayer.py. No user is available: a claim with nothing checkable behind it is dropped, not asked about. Do not delete any file. Finish when \`python3 $P/ml/memlayer.py check .\` prints \"memory layer clean\", then print a short report."
-mark() { python3 -c "import json,sys,time;p='$W/phases.json';d=json.load(open(p)) if __import__('os').path.exists(p) else {};d.setdefault('$1',[0,0])[int(sys.argv[1])]=time.time();json.dump(d,open(p,'w'))" "$2"; }
+mark() { python3 -c "import json,sys,time;p='$W/phases.json';d=json.load(open(p)) if __import__('os').path.exists(p) else {};i=int(sys.argv[1]);r=d.setdefault('$1',[0,0]);r[i]=r[i] if i==0 and r[0] else time.time();json.dump(d,open(p,'w'))" "$2"; }
 
 case "$1" in
 setup)
@@ -34,9 +35,9 @@ build)
   mark build 1
   ;;
 sessions)
-  for a in $ARMS_ALL; do rm -rf $W/snap/$a && cp -r $W/wr/$a $W/snap/$a; done
+  for a in $ARMS_ALL; do [ -d $W/snap/$a ] || cp -r $W/wr/$a $W/snap/$a; done
   mark write 0
-  cd $P && MODEL=sonnet ARMS=DML TASKS=sessions.json RESULTS=results_sessions python3 run.py session $W/wr
+  cd $P && MODEL=sonnet ARMS=DML TASKS=${TASKS:-sessions.json} RESULTS=results_sessions python3 run.py session $W/wr
   mark write 1
   ;;
 drain)

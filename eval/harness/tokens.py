@@ -1,9 +1,12 @@
 import json
+import re
 import sys
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
 
+CMEM = re.compile(r"^\[(\S+ \S+)\] \[DEBUG\] \[SDK\s*\] (\[[^]]*\])? ?Token usage captured \{(.*)\}")
+CMEM_MODEL = "claude-haiku-4-5-20251001"
 KEYS = ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens")
 
 
@@ -38,9 +41,23 @@ def account(home: Path, plog: Path, phases: dict) -> dict:
             if ev.get("type") != "assistant" or msg.get("id") in seen or not msg.get("usage"):
                 continue
             seen.add(msg.get("id"))
-            src = "worker" if ev.get("entrypoint") == "sdk-ts" else "main"
+            if ev.get("entrypoint") == "sdk-ts":
+                continue
             ts = datetime.fromisoformat(ev["timestamp"]).timestamp()
-            add(out[src][phase(ts)][msg.get("model", "")], msg["usage"])
+            add(out["main"][phase(ts)][msg.get("model", "")], msg["usage"])
+    last = {}
+    for log in sorted((home / ".claude-mem" / "logs").glob("*.log")):
+        for line in log.read_text(encoding="utf-8", errors="replace").splitlines():
+            if m := CMEM.match(line):
+                f = dict(kv.split("=", 1) for kv in m[3].split(", "))
+                key = tuple(f[k] for k in ("inputTokens", "outputTokens", "cacheCreation", "cacheRead"))
+                if last.get(m[2]) == key:
+                    continue
+                last[m[2]] = key
+                usage = {"input_tokens": int(f["inputTokens"]), "output_tokens": int(f["outputTokens"]),
+                         "cache_creation_input_tokens": int(f["cacheCreation"]), "cache_read_input_tokens": int(f["cacheRead"])}
+                ts = datetime.fromisoformat(m[1].replace(" ", "T") + "+00:00").timestamp()
+                add(out["worker"][phase(ts)][CMEM_MODEL], usage)
     return out
 
 

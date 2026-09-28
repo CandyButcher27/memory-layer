@@ -34,7 +34,7 @@ def run_one(arm: str, tid: str, rep: int, write: bool = False) -> Path:
     cmd = [
         "claude", "-p", TASKS[tid]["task"] + (WRITE_SUFFIX if write else SUFFIX),
         "--output-format", "stream-json", "--verbose",
-        "--allowedTools", "Read Grep Glob Bash Edit Write Skill" if write else "Read Grep Glob Bash",
+        "--allowedTools", ("Read Grep Glob Bash Edit Write Skill" if write else "Read Grep Glob Bash") + " " + arm_env(arm).get("EXTRA_TOOLS", ""),
         "--disallowedTools", ("" if write else "Edit Write ") + "NotebookEdit Agent Workflow WebFetch WebSearch",
         "--max-turns", "40",
     ] + (["--model", os.environ["MODEL"]] if os.environ.get("MODEL") else [])
