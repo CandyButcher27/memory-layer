@@ -1,0 +1,1 @@
+{"hits": [true, true, true, false, false], "wrong": 0, "note": "Gets the progress and the next steps right, but misses both constraints: the ruled-out env-var approach and keeping the default or jitter unchanged."}

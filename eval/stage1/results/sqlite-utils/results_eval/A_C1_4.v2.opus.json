@@ -1,0 +1,1 @@
+{"hits": [true, false, false, true, true], "wrong": 0, "note": "Describes the finished library step correctly, but hedges on the next step and never mentions the --sample/--order mutual-exclusion rule."}

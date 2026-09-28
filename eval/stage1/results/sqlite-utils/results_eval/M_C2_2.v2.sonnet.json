@@ -1,0 +1,1 @@
+{"hits": [false, false, false, true], "wrong": 2, "note": "Answer fabricates a different root-cause narrative (falsy-value early return) and omits ruling out --alter and SQLite affinity entirely."}

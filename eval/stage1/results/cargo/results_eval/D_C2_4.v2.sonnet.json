@@ -1,0 +1,1 @@
+{"hits": [true, true, true, true], "wrong": 0, "note": "All four key points are present, matching the ruled-out causes, the cargo_clean.rs name-matching suspect, and the proposed failing-test next step."}

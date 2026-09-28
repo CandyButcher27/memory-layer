@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Explains the one-column symptom and the --delimiter fix in general, but never says this vendor's exports use semicolons or a BOM."}

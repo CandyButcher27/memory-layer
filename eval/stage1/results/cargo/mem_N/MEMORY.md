@@ -1,0 +1,6 @@
+- [build-std decision](project_build_std_decision.md) — rejected -Zbuild-std for internal CI, doubled runner cache 40GB→80GB; code is in src/compiler/standard_lib.rs
+- [fork rebase deadline](project_fork_rebase_deadline.md) — internal fork must rebase onto upstream before 2026-10-15 release branch cut
+- [resolver review rule](feedback_resolver_review.md) — src/resolver/ changes need a second reviewer from platform team
+- [config via net_config](feedback_config_via_net_config.md) — don't read CARGO_NET_* env vars directly, use net_config() so --config/config files still work
+- [retry-max-delay task](project_retry_max_delay.md) — step 1 done (schema.rs), step 2 pending: wire into retry.rs via net_config()
+- [clean -p stale rmeta bug](project_clean_p_stale_rmeta.md) — likely layouts/host-exclusion gap in cargo_clean.rs, not rename matching; testsuite case pending

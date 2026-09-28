@@ -1,0 +1,1 @@
+{"hits": [true, true, true, false, true], "wrong": 0, "note": "Answer covers steps 1-3 and the default-10 detail accurately but omits the explicit warning against using std::env::var directly."}

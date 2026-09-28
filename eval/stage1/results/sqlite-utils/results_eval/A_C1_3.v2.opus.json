@@ -1,0 +1,1 @@
+{"hits": [true, false, false, true, true], "wrong": 0, "note": "The answer gets the finished API step right, but treats the CLI step as undecided and misses the --sample/--order mutual-exclusion rule."}

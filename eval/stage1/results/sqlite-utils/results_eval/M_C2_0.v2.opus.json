@@ -1,0 +1,1 @@
+{"hits": [false, false, true, false], "wrong": 2, "note": "The answer finds the TypeTracker area but leaves out both ruled-out paths, overstates the suspect as a confirmed root cause, and puts the test after the fix."}

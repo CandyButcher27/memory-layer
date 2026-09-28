@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true, true], "wrong": 0, "note": "The answer gets the state and next step right, but misses the --sample/--order mutual-exclusion rule and the rejected random-offset approach."}

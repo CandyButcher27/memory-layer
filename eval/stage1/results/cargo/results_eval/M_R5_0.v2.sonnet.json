@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "Answer claims no compiler cache exists at all, directly contradicting both key points about sccache and the 50 GB limit."}

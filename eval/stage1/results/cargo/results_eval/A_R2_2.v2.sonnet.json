@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "Answer never mentions the internal mirror's Sunday pruning job, and its claim that yanked versions still resolve from lockfile directly contradicts the key mechanism."}

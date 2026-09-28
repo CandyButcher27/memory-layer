@@ -1,0 +1,1 @@
+{"hits": [false, false, true, true], "wrong": 0, "note": "The answer names TypeTracker and the failing-test-first step but leaves out both ruled-out hypotheses (--alter and SQLite affinity)."}

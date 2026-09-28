@@ -1,0 +1,43 @@
+{
+ "proxy": {
+  "write": {
+   "claude-sonnet-5": {
+    "input_tokens": 148,
+    "cache_creation_input_tokens": 101277,
+    "cache_read_input_tokens": 3520195,
+    "output_tokens": 35408,
+    "calls": 74
+   }
+  },
+  "eval": {
+   "claude-sonnet-5": {
+    "input_tokens": 172,
+    "cache_creation_input_tokens": 112418,
+    "cache_read_input_tokens": 3164146,
+    "output_tokens": 29062,
+    "calls": 86
+   }
+  }
+ },
+ "main": {
+  "eval": {
+   "claude-sonnet-5": {
+    "input_tokens": 172,
+    "cache_creation_input_tokens": 112418,
+    "cache_read_input_tokens": 3164146,
+    "output_tokens": 29062,
+    "calls": 86
+   }
+  },
+  "write": {
+   "claude-sonnet-5": {
+    "input_tokens": 148,
+    "cache_creation_input_tokens": 101277,
+    "cache_read_input_tokens": 3520195,
+    "output_tokens": 35408,
+    "calls": 74
+   }
+  }
+ },
+ "worker": {}
+}

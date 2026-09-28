@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Answer explains the general sniff/delimiter mechanism and the single-column symptom but never confirms the specific vendor uses semicolons+BOM, only offering semicolon as a generic example."}

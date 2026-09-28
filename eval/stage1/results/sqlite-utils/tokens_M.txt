@@ -1,0 +1,11 @@
+
+phase   source  model                               calls       input cache_write  cache_read      output
+eval    proxy   claude-sonnet-5                       129         258     277,372   4,854,768      43,609
+write   proxy   claude-sonnet-5                        51         102      61,863   2,118,616      13,677
+eval    main    claude-sonnet-5                       129         258     277,372   4,854,768      43,609
+other   main    claude-haiku-4-5-20251001               2          20       3,969      33,271          75
+write   main    claude-sonnet-5                        51         102      61,863   2,118,616      13,677
+drain   worker  claude-haiku-4-5-20251001               2          20       2,241      47,653           5
+eval    worker  claude-haiku-4-5-20251001              90         900     230,134     851,871         204
+other   worker  claude-haiku-4-5-20251001               4          40      12,496      29,071          11
+write   worker  claude-haiku-4-5-20251001              41         410      74,278     513,224          82

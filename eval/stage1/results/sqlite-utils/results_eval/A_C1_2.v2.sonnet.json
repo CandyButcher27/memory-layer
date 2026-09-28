@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true, true], "wrong": 0, "note": "Answer covers steps/status and the random()-based approach accurately but omits the --sample/--order mutual-exclusivity requirement entirely."}

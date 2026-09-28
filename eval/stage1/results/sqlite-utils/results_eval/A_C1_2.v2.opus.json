@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true, true], "wrong": 0, "note": "The answer covers the state and next step well but leaves out the rule that --sample and --order are mutually exclusive, and it doesn't say the random-offset approach was rejected."}

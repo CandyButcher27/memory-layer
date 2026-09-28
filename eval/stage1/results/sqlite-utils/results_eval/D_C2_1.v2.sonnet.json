@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true], "wrong": 1, "note": "Answer fabricates a confirmed root cause (invented ValueTracker.test_integer) instead of framing TypeTracker's type guessing as the next unconfirmed suspect."}

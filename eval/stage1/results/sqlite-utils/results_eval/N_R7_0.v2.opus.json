@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer covers both key points, says no to --replace and cites the enrichment-column incident, and recommends --upsert with an explicit --pk."}

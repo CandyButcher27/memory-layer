@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 2, "note": "Answer says Yes, SpatiaLite works fine in production and attributes the Lambda constraint to layer size as a workaround-solvable issue, directly contradicting the expected 'No, due to Lambda layer size limit' answer."}

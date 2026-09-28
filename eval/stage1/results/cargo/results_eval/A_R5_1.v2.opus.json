@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "The answer says no compiler cache is set up, which contradicts the expected sccache setup with a 50 GB limit."}

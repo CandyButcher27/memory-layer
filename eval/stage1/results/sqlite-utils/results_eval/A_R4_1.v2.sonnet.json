@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Answer gives generic docs guidance about delimiter/quote mismatch but never asserts the specific known fact that the vendor uses semicolons+UTF-8 BOM."}

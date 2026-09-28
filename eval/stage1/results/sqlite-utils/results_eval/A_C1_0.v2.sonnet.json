@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true, true], "wrong": 0, "note": "Answer covers steps done/db.py implementation and next CLI step but never mentions the required --sample/--order mutual exclusivity."}

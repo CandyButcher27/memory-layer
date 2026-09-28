@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Answer never confirms the specific known fact that the vendor's export uses semicolons plus a UTF-8 BOM; it only gives generic reasoning about delimiter mismatches."}

@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 1, "note": "Answer says 'Yes, with caveats' contradicting the required 'No' policy answer, though it does correctly suggest upsert with --pk as an alternative."}

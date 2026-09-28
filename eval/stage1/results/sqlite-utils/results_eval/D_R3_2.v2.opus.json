@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Answer says no until Q1 2027 because the dashboard team depends on the old upsert behaviour; its hedge that other 4.x changes may be fine doesn't contradict that."}

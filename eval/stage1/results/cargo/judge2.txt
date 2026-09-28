@@ -1,0 +1,21 @@
+arm    n      sonnet        opus        mean    disagree
+A     34        0.16        0.17        0.17        0.05
+N     34        0.54        0.57        0.56        0.07
+D     34        0.99        1.00        0.99        0.01
+M     34        0.16        0.17        0.16        0.04
+
+14 answers where the judges disagree on a key point:
+A_C1_2: sonnet=[True, True, True, False, True] vs opus=[True, True, True, False, False]
+A_R2_0: sonnet=[False, True] vs opus=[False, False]
+A_R6_0: sonnet=[False, False] vs opus=[True, False]
+A_R6_1: sonnet=[False, False] vs opus=[True, False]
+D_R6_0: sonnet=[True, False] vs opus=[True, True]
+M_C1_2: sonnet=[True, False, False, True, False] vs opus=[True, True, False, True, False]
+M_C2_4: sonnet=[False, False, False, False] vs opus=[True, False, False, False]
+M_R4_1: sonnet=[False, False] vs opus=[True, False]
+M_R6_0: sonnet=[True, False] vs opus=[False, False]
+N_C2_0: sonnet=[True, True, False, True] vs opus=[True, True, True, True]
+N_R1_1: sonnet=[False, True] vs opus=[True, True]
+N_R2_1: sonnet=[False, False] vs opus=[False, True]
+N_R2_2: sonnet=[False, False] vs opus=[False, True]
+N_R5_1: sonnet=[True, False] vs opus=[False, False]

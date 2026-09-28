@@ -1,0 +1,1 @@
+{"hits": [true, true, true, false, true], "wrong": 0, "note": "Accurate state and next steps, but it misses the prior lesson not to read the env var directly with std::env::var."}

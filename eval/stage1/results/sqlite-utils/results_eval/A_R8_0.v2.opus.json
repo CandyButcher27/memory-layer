@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "The answer says yes, you can use it in production, which contradicts the expected no, and it never mentions the Lambda layer size limit."}

@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "Answer denies any compiler cache exists, contradicting the sccache setup with 50 GB limit."}

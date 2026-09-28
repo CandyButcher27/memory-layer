@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 0, "note": "Answer is generic knowledge about -Zbuild-std tradeoffs and explicitly did not consult the repo, so it never reports the team's actual decision or the cache-size reasoning."}

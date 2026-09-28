@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true], "wrong": 1, "note": "Answer claims a confirmed root cause with specific file/line detail instead of treating TypeTracker as merely the next suspect to verify via a failing test."}

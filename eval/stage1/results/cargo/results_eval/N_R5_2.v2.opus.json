@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "The answer discusses the build-std decision instead of the sccache setup and wrongly says no compiler-cache config exists."}

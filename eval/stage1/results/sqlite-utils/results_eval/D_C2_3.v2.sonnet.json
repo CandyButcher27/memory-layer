@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true], "wrong": 1, "note": "Answer claims diagnosis is already complete with confirmed root cause, contradicting the expected state where TypeTracker type-guessing is merely the next suspect to investigate."}

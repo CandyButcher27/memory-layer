@@ -1,0 +1,1 @@
+{"hits": [true, true, true, false, true], "wrong": 0, "note": "The answer is accurate and complete except that it omits the warning against reading the env var directly, which was already tried."}

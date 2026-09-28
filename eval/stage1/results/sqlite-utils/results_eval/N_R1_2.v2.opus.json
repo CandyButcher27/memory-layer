@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Answer says /tmp because the service runs on AWS Lambda, where only /tmp is writable."}

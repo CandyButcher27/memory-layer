@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true, false], "wrong": 0, "note": "Answer covers step 1 status, step 2 next-action, and the env-var gotcha, but omits step 3 (docs/test) and the default-value/jitter point entirely."}

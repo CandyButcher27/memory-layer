@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 2, "note": "Answer says 'Yes, but...' and never mentions the Lambda layer size limit as the blocker, instead citing needing to get the .so onto the host and suggesting workarounds \u2014 directly contradicting the expected 'No' answer."}

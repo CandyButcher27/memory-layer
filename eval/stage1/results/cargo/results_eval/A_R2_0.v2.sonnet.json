@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Answer gives plausible generic Cargo/registry speculation and explicitly flags it as unverified, but misses the specific known fact about the internal mirror's Sunday-night pruning of yanked crates."}

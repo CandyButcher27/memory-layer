@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true, true], "wrong": 0, "note": "Answer covers steps 1/2, the random()-limit approach, and backwards compatibility, but omits the --sample/--order mutual exclusivity requirement."}

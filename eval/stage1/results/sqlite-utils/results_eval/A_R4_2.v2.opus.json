@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Correctly gives the general delimiter fix, but doesn't know that this vendor uses semicolons plus a BOM."}

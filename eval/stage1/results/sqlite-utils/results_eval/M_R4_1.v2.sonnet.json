@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Answer confirms semicolon delimiter and delimiter-fix/single-column symptom, but omits the UTF-8 BOM detail from key point 1."}

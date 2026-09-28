@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer states sccache with a 50 GB per-runner local cache limit, which covers both key points."}

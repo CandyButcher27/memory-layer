@@ -1,0 +1,1 @@
+{"hits": [true, true, true, false, true], "wrong": 0, "note": "Missing the env-var/net_config() caveat (point 4); all other key points are present and consistent."}

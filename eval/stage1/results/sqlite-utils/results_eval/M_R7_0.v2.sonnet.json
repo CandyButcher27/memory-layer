@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 1, "note": "Answer says 'Yes' with caveats instead of 'No', and omits the prior incident of --replace wiping enrichment columns, though it does correctly suggest --upsert --pk as an alternative."}

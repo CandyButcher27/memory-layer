@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true, false], "wrong": 0, "note": "Answer nails steps 1, 2, and the env-var pitfall, but omits the unit-test requirement and the default/jitter preservation detail."}

@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 1, "note": "The answer says yes to production use, which contradicts the expected no, but it does name the Lambda layer size limit as the obstacle."}

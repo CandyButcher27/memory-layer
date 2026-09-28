@@ -1,0 +1,1 @@
+{"hits": [false, false, false, true], "wrong": 1, "note": "The answer wrongly says name matching was ruled out, omits the debug and locking eliminations, but gets the next step (a failing rename test) right."}

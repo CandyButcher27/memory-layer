@@ -1,0 +1,1 @@
+{"hits": [true, true, true, true], "wrong": 1, "note": "All four points are covered, but the answer says TypeTracker is the confirmed root cause when it is only the next suspect."}

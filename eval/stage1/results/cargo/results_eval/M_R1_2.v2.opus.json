@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "The answer says CI can download from crates.io directly with no restriction, which contradicts the mirror-only block, and it never mentions the July start."}

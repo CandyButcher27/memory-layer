@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Answer speculates generically about yanked crates/Cargo failure modes but never identifies the actual known fact (internal mirror prunes yanked crates every Sunday night) and explicitly disclaims confirming any cause."}

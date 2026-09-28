@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Blames a yank for the failure but misses the Sunday-night pruning on the internal mirror, which is the actual cause."}

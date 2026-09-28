@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true, false], "wrong": 0, "note": "Covers steps 1 and 2 and the warning about reading the env var directly, but leaves out step 3 (docs and test) and the default/jitter constraint."}

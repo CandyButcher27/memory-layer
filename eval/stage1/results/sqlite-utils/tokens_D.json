@@ -1,0 +1,61 @@
+{
+ "proxy": {
+  "build": {
+   "claude-opus-5-5": {
+    "input_tokens": 26,
+    "cache_creation_input_tokens": 29718,
+    "cache_read_input_tokens": 510212,
+    "output_tokens": 7455,
+    "calls": 13
+   }
+  },
+  "write": {
+   "claude-sonnet-5": {
+    "input_tokens": 249,
+    "cache_creation_input_tokens": 159065,
+    "cache_read_input_tokens": 6257909,
+    "output_tokens": 53363,
+    "calls": 127
+   }
+  },
+  "eval": {
+   "claude-sonnet-5": {
+    "input_tokens": 138,
+    "cache_creation_input_tokens": 99042,
+    "cache_read_input_tokens": 2366396,
+    "output_tokens": 17400,
+    "calls": 69
+   }
+  }
+ },
+ "main": {
+  "eval": {
+   "claude-sonnet-5": {
+    "input_tokens": 138,
+    "cache_creation_input_tokens": 99042,
+    "cache_read_input_tokens": 2366396,
+    "output_tokens": 17400,
+    "calls": 69
+   }
+  },
+  "write": {
+   "claude-sonnet-5": {
+    "input_tokens": 249,
+    "cache_creation_input_tokens": 159065,
+    "cache_read_input_tokens": 6257909,
+    "output_tokens": 53363,
+    "calls": 127
+   }
+  },
+  "build": {
+   "claude-opus-5-5": {
+    "input_tokens": 26,
+    "cache_creation_input_tokens": 29718,
+    "cache_read_input_tokens": 510212,
+    "output_tokens": 7455,
+    "calls": 13
+   }
+  }
+ },
+ "worker": {}
+}

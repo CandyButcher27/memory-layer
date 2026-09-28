@@ -1,0 +1,1 @@
+{"hits": [true, true, true, false, true], "wrong": 0, "note": "Answer covers steps/status/defaults well but never mentions the std::env::var pitfall from point 4."}

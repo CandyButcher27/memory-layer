@@ -1,0 +1,6 @@
+- [No --replace in prod](feedback_no_replace_use_upsert_with_pk.md) — use --upsert with explicit --pk; --replace once wiped enrichment columns
+- [Reporting service stuck on 3.x](project_reporting_service_3x_freeze.md) — dashboard team depends on old upsert behavior, frozen until Q1 2027
+- [Ingest DB schema freeze](project_ingest_schema_freeze.md) — no schema changes to ingest database on/after 2026-11-01
+- [No SpatiaLite in prod](project_no_spatialite_in_prod.md) — Lambda layer size limit blocks shipping SpatiaLite in production
+- [--sample rows option](project_sample_option_rows.md) — step 1 done (rows_where sample kwarg); step 2 CLI must make --sample/--order mutually exclusive
+- [TypeTracker leading-zero bug](project_typetracker_leading_zero_bug.md) — root cause found in test_integer; next: write failing test first, then fix

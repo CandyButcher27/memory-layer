@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "Answer explicitly recommends avoiding /tmp and never mentions AWS Lambda, contradicting both key points."}

@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 0, "note": "Answer never mentions the internal mirror pruning yanked crates on Sundays; it speculates about cache eviction, toolchain drift, and index staleness instead."}

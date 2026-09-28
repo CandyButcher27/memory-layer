@@ -1,0 +1,1 @@
+{"hits": [false, false, false, true], "wrong": 1, "note": "Answer omits --alter and affinity elimination, and overclaims a confirmed root cause rather than describing TypeTracker as the next suspect."}

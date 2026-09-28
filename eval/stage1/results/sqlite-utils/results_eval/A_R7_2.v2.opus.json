@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 1, "note": "The answer approves --replace with caveats, which contradicts the team's no-replace rule, though it does point to upsert with --pk."}

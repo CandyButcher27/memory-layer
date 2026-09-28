@@ -1,0 +1,1 @@
+{"hits": [true, true, true, false, true], "wrong": 0, "note": "Answer covers steps 1-3 and backward-compat detail well but omits the rejected random-offset rationale (duplicates/WITHOUT ROWID)."}

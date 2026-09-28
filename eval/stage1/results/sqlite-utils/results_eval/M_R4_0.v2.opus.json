@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Correctly says to use --delimiter ';' but does not say that this vendor exports with semicolons and a BOM."}

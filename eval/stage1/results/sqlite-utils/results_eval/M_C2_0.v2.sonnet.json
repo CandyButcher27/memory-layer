@@ -1,0 +1,1 @@
+{"hits": [false, false, false, false], "wrong": 2, "note": "Answer omits --alter/affinity elimination entirely and claims root cause already confirmed with test written after the fix, contradicting the expected still-investigating, test-first narrative."}

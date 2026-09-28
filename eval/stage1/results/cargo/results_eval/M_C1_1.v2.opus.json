@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true, false], "wrong": 0, "note": "Covers step 1, step 2 and the env-var warning, but leaves out the config-reference docs and the 10-second default/jitter constraint."}

@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "The answer says nothing is known about the vendor's format, but its generic guess still points to a semicolon delimiter and the --delimiter option."}

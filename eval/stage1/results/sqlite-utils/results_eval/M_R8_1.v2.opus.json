@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 1, "note": "Names the Lambda layer size limit as the blocker but answers 'Yes' instead of 'No'."}

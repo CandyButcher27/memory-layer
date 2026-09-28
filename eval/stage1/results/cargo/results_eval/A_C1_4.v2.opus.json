@@ -1,0 +1,1 @@
+{"hits": [true, true, true, false, true], "wrong": 0, "note": "Accurate state and next steps, but no warning against the env-var approach that was already tried."}

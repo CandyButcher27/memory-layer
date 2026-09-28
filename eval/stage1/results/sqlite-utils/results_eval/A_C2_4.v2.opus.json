@@ -1,0 +1,1 @@
+{"hits": [false, false, true, true], "wrong": 0, "note": "Leaves out both ruled-out paths (--alter and affinity); points to the type-guessing code and test-first as next steps, but overstates it as a confirmed diagnosis."}

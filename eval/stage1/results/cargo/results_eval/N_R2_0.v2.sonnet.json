@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 0, "note": "Answer never mentions the Sunday-night mirror pruning of yanked crates; it only speculates about retry/backoff, cache eviction, and generic yank timing without stating the key mechanism."}

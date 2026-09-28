@@ -1,0 +1,1 @@
+{"hits": [false, false, false, false], "wrong": 0, "note": "The answer couldn't recover what was ruled out or the planned next step; it only guesses at cargo_clean.rs without the renamed-dependency angle."}

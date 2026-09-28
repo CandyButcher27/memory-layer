@@ -1,0 +1,1 @@
+{"hits": [true, true, false, false, true], "wrong": 0, "note": "Answer correctly covers done/next state and the random()-limit implementation but omits the --order mutual-exclusivity requirement and the rejected random-offset rationale."}

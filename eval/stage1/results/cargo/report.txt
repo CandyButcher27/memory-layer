@@ -1,0 +1,17 @@
+arm    n         score         wrong         tools        search          bash         reads  input_tokens          cost       seconds
+A     34          0.16          0.62          4.65          1.79          2.47          0.38     182133.65          0.07         21.22
+N     34          0.54          0.29          1.91          0.59          0.74          0.59      96374.59          0.04         11.84
+D     34          0.99          0.06          0.68          0.09          0.26          0.32      57266.91          0.03         10.08
+M     34          0.16          0.59          5.06          1.35          1.97          0.26     207519.15          0.09         24.64
+
+per task score (A / N / D / M):
+R1 corrected-fact   0.00 / 0.17 / 1.00 / 0.00
+R2 trap             0.33 / 0.00 / 1.00 / 0.33
+R3 person           0.00 / 0.00 / 1.00 / 0.00
+R4 measurement      0.00 / 0.00 / 1.00 / 0.00
+R5 infrastructure   0.00 / 0.17 / 1.00 / 0.00
+R6 decision         0.17 / 1.00 / 0.83 / 0.50
+R7 deadline         0.00 / 1.00 / 1.00 / 0.00
+R8 review-rule      0.00 / 1.00 / 1.00 / 0.00
+C1 continuity-feature 0.80 / 1.00 / 1.00 / 0.56
+C2 continuity-investigation 0.00 / 0.65 / 1.00 / 0.00

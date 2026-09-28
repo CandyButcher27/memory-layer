@@ -1,0 +1,6 @@
+
+phase   source  model                               calls       input cache_write  cache_read      output
+eval    proxy   claude-sonnet-5                       143         286     145,175   4,744,634      43,602
+write   proxy   claude-sonnet-5                        45          90      66,368   1,668,898      12,993
+eval    main    claude-sonnet-5                       143         286     145,175   4,744,634      43,602
+write   main    claude-sonnet-5                        45          90      66,368   1,668,898      12,993

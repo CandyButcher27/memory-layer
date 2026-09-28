@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true], "wrong": 1, "note": "Answer claims the bug is already fully diagnosed to a specific line in TypeTracker, contradicting the key point that TypeTracker guessing is merely the next suspect to investigate."}

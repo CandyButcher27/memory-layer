@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true], "wrong": 1, "note": "Covers the ruled-out items and the next test step, but says the rename matching in cargo_clean.rs is ruled out instead of the next suspect."}

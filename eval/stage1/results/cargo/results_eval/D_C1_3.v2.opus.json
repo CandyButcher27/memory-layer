@@ -1,0 +1,1 @@
+{"hits": [true, true, true, true, true], "wrong": 0, "note": "All key points are covered; the answer leaves out why std::env::var was rejected, but it still says to use net_config()."}

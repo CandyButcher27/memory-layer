@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "The answer says nothing is known and only guesses at a delimiter problem; it never identifies the vendor's semicolon/BOM format or the needed --delimiter ';'."}

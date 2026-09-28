@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Mentions a yanked lockfile pin failing after the weekend but misses the known Sunday-night pruning on the internal mirror."}

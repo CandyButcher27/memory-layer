@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 1, "note": "Answer concludes 'Yes' overall (contradicting the expected 'No'), though it does correctly cite the Lambda layer size limit as a caveat/exception."}

@@ -1,0 +1,1 @@
+{"hits": [true, true, true, true, true], "wrong": 0, "note": "All five key points are addressed; point 4's specific rejection reasons (duplicates, WITHOUT ROWID) aren't spelled out but the core decision is confirmed."}

@@ -1,0 +1,1 @@
+{"hits": [true, false], "wrong": 0, "note": "Reaches the correct 'no' but uses general reasoning and misses the cache doubling from 40 GB to 80 GB."}

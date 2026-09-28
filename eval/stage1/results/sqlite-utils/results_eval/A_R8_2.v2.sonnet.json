@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 2, "note": "Answer says 'Yes, with caveats' (contradicting expected 'No') and never mentions the Lambda layer size limit reason."}

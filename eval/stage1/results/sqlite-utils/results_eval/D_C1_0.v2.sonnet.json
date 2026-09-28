@@ -1,0 +1,1 @@
+{"hits": [true, true, true, true, true], "wrong": 0, "note": "All five key points are addressed; point 5 is only partially explicit (mentions default None but not keyword-only) yet not contradicted."}

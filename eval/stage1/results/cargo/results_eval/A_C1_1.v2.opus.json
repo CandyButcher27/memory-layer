@@ -1,0 +1,1 @@
+{"hits": [true, true, true, false, true], "wrong": 0, "note": "Covers state and next steps well but omits the warning against reading the env var directly."}

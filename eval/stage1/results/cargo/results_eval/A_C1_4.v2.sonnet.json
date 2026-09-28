@@ -1,0 +1,1 @@
+{"hits": [true, true, true, false, true], "wrong": 0, "note": "Answer covers steps 1-3 and the default-10 behavior accurately, but omits the env-var pitfall entirely."}

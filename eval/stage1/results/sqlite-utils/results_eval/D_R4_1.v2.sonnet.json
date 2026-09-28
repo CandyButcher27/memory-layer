@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 0, "note": "Answer found nothing in memory and did not surface the semicolon/BOM delimiter fact at all."}

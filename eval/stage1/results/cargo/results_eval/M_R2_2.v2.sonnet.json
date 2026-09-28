@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 0, "note": "Answer speculates generically about yanking/mirror sync but never states the specific fact that the internal mirror prunes yanked crates every Sunday night."}

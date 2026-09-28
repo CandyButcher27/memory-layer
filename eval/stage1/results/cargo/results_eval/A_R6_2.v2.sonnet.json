@@ -1,0 +1,1 @@
+{"hits": [true, false], "wrong": 0, "note": "Answer concludes 'no' but gives generic nightly/rough-edges reasoning, never mentions the actual decisive reason (cache size doubling from 40GB to 80GB)."}

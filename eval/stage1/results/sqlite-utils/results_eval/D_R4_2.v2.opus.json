@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "The answer says nothing is recorded about this and only guesses at a delimiter mismatch, missing both the known semicolon/BOM format and the --delimiter fix."}

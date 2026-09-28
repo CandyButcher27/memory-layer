@@ -1,0 +1,1 @@
+{"hits": [true, false], "wrong": 1, "note": "Mentions sccache nowhere and states cache limit as ~40 GB (not enabled) rather than 50 GB, directly contradicting the second key point."}

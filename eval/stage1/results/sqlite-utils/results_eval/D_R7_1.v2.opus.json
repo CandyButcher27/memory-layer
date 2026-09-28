@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Answer says no, cites the incident where --replace wiped enrichment columns, and recommends --upsert with an explicit --pk."}

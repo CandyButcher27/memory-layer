@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Gives the --delimiter ';' fix and the single-column symptom, but misses that this vendor's exports specifically use semicolons and a UTF-8 BOM."}

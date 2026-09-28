@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true, false], "wrong": 0, "note": "The status and next step are correct, but the answer leaves out step 3 (docs and unit test) and the 10s default / untouched-jitter constraint."}

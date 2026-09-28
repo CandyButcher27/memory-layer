@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Answer gives generic --sniff/--delimiter troubleshooting advice but never asserts the vendor's actual format is semicolon-delimited with a UTF-8 BOM."}

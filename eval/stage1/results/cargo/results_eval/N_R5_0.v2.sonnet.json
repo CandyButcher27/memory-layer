@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 2, "note": "Answer says sccache wasn't used/mentioned at all; instead claims 40GB (later 80GB) cache size, contradicting the 50GB sccache setup."}

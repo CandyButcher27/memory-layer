@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true, false], "wrong": 0, "note": "Answer captures steps 1, 2, and the env-var pitfall accurately but omits the config-reference documentation and the 10s-default/jitter-untouched detail."}

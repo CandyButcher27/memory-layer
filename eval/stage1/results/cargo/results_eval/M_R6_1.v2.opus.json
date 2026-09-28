@@ -1,0 +1,1 @@
+{"hits": [true, false], "wrong": 0, "note": "Right conclusion (no), but it misses the actual reason (runner cache doubling from 40 GB to 80 GB) and uses general reasoning instead."}

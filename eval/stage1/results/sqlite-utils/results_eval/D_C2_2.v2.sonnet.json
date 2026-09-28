@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true], "wrong": 1, "note": "Answer fabricates a fully diagnosed root cause (ValueTracker.test_integer) instead of correctly stating TypeTracker's per-column guessing is merely the next suspect to investigate."}

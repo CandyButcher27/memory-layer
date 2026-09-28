@@ -1,0 +1,1 @@
+{"hits": [true, false], "wrong": 1, "note": "Decision-against is stated correctly, but the answer claims the cap is 50 GB and that 40\u219280 GB blows past it, contradicting the key point that the cache size doubling itself (40\u219280 GB) was the stated reason."}

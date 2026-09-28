@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true, false], "wrong": 0, "note": "Steps 1\u20132 and the env-var warning are correct, but the answer leaves out the unit test and the 10s default/jitter constraint."}

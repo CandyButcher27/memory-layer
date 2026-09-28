@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Answer says it found no data and gives no timing, so it misses the 6m10s figure but avoids the stale 4m10s one."}

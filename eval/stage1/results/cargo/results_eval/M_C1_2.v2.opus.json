@@ -1,0 +1,1 @@
+{"hits": [true, true, false, true, false], "wrong": 1, "note": "Covers step 1, step 2 and the env-var pitfall, but gives the wrong path for retry.rs and omits step 3 and the default/jitter constraint."}

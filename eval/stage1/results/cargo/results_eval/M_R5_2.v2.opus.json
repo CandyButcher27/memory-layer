@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 2, "note": "The answer says CI has no compiler cache, which contradicts both the sccache setup and its 50 GB per-runner limit."}

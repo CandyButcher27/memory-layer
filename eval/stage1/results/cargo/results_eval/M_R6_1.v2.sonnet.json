@@ -1,0 +1,1 @@
+{"hits": [true, false], "wrong": 0, "note": "Answer correctly says no but gives a fabricated/unverified rationale (MSRV, nightly, instability) instead of the actual cache-size reason, and never mentions cache size at all."}
