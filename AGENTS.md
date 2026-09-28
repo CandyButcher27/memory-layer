@@ -9,16 +9,19 @@ It needs no server, no database and no dependencies.
 
 ## What it maintains in a project
 
+Everything lives in `mimi/` at the project root. `mimi/.gitignore` (`*`) keeps the folder out of git.
+`CLAUDE.md` gets one managed line, `@mimi/MIMI.md`, and `/mimi-logging` reports go to `mimi/logs/`.
+
 | File | Holds | Cap | Updated |
 |---|---|---|---|
-| `CLAUDE.md` (managed block) | Map: where to look for what, hard rules, the memory index | ~100 lines | When the layout changes |
-| `STATE.md` | Now only: goal, deployed, broken, open threads, next 3, and a `## Last session` handoff (branch, uncommitted, stopped at, tried and failed, resume with) | 60 lines | Overwritten every session |
-| `ISSUES.md` | Every bug: exact symptom, cause, fix commit, test | Append-only | Per bug |
-| `decisions.md` | Choices someone would argue again: why, what was rejected, what reverses it | Short entries | Per decision |
-| `memory/<topic>.md` | Only what the code cannot tell you: external-system quirks, measured numbers with date and sample, traps, non-obvious whys | 150 lines each | When that topic changes |
+| `mimi/MIMI.md` | Map: where to look for what, hard rules, the memory index | ~100 lines | When the layout changes |
+| `mimi/STATE.md` | Now only: goal, deployed, broken, open threads, next 3, and a `## Last session` handoff (branch, uncommitted, stopped at, tried and failed, resume with) | 60 lines | Overwritten every session |
+| `mimi/ISSUES.md` | Every bug: exact symptom, cause, fix commit, test | Append-only | Per bug |
+| `mimi/decisions.md` | Choices someone would argue again: why, what was rejected, what reverses it | Short entries | Per decision |
+| `mimi/memory/<topic>.md` | Only what the code cannot tell you: external-system quirks, measured numbers with date and sample, traps, non-obvious whys | 150 lines each | When that topic changes |
 
-`CLAUDE.md` imports `STATE.md` (`@STATE.md`), so each session starts with the current state already
-loaded. The index lines in `CLAUDE.md` say which file answers which question, and `memlayer.py index`
+`CLAUDE.md` imports `mimi/MIMI.md`, which imports `STATE.md`, so each session starts with the map and
+the current state already loaded. The index lines in `mimi/MIMI.md` say which file answers which question, and `memlayer.py index`
 appends each memory file's `##` headings to its line. That lets a task that names a symptom find the
 right file without searching.
 
@@ -33,17 +36,19 @@ right file without searching.
 ## Commands
 
 ```bash
-python memlayer.py init  [dir]   # create missing files, add the CLAUDE.md block; never overwrites
-python memlayer.py index [dir]   # refresh index lines from each memory file's ## headings; idempotent
+python memlayer.py init  [dir]   # create mimi/ and the CLAUDE.md import; never overwrites
+python memlayer.py index [dir]   # refresh index lines in mimi/MIMI.md from each memory file's ## headings; idempotent
 python memlayer.py check [dir]   # report rot, exit 1 if any
-python memlayer.py stats [dir]   # usage and token report from the project's Claude Code session logs
+python memlayer.py stats [dir]   # usage and token report from session logs, saved to mimi/logs/
 python memlayer.py selftest      # prints SELFTEST_OK
 ```
 
 `check` flags (all covered by `eval/stress/s1/test_memlayer_stress.py`):
-- `CLAUDE.md` over 100 lines, or `STATE.md` over 60
-- `CLAUDE.md` + `STATE.md` over 16 KB together, since both load into every session
-- a memory file over 150 lines, or in a subfolder of `memory/` (allowed, but noted)
+- `mimi/MIMI.md` over 100 lines, or `mimi/STATE.md` over 60
+- `CLAUDE.md` + `mimi/MIMI.md` + `mimi/STATE.md` over 16 KB together, since all three load into every
+  session
+- a `CLAUDE.md` that no longer imports `mimi/MIMI.md`
+- a memory file over 150 lines, or in a subfolder of `mimi/memory/` (allowed, but noted)
 - a memory file missing from the index, an index line pointing to a missing file, or index lines
   gone stale since the headings changed
 - a `Last verified:` date that is missing, malformed, in the future, duplicated, or more than 90
@@ -51,34 +56,38 @@ python memlayer.py selftest      # prints SELFTEST_OK
 - a `## ISS-` issue entry without `Symptom:` or `Cause:` (code blocks inside an entry are ignored)
 - git conflict markers in any layer file
 
-The script keeps each file's own line endings, only touches text inside its managed block, and writes
-its own path as `$HOME/...`, so the block works on any machine. Errors are reported as one line, never
+The script keeps each file's own line endings, and only touches `CLAUDE.md` to add its one managed
+import. It writes its own path as `$HOME/...`, so the map works on any machine. Errors are reported as one line, never
 as a traceback.
 
 ## Slash commands
 
 | Command | When | What it does |
 |---|---|---|
-| `/mimi-start` | Start of a session | Sets the project up (New or Adopt) if it has no block. Otherwise runs `index` and `check`, compares the `Last session` handoff with the working tree, and briefs where work stopped |
-| `/mimi-close` | End of a session | Writes what the session learned, rewrites `STATE.md`, runs `index` and `check` (below) |
-| `/mimi-logging` | Any time | Runs `stats` and reads the result: tokens loaded per session, per-prompt tokens and searches before and after adoption, memory files never read |
+| `/mimi-start` | Once per project | Sets the project up (New or Adopt) if it has no `mimi/`. Run again later only for a brief: it runs `index` and `check`, compares the `Last session` handoff with the working tree, and says where work stopped |
+| `/mimi-close` | End of a session | Writes what the session learned, rewrites `mimi/STATE.md`, runs `index` and `check` (below) |
+| `/mimi-logging` | Any time | Runs `stats`, saves the report to `mimi/logs/`, and reads the result: tokens loaded per session, per-prompt tokens and searches before and after adoption, memory files never read |
 
 ## Closing a session: `/mimi-close`
 
 `commands/mimi-close.md` is a slash command to run at the end of every work session. It:
 
-1. Stops if the project has no memory-layer block. It never creates the files itself.
+1. Stops if the project has no `mimi/MIMI.md`. It never creates the files itself.
 2. Gathers candidates from the conversation, git status and diff, this session's commits, and the
    memory files the work touched.
 3. Drops anything the code or git already shows, plus narration and descriptions of how the code
-   works.
-4. Routes each surviving fact to exactly one place: a bug to `ISSUES.md`, a choice to
-   `decisions.md`, a correction edited in place everywhere the old value appears, an external fact,
-   measurement or trap to `memory/<topic>.md` under a heading named after the trap.
-5. Runs `index` first, so the `CLAUDE.md` change it makes is already in `git status`.
-6. Rewrites `STATE.md` to show only what is true now, including the `## Last session` handoff. Its
-   `Tried, failed:` line keeps dead ends the user mentioned from being retried. It points to facts
-   already in `memory/` instead of repeating them. Then it runs `check` until clean.
+   works. Scope is never a reason to drop: a fact about the user's own systems is kept.
+4. Routes each surviving fact to exactly one place:
+   - a bug → `mimi/ISSUES.md`
+   - a choice → `mimi/decisions.md`
+   - a correction → edited in place everywhere the old value appears
+   - an external fact, measurement or trap → `mimi/memory/<topic>.md`, under a heading named after the
+     trap
+5. Runs `index` before writing the state.
+6. Rewrites `mimi/STATE.md` to show only what is true now, including the `## Last session` handoff.
+   - Its `Tried, failed:` line keeps dead ends the user mentioned from being retried.
+   - It points to facts already in `mimi/memory/` instead of repeating them.
+   - Then it runs `check` until clean.
 7. Verifies that no fact is duplicated and no corrected value survives as current.
 8. Reports what was written, corrected and dropped, the open questions and the `check` result. It
    does not commit unless asked.

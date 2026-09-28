@@ -8,7 +8,7 @@
 
 Coding agents start every session knowing nothing about your project. Most memory tools fix this by
 recording everything the agent does and replaying summaries of it. mimi does the opposite. It keeps a
-small, reviewed memory inside your repository and gives every file one job. It stores only the things
+small, reviewed memory in one `mimi/` folder inside your project, and gives every file one job. It stores only the things
 that are not in the code: bugs and their causes, decisions and the options you rejected, quirks of
 external systems, measured numbers, and what people told the agent.
 
@@ -62,11 +62,11 @@ python ~/.claude/skills/mimi/memlayer.py selftest    # prints SELFTEST_OK
 
 | Command | When | What it does |
 |---|---|---|
-| `/mimi-start` | Start of a session | Sets the project up if it has no memory yet. Otherwise refreshes the index, checks for rot, and briefs you on where the last session stopped |
-| `/mimi-close` | End of a session | Writes what the session learned to the right file, rewrites the current state, and checks the result |
-| `/mimi-logging` | Any time | Shows what mimi costs and what it is used for in this project, from your Claude Code session logs |
+| `/mimi-start` | Once per project | Sets the project up: creates `mimi/` and adds one import line to `CLAUDE.md`. Running it again later is optional and only gives a brief of where the last session stopped |
+| `/mimi-close` | End of a work session | Writes what the session learned to the right file, rewrites the current state, and checks the result |
+| `/mimi-logging` | Any time | Shows what mimi costs and what it is used for in this project, from your Claude Code session logs, and saves the report in `mimi/logs/` |
 
-**First run.** `/mimi-start` picks a mode:
+**Setup, once.** `/mimi-start` picks a mode:
 - **New**, for a project with little history. It creates the files, asks for the project's one-line
   goal, and stops. Memory grows from real bugs and decisions, not from guesses on day one.
 - **Adopt**, for an existing project. It reads your old notes, `CLAUDE.md`, git history, issues and
@@ -74,25 +74,45 @@ python ~/.claude/skills/mimi/memlayer.py selftest    # prints SELFTEST_OK
   place. Then it reports what moved and what it dropped. It never deletes project documentation, and it
   deletes old agent notes only with your approval.
 
-**Every session after that.** Run `/mimi-start` when you begin and `/mimi-close` when you stop.
-`/mimi-close` sends a bug to `ISSUES.md` and a choice to `decisions.md`. It edits a correction in place
-wherever the old value appears, and it puts an external fact under its own heading in `memory/`. It
-never commits unless you ask.
+**Every session after that.** Nothing to run at the start: the memory loads by itself through
+`CLAUDE.md`. Run `/mimi-close` when you stop:
+- a bug goes to `mimi/ISSUES.md`
+- a choice goes to `mimi/decisions.md`
+- a correction is edited in place wherever the old value appears
+- an external fact goes under its own heading in `mimi/memory/`
+
+It never commits unless you ask.
 
 ## How it works
 
-mimi maintains five kinds of file in your project:
+Everything mimi keeps is in one folder at the project root:
 
-| File | Holds | Limit | Updated |
-|---|---|---|---|
-| `CLAUDE.md` (managed block) | The map: where to look for what, the rules, and the memory index | ~100 lines | When the layout changes |
-| `STATE.md` | Now only: goal, deployed, broken, open threads, next 3, and a `Last session` handoff | 60 lines | Rewritten every session |
-| `ISSUES.md` | Every bug: exact symptom, cause, fix commit, test | Append-only | Per bug |
-| `decisions.md` | Choices someone would argue again: why, what was rejected, what would reverse it | Short entries | Per decision |
-| `memory/<topic>.md` | External-system quirks, measurements with date and sample size, traps, non-obvious reasons | 150 lines each | When the topic changes |
+```
+CLAUDE.md               your file; mimi adds one managed line: @mimi/MIMI.md
+mimi/
+  .gitignore            "*"  (git ignores the whole folder)
+  MIMI.md               the map: where to look for what, the rules, the memory index
+  STATE.md              now only: goal, deployed, broken, open threads, next 3, Last session handoff
+  ISSUES.md             every bug: exact symptom, cause, fix commit, test
+  decisions.md          choices someone would argue again: why, what was rejected, what would reverse it
+  memory/<topic>.md     external quirks, measurements with date and sample size, traps, non-obvious reasons
+  logs/                 reports saved by /mimi-logging
+```
 
-`CLAUDE.md` imports `STATE.md`, so every session starts with the current state already loaded. That is
-about 1–2k tokens on a typical project, capped at 16 KB.
+| File | Limit | Updated |
+|---|---|---|
+| `mimi/MIMI.md` | ~100 lines | When the layout changes |
+| `mimi/STATE.md` | 60 lines | Rewritten every session |
+| `mimi/ISSUES.md` | Append-only | Per bug |
+| `mimi/decisions.md` | Short entries | Per decision |
+| `mimi/memory/<topic>.md` | 150 lines each | When the topic changes |
+
+`CLAUDE.md` imports `mimi/MIMI.md`, which imports `mimi/STATE.md`. So every session starts with the map
+and the current state already loaded: about 1–2k tokens on a typical project, capped at 16 KB.
+
+**Git.** `mimi/.gitignore` keeps the folder out of git, so your project's own `.gitignore` is never
+touched, and memory stays on your machine. To share memory with your team through git, delete
+`mimi/.gitignore`.
 
 **The one-minute test.** Before any line is written: could someone learn this in under a minute from the
 code or a command? If yes, it is not written down. The test applies to each fact on its own. A number,
@@ -103,8 +123,8 @@ would describe it. `memlayer.py index` copies those headings onto the file's lin
 task that mentions duplicate webhooks lands on the file that holds that trap:
 
 ```markdown
-- Touching payments → `memory/payments.md` — contains: Stripe sends the same webhook event twice; refunds fail on test cards
-- About to change an existing choice → `decisions.md` — empty
+- Touching payments → `mimi/memory/payments.md` — contains: Stripe sends the same webhook event twice; refunds fail on test cards
+- About to change an existing choice → `mimi/decisions.md` — empty
 ```
 
 Files with nothing in them are marked `— empty`, so the agent skips them. A memory miss is never taken as
@@ -115,16 +135,17 @@ an answer. The agent falls back to `git log --grep` and the code.
 `memlayer.py` does the mechanical work, and the slash commands call it for you:
 
 ```bash
-python memlayer.py init  [dir]   # create missing files and the CLAUDE.md block; never overwrites
-python memlayer.py index [dir]   # refresh index lines from headings, mark empty files; idempotent
+python memlayer.py init  [dir]   # create mimi/ and the CLAUDE.md import; never overwrites
+python memlayer.py index [dir]   # refresh index lines in mimi/MIMI.md, mark empty files; idempotent
 python memlayer.py check [dir]   # report rot, exit 1 if any
-python memlayer.py stats [dir]   # usage and token report from Claude Code session logs
+python memlayer.py stats [dir]   # usage and token report; also saved to mimi/logs/stats-<date>.txt
 python memlayer.py selftest      # prints SELFTEST_OK
 ```
 
 `check` reports:
 - files over their line limit
 - more than 16 KB loaded into every session
+- a `CLAUDE.md` that no longer imports `mimi/MIMI.md`
 - a stale or broken index, or a memory file the index doesn't list
 - a missing, malformed, future, duplicated or 90-day-old `Last verified:` date
 - an incomplete issue entry
@@ -136,8 +157,8 @@ one line instead of a traceback.
 ## Usage report
 
 `/mimi-logging` reads the transcripts Claude Code already keeps for the project
-(`~/.claude/projects/<project>/*.jsonl`). mimi installs no hooks and logs nothing of its own. The report
-covers:
+(`~/.claude/projects/<project>/*.jsonl`). mimi installs no hooks and logs nothing while you work. Each
+report is printed and saved as `mimi/logs/stats-<date>.txt`. It covers:
 
 - **Cost:** tokens loaded into every session by `CLAUDE.md` and `STATE.md`, and that total across all
   sessions since adoption
@@ -343,13 +364,17 @@ The pass conditions were written before any test ran. See [`docs/STRESS_TESTS.md
   remove it.
 - **Parallel work:** two sessions closing on separate branches conflict in `STATE.md`. `check` catches
   leftover conflict markers, but the conflict itself comes from having a single current-state file.
+- **Local by default:** `mimi/` is git-ignored, so memory is not shared with teammates or backed up by
+  git unless you delete `mimi/.gitignore`. The evaluations above tracked the memory files in the
+  repository. The only difference is where the files live, since Claude Code loads imported files either
+  way.
 - **Manual close:** memory is only as current as the last `/mimi-close`. `/mimi-logging` shows how many
   sessions ended without one.
 
 ## Repository layout
 
 ```
-SKILL.md  memlayer.py  templates/   the skill; installs as one folder
+SKILL.md  memlayer.py  templates/   the skill; installs as one folder (templates/ seeds a project's mimi/)
 commands/     mimi-start.md, mimi-close.md, mimi-logging.md
 AGENTS.md     what the agent does, written for agents
 docs/         EVALUATION.md, STRESS_TESTS.md
