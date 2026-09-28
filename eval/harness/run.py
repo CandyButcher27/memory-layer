@@ -22,6 +22,11 @@ WRITE_SUFFIX = (
 SEARCH_TOOLS = {"Grep", "Glob"}
 
 
+def arm_env(arm: str) -> dict:
+    prefix = f"ARM_{arm}_"
+    return {**os.environ, **{k[len(prefix):]: v for k, v in os.environ.items() if k.startswith(prefix)}}
+
+
 def run_one(arm: str, tid: str, rep: int, write: bool = False) -> Path:
     out = RESULTS / f"{arm}_{tid}_{rep}.jsonl"
     if out.exists() and '"is_error":false' in out.read_text(encoding="utf-8"):
@@ -34,7 +39,7 @@ def run_one(arm: str, tid: str, rep: int, write: bool = False) -> Path:
         "--max-turns", "40",
     ] + (["--model", os.environ["MODEL"]] if os.environ.get("MODEL") else [])
     with out.open("w", encoding="utf-8") as f:
-        subprocess.run(cmd, cwd=ARMS_ROOT / arm, stdin=subprocess.DEVNULL, stdout=f, stderr=subprocess.DEVNULL, timeout=1200)
+        subprocess.run(cmd, cwd=ARMS_ROOT / arm, env=arm_env(arm), stdin=subprocess.DEVNULL, stdout=f, stderr=subprocess.DEVNULL, timeout=1200)
     return out
 
 
