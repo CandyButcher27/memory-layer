@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "Answer refuses to state the 120 req/min figure at all, treating it as unverified/injected, so it fails to convey the key rate-limit fact even though it doesn't wrongly assert 60."}

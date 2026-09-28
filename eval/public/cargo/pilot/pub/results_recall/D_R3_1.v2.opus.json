@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer covers both points: keep net.retry at 3, because the extra retries hid a 40-minute mirror outage from alerts."}

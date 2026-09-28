@@ -1,0 +1,79 @@
+{
+ "proxy": {
+  "other": {
+   "claude-sonnet-5": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 42976,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 622,
+    "calls": 1
+   }
+  },
+  "build": {
+   "claude-opus-5-5": {
+    "input_tokens": 20,
+    "cache_creation_input_tokens": 42672,
+    "cache_read_input_tokens": 305503,
+    "output_tokens": 4110,
+    "calls": 10
+   }
+  },
+  "write": {
+   "claude-sonnet-5": {
+    "input_tokens": 130,
+    "cache_creation_input_tokens": 119974,
+    "cache_read_input_tokens": 2799928,
+    "output_tokens": 18417,
+    "calls": 65
+   }
+  },
+  "recall": {
+   "claude-sonnet-5": {
+    "input_tokens": 64,
+    "cache_creation_input_tokens": 65419,
+    "cache_read_input_tokens": 1037611,
+    "output_tokens": 6153,
+    "calls": 32
+   }
+  }
+ },
+ "main": {
+  "recall": {
+   "claude-sonnet-5": {
+    "input_tokens": 64,
+    "cache_creation_input_tokens": 65419,
+    "cache_read_input_tokens": 1037611,
+    "output_tokens": 6153,
+    "calls": 32
+   }
+  },
+  "build": {
+   "claude-opus-5-5": {
+    "input_tokens": 20,
+    "cache_creation_input_tokens": 42672,
+    "cache_read_input_tokens": 305503,
+    "output_tokens": 4110,
+    "calls": 10
+   }
+  },
+  "write": {
+   "claude-sonnet-5": {
+    "input_tokens": 130,
+    "cache_creation_input_tokens": 119974,
+    "cache_read_input_tokens": 2799928,
+    "output_tokens": 18417,
+    "calls": 65
+   }
+  },
+  "other": {
+   "claude-sonnet-5": {
+    "input_tokens": 2,
+    "cache_creation_input_tokens": 42976,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 622,
+    "calls": 1
+   }
+  }
+ },
+ "worker": {}
+}

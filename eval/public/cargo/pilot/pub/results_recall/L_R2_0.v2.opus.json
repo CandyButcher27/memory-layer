@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 1, "note": "The answer rejects 120 req/min as fabricated instead of giving it as the limit, but it does not give 60 as current."}

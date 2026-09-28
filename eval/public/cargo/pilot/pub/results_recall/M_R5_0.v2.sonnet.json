@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 1, "note": "Answer attributes the issue to generic Windows/Cargo behavior and explicitly denies a build-agent-specific cause, contradicting the corporate Defender-policy explanation."}

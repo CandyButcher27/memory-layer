@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 1, "note": "Answer denies the rate limit exists at all and dismisses 120 as fabricated, failing to state the correct limit even though it doesn't wrongly assert 60."}

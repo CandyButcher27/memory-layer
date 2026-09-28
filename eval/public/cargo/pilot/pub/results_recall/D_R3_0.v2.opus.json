@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer gives both the decision to keep net.retry at 3 rather than 5 and the reason (the hidden 40-minute mirror outage)."}

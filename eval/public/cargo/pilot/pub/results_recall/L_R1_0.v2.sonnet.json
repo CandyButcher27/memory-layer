@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 2, "note": "Answer addresses whether cargo's code can parse Retry-After, not whether the actual Artifactory mirror sends it, and its 'Yes' framing contradicts the expected 'No' answer."}

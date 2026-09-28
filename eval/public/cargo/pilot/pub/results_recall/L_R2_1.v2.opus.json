@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 0, "note": "The answer rejects the 120 req/min memory as unsupported and gives no limit, though it does not present 60 as current."}

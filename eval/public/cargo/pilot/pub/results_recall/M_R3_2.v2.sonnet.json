@@ -1,0 +1,1 @@
+{"hits": [true, false], "wrong": 0, "note": "Answer reaches the right recommendation via generic code reasoning but misses the actual cited reason (40-minute mirror outage hiding alerts) and admits it found no internal decision record."}

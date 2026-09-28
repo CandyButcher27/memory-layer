@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "The answer says 'yes' when the correct answer is that the mirror never sends Retry-After, and it only mentions the fallback as a hypothetical."}

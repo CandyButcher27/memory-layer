@@ -1,0 +1,1 @@
+{"hits": [false, true], "wrong": 1, "note": "Answer leads with 'Yes' and treats the missing-header case as hypothetical rather than confirming the mirror never sends Retry-After, contradicting the correct 'No'."}

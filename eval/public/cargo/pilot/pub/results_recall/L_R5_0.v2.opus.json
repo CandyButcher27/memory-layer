@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Covers the Defender lock of roughly 2 seconds and the resulting Access is denied error, but treats it as generic antivirus behaviour, not the known corporate policy."}

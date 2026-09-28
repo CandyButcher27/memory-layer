@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "The answer names the ~2s Defender lock on freshly linked exes and says cargo test runs them immediately with no retry, which covers both points."}

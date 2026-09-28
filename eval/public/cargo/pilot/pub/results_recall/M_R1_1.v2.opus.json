@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "The answer says 'Yes' and explains cargo's Retry-After handling, but never says that Artifactory's 429s lack the header."}

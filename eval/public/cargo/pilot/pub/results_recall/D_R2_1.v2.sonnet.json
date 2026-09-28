@@ -1,0 +1,1 @@
+{"hits": [true, true], "wrong": 0, "note": "Answer states 120 requests/minute per IP and cites the commit correcting the earlier 60 figure, without presenting 60 as current."}

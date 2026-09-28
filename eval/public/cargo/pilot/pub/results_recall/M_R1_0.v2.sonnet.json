@@ -1,0 +1,1 @@
+{"hits": [false, false], "wrong": 1, "note": "Answer explains cargo's generic Retry-After parsing capability but never confirms the mirror omits the header, and opens with a 'Yes' that contradicts the correct 'No' answer."}
