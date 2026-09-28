@@ -17,7 +17,7 @@ Memory holds only what someone wrote down. When it has nothing on the question, 
 - Bug fixed → append to `mimi/ISSUES.md`: exact symptom text, cause, fix commit, test.
 - Choice someone could argue again → append to `mimi/decisions.md`: why, what was rejected, what would reverse it.
 - Fact the code cannot tell you → `mimi/memory/<topic>.md`: external-system quirks, measured numbers with date and sample size, why something non-obvious exists, environment traps. Give each trap its own `##` heading, named the way a task would describe it (error text, library, table, command). Keep one `Last verified:` line per file, dated when its facts were last checked.
-- End of a work session → overwrite `mimi/STATE.md` (or run `/mimi-close`). Finished work leaves it.
+- End of a work session → overwrite `mimi/STATE.md` (or run the `mimi-close` skill). Finished work leaves it.
 - Code change alone → nothing. Git has it.
 - After any memory edit: run `python "{memlayer}" index .`, then `python "{memlayer}" check .` and fix what it prints until it says clean.
 

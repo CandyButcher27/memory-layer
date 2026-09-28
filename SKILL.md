@@ -1,6 +1,6 @@
 ---
 name: mimi
-description: Set up, adopt, or audit a project's mimi memory (the mimi/ folder - MIMI.md map, STATE.md, ISSUES.md, decisions.md, memory/<topic>.md - imported from CLAUDE.md) so the agent checks memory before grepping the repo. Use when the user says "/mimi", "mimi", "set up memory", "add the memory layer to this project", "adopt memory layer", "check memory for rot", or starts a new project.
+description: Set up, adopt, or audit a project's mimi memory (the mimi/ folder - MIMI.md map, STATE.md, ISSUES.md, decisions.md, memory/<topic>.md - loaded from CLAUDE.md, AGENTS.md or GEMINI.md) so the agent checks memory before grepping the repo. Use when the user says "/mimi", "mimi", "set up memory", "add the memory layer to this project", "adopt memory layer", "check memory for rot", or starts a new project.
 ---
 
 # mimi
@@ -16,10 +16,12 @@ one of each:
 | `mimi/decisions.md` | Choices someone would argue again: why, what reverses it | Short entries | Per decision |
 | `mimi/memory/<topic>.md` | What the code cannot tell you | 150 lines each | When that topic changes |
 
-`mimi/logs/` holds the reports `/mimi-logging` saves.
+`mimi/logs/` holds the reports the `mimi-logging` skill saves.
 
-**How it loads.** `CLAUDE.md` gets one managed block, `@mimi/MIMI.md`, between
-`<!-- memory-layer:start -->` markers. `MIMI.md` imports `STATE.md`. So every session starts with the
+**How it loads.** Each agent instruction file the project has (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`;
+a new `CLAUDE.md` if none) gets one managed block between `<!-- memory-layer:start -->` markers. The block
+holds `@mimi/MIMI.md`, which Claude Code and Gemini CLI expand, and a plain line telling any other agent
+to read `mimi/MIMI.md` and `mimi/STATE.md`. `MIMI.md` imports `STATE.md`. So every session starts with the
 map and the current state already loaded, and an index saying which file answers which question. That
 index is what replaces grepping.
 
@@ -27,18 +29,19 @@ index is what replaces grepping.
 `.gitignore` is never touched. Memory stays on this machine. Deleting `mimi/.gitignore` shares it through
 git.
 
-**Grep.** Claude Code's Grep runs on ripgrep, which skips git-ignored files, so it would not search
-`mimi/`. `mimi/.ignore` contains `!*`, which ripgrep reads and git does not, so Grep can search the folder
+**Search.** Most agents search with ripgrep, which skips git-ignored files, so it would not search
+`mimi/`. `mimi/.ignore` contains `!*`, which ripgrep reads and git does not, so search sees the folder
 again. `check` flags the file if it goes missing.
 
-**The script.** `memlayer.py` sits next to this file.
+**The script.** `memlayer.py` sits next to this file. Run it with `python`, or `python3` where `python`
+is missing.
 - `init` creates missing files and the import. It never overwrites anything, so it is safe on any
   project, any number of times.
 - `index` refreshes the index lines in `mimi/MIMI.md`.
 - `check` reports rot and exits 1 when it finds any:
   - files over their line cap
-  - more than 16 KB auto-loaded (`CLAUDE.md` + `MIMI.md` + `STATE.md`)
-  - a `CLAUDE.md` that lost the import
+  - more than 16 KB auto-loaded (instruction file + `MIMI.md` + `STATE.md`)
+  - an instruction file that lost the import
   - a stale or broken index
   - missing or bad `Last verified:` dates
   - incomplete `## ISS-` entries
@@ -77,7 +80,7 @@ the topic, so the symptom words come from the file itself:
 
 1. `python memlayer.py init <project>`.
 2. Gather candidates. Read, don't edit:
-   - existing `CLAUDE.md`, `README*`, `TODO*`, `NOTES*`, any old `memory/`, `.harness/`, `docs/`
+   - existing `CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `README*`, `TODO*`, `NOTES*`, any old `memory/`, `.harness/`, `docs/`
    - `git log --oneline -200`, especially `fix:` commits and reverts
    - `gh issue list --state all --limit 50` if a GitHub remote exists
    - config and deploy files (`Dockerfile`, CI workflows, `.env.example`, `railway.json` and the like) for external systems
@@ -99,7 +102,7 @@ the topic, so the symptom words come from the file itself:
 5. Do not delete or rewrite the old sources. Report to the user: what moved where, what was dropped and
    why, and which old files now look redundant.
    - Delete only what the user approves, and only files whose sole purpose is agent memory: the old
-     `CLAUDE.md` content (rewritten, not deleted), an old `memory/`, `.harness/`, and notes addressed to
+     instruction-file content (rewritten, not deleted), an old `memory/`, `.harness/`, and notes addressed to
      the agent (`AGENT_NOTES.md` and the like).
    - Project documentation is never deleted or edited, even when its facts moved into memory: `README*`,
      `CONTRIBUTING*`, `docs/`, `.docs/`, design specs, plans, task lists and anything a person reads.
@@ -114,7 +117,7 @@ Run `python memlayer.py check <project>` and fix each line it prints:
 - over cap → trim. `mimi/STATE.md` over cap usually means finished work was never removed.
 - not in the index → add a "read when" line, or merge the file into another and delete it.
 - stale `Last verified:` → re-check each fact against reality. Fix it or delete it, then bump the date.
-- `CLAUDE.md` does not import `mimi/MIMI.md` → run `init`, which adds the import back.
+- an instruction file does not import `mimi/MIMI.md` → run `init`, which adds the import back.
 
 The script cannot see these. Look for them yourself:
 
