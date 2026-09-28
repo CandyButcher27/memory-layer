@@ -91,6 +91,7 @@ Everything mimi keeps is in one folder at the project root:
 CLAUDE.md               your file; mimi adds one managed line: @mimi/MIMI.md
 mimi/
   .gitignore            "*"  (git ignores the whole folder)
+  .ignore               "!*" (Claude's Grep uses ripgrep, which skips git-ignored files; this lets it search mimi/)
   MIMI.md               the map: where to look for what, the rules, the memory index
   STATE.md              now only: goal, deployed, broken, open threads, next 3, Last session handoff
   ISSUES.md             every bug: exact symptom, cause, fix commit, test

@@ -27,6 +27,10 @@ index is what replaces grepping.
 `.gitignore` is never touched. Memory stays on this machine. Deleting `mimi/.gitignore` shares it through
 git.
 
+**Grep.** Claude Code's Grep runs on ripgrep, which skips git-ignored files, so it would not search
+`mimi/`. `mimi/.ignore` contains `!*`, which ripgrep reads and git does not, so Grep can search the folder
+again. `check` flags the file if it goes missing.
+
 **The script.** `memlayer.py` sits next to this file.
 - `init` creates missing files and the import. It never overwrites anything, so it is safe on any
   project, any number of times.

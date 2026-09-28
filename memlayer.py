@@ -88,6 +88,11 @@ def init(root: Path) -> list[str]:
     if not ignore.exists():
         save(ignore, "*\n")
         done.append(f"created {DIR}/.gitignore (git ignores {DIR}/; delete this file to share memory through git)")
+    # ripgrep, behind Claude Code's Grep, skips git-ignored files; a .ignore whitelist lets it search mimi/ again
+    unignore = root / DIR / ".ignore"
+    if not unignore.exists():
+        save(unignore, "!*\n")
+        done.append(f"created {DIR}/.ignore (lets Grep search {DIR}/ although git ignores it)")
     claude = root / "CLAUDE.md"
     text, eol = load(claude)
     if START not in text:
@@ -133,6 +138,8 @@ def check(root: Path) -> list[str]:
             problems.append(f"{name}: {n} lines, cap {cap}")
     if START not in read(root / "CLAUDE.md"):
         problems.append(f"CLAUDE.md: does not import {MAP}, so memory never loads; run init")
+    if (root / DIR / ".gitignore").exists() and read(root / DIR / ".ignore") != "!*\n":
+        problems.append(f"{DIR}/.ignore: missing, so Grep cannot search {DIR}/; run init")
     mapped = read(root / MAP)
     refs = {m[2] for m in INDEX_LINE.finditer(mapped)}
     autoload = sum(len(read(root / n).encode("utf-8")) for n in ("CLAUDE.md", MAP, STATE))
@@ -320,11 +327,11 @@ def selftest() -> None:
     with tempfile.TemporaryDirectory() as d:
         root = Path(d)
         (root / "CLAUDE.md").write_bytes(b"# Mine\r\n- Old note \xe2\x86\x92 `memory/external.md`\r\n")
-        assert len(init(root)) == 7, init(root)
+        assert len(init(root)) == 8, init(root)
         assert init(root) == []
         assert read(root / "CLAUDE.md") == "# Mine\n- Old note → `memory/external.md`\n\n" + POINTER
         assert b"\r\n" in (root / "CLAUDE.md").read_bytes()
-        assert read(root / DIR / ".gitignore") == "*\n"
+        assert read(root / DIR / ".gitignore") == "*\n" and read(root / DIR / ".ignore") == "!*\n"
         assert check(root) == [], check(root)
         (root / "mimi/memory/db.md").write_text("quirk\n", encoding="utf-8")
         assert len(check(root)) == 2, check(root)

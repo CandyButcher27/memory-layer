@@ -333,6 +333,10 @@ def test_s1_14_check_without_init(tmp_path):
 def test_mimi_folder_is_git_ignored_and_imported(tmp_path):
     root = project(tmp_path)
     assert (root / "mimi/.gitignore").read_text(encoding="utf-8") == "*\n"
+    (root / "mimi/.ignore").unlink()
+    assert memlayer.check(root) == ["mimi/.ignore: missing, so Grep cannot search mimi/; run init"]
+    memlayer.init(root)
+    assert (root / "mimi/.ignore").read_text(encoding="utf-8") == "!*\n"
     assert f"@{MAP}" in (root / "CLAUDE.md").read_text(encoding="utf-8")
     if subprocess.run(["git", "init", "-q", str(root)]).returncode == 0:
         status = subprocess.run(["git", "status", "--short", "--untracked-files=all"], cwd=root, capture_output=True, text=True).stdout
