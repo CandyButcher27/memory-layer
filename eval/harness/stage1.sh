@@ -9,6 +9,7 @@ case "$REPO" in
 esac
 W=$HOME/w/$REPO
 T=$P/stage1/$REPO
+S=/tmp/snap-$REPO
 ARMS_ALL="A N D M"
 CMEM=claude-mem@13.28.0
 . $HOME/w/env.sh
@@ -23,11 +24,14 @@ export MODEL=sonnet ARMS=ANDM
 mark() { python3 -c "import json,os,sys,time;p='$W/phases.json';d=json.load(open(p)) if os.path.exists(p) else {};i=int(sys.argv[1]);r=d.setdefault('$1',[0,0]);r[i]=r[i] if i==0 and r[0] else time.time();json.dump(d,open(p,'w'))" "$2"; }
 cmem() { (cd $W && HOME=$W/home/M CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 timeout 180 npx -y $CMEM "$@" > /dev/null 2>&1); }
 cmem_up() { for _ in $(seq 30); do curl -sf 127.0.0.1:37700/api/health > /dev/null && return 0; sleep 2; done; echo "claude-mem worker not up"; return 1; }
-sync_home() { rsync -a --delete --exclude '*.jsonl' --exclude 'logs/' "$1" "$2"; }
+# build outputs and tool runtimes are not memory state; they stay out of snapshots and restores
+SKIP_HOME="--exclude=/.rustup/ --exclude=/.cargo/ --exclude=/.npm/ --exclude=/.bun/ --exclude=/.cache/ --exclude=/.local/ --exclude=node_modules/"
+sync_home() { rsync -a --delete $SKIP_HOME --exclude '*.jsonl' --exclude 'logs/' "$1" "$2"; }
+sync_wr() { rsync -a --delete --exclude=/target/ "$1" "$2"; }
 
 case "$1" in
 setup)
-  mkdir -p $W/home $W/snap/wr $W/snap/home
+  mkdir -p $W/home $S/wr $S/home
   [ -d $W/src ] || git clone -q $URL $W/src
   git -C $W/src checkout -q $SHA
   for a in $ARMS_ALL; do
@@ -37,10 +41,13 @@ setup)
   done
   mkdir -p $W/home/D/.claude/commands && cp $P/ml/commands/mimi-*.md $W/home/D/.claude/commands/
   cmem install --provider claude
+  # the npx installer leaves a marketplace Claude Code cannot read ("cache-miss"); re-register it with the CLI
+  (cd $W && export HOME=$W/home/M && claude plugin marketplace remove thedotmack && claude plugin marketplace add thedotmack/claude-mem && claude plugin install claude-mem@thedotmack) > /dev/null 2>&1
   python3 -c "import json;p='$W/home/M/.claude-mem/settings.json';d=json.load(open(p));d['CLAUDE_MEM_LOG_LEVEL']='DEBUG';json.dump(d,open(p,'w'),indent=2)"
   cmem start && cmem_up
   # claude-mem's first session after install records nothing: warm it up outside the arm's project
   mkdir -p /tmp/warm-$REPO && (cd /tmp/warm-$REPO && HOME=$W/home/M CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 claude -p "Reply with exactly: ok" --model haiku --max-turns 1 > /dev/null)
+  (cd /tmp/warm-$REPO && HOME=$W/home/M CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 claude -p "Reply with exactly: ok" --model haiku --max-turns 1 > /dev/null)
   sleep 20
   python3 -c "import sqlite3;c=sqlite3.connect('file:$W/home/M/.claude-mem/claude-mem.db?mode=ro',uri=True);print('claude-mem sessions:',c.execute('select project,count(*) from sdk_sessions group by project').fetchall())"
   ;;
@@ -69,14 +76,15 @@ drain)
   ;;
 snapshot)
   cmem stop
-  for a in $ARMS_ALL; do rsync -a --delete $W/wr/$a/ $W/snap/wr/$a/; sync_home $W/home/$a/ $W/snap/home/$a/; done
+  mkdir -p $S/wr $S/home
+  for a in $ARMS_ALL; do sync_wr $W/wr/$a/ $S/wr/$a/; sync_home $W/home/$a/ $S/home/$a/; done
   cmem start && cmem_up
   ;;
 restore)
   a=$2
   [ "$a" = M ] && { pkill -f "worker-service.cjs hook"; cmem stop; }
-  rsync -a --delete $W/snap/wr/$a/ $W/wr/$a/
-  sync_home $W/snap/home/$a/ $W/home/$a/
+  sync_wr $S/wr/$a/ $W/wr/$a/
+  sync_home $S/home/$a/ $W/home/$a/
   [ "$a" = M ] && { cmem start && cmem_up; }
   exit 0
   ;;
@@ -96,8 +104,8 @@ tokens)
   for a in $ARMS_ALL; do python3 $P/tokens.py $W/home/$a $W/proxy_$a.jsonl $W/phases.json > $W/tokens_$a.json 2> $W/tokens_$a.txt; done
   ;;
 state)
-  for a in $ARMS_ALL; do echo "== $a"; git -C $W/snap/wr/$a status --short | head -20; git -C $W/snap/wr/$a diff --stat | tail -3; done
-  echo "== N auto-memory"; find $W/snap/home/N/.claude/projects -path '*memory*' -type f | sed "s|$W/||"
-  python3 -c "import sqlite3;c=sqlite3.connect('file:$W/snap/home/M/.claude-mem/claude-mem.db?mode=ro',uri=True);print('== M observations',c.execute('select project,count(*) from observations group by project').fetchall());print('== M sessions',c.execute('select project,count(*) from sdk_sessions group by project').fetchall())"
+  for a in $ARMS_ALL; do echo "== $a"; git -C $S/wr/$a status --short | head -20; git -C $S/wr/$a diff --stat | tail -3; done
+  echo "== N auto-memory"; find $S/home/N/.claude/projects -path '*memory*' -type f | sed "s|$W/||"
+  python3 -c "import sqlite3;c=sqlite3.connect('file:$S/home/M/.claude-mem/claude-mem.db?mode=ro',uri=True);print('== M observations',c.execute('select project,count(*) from observations group by project').fetchall());print('== M sessions',c.execute('select project,count(*) from sdk_sessions group by project').fetchall())"
   ;;
 esac

@@ -130,13 +130,13 @@ def judge_one(path: Path, model: str = "sonnet", suffix: str = ".judge.json") ->
             text = json.loads(r.stdout).get("result") or ""
         except json.JSONDecodeError:
             text = ""
-        m = re.search(r"\{\"hits\".*\}", text, re.S)
+        m = ([None] + re.findall(r"\{\"hits\".*\}", text))[-1]
         if m:
             break
     if not m:
         print(f"judge {model} gave no verdict for {path.name}", flush=True)
         return {}
-    verdict = json.loads(m[0])
+    verdict = json.loads(m)
     assert len(verdict["hits"]) == len(t["gold"]), verdict
     out.write_text(json.dumps(verdict), encoding="utf-8")
     return verdict

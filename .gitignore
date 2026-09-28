@@ -16,3 +16,6 @@ eval/stress/**/*.jsonl
 eval/public/*/results*/**/*.jsonl
 eval/public/*/results*/**/*.txt
 eval/public/**/*.jsonl
+
+# Stage 1 raw transcripts
+eval/stage1/results/**/*.jsonl
