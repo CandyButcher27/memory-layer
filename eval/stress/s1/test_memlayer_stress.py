@@ -334,7 +334,7 @@ def test_mimi_folder_is_git_ignored_and_imported(tmp_path):
     root = project(tmp_path)
     assert (root / "mimi/.gitignore").read_text(encoding="utf-8") == "*\n"
     (root / "mimi/.ignore").unlink()
-    assert memlayer.check(root) == ["mimi/.ignore: missing, so Grep cannot search mimi/; run init"]
+    assert memlayer.check(root) == ["mimi/.ignore: missing, so agent search tools cannot see mimi/; run init"]
     memlayer.init(root)
     assert (root / "mimi/.ignore").read_text(encoding="utf-8") == "!*\n"
     assert f"@{MAP}" in (root / "CLAUDE.md").read_text(encoding="utf-8")
