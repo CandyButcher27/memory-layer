@@ -1,16 +1,18 @@
 # mimi, the memory layer agent
 
-A project-memory agent for coding agents such as Claude Code. It gives every session a small, trusted
+A project-memory agent for coding agents: Claude Code, OpenCode, Codex, Gemini CLI, Antigravity, or any
+agent that reads `SKILL.md` skills. It gives every session a small, trusted
 place to look before grepping the repository. It sets that place up on a new project, builds it from
 what already exists on an old one, keeps it from rotting, and decides what is worth remembering.
 
-It is a skill (`SKILL.md`), a stdlib-only script (`memlayer.py`) and a set of templates (`templates/`).
+It is four skills (`SKILL.md` and `skills/mimi-*/SKILL.md`), a stdlib-only script (`memlayer.py`) and a set of templates (`templates/`).
 It needs no server, no database and no dependencies.
 
 ## What it maintains in a project
 
 Everything lives in `mimi/` at the project root. `mimi/.gitignore` (`*`) keeps the folder out of git.
-`CLAUDE.md` gets one managed line, `@mimi/MIMI.md`, and `/mimi-logging` reports go to `mimi/logs/`.
+Each agent instruction file the project has (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`; a new `CLAUDE.md`
+if none) gets one managed block: `@mimi/MIMI.md` plus a plain line for agents without `@` imports. And `/mimi-logging` reports go to `mimi/logs/`.
 
 | File | Holds | Cap | Updated |
 |---|---|---|---|
@@ -20,7 +22,7 @@ Everything lives in `mimi/` at the project root. `mimi/.gitignore` (`*`) keeps t
 | `mimi/decisions.md` | Choices someone would argue again: why, what was rejected, what reverses it | Short entries | Per decision |
 | `mimi/memory/<topic>.md` | Only what the code cannot tell you: external-system quirks, measured numbers with date and sample, traps, non-obvious whys | 150 lines each | When that topic changes |
 
-`CLAUDE.md` imports `mimi/MIMI.md`, which imports `STATE.md`, so each session starts with the map and
+The instruction file imports `mimi/MIMI.md`, which imports `STATE.md`, so each session starts with the map and
 the current state already loaded. The index lines in `mimi/MIMI.md` say which file answers which question, and `memlayer.py index`
 appends each memory file's `##` headings to its line. That lets a task that names a symptom find the
 right file without searching.
@@ -36,7 +38,7 @@ right file without searching.
 ## Commands
 
 ```bash
-python memlayer.py init  [dir]   # create mimi/ and the CLAUDE.md import; never overwrites
+python memlayer.py init  [dir]   # create mimi/ and the instruction-file import; never overwrites
 python memlayer.py index [dir]   # refresh index lines in mimi/MIMI.md from each memory file's ## headings; idempotent
 python memlayer.py check [dir]   # report rot, exit 1 if any
 python memlayer.py stats [dir]   # usage and token report from session logs, saved to mimi/logs/
@@ -45,9 +47,9 @@ python memlayer.py selftest      # prints SELFTEST_OK
 
 `check` flags (all covered by `eval/stress/s1/test_memlayer_stress.py`):
 - `mimi/MIMI.md` over 100 lines, or `mimi/STATE.md` over 60
-- `CLAUDE.md` + `mimi/MIMI.md` + `mimi/STATE.md` over 16 KB together, since all three load into every
+- the largest instruction file + `mimi/MIMI.md` + `mimi/STATE.md` over 16 KB together, since all three load into every
   session
-- a `CLAUDE.md` that no longer imports `mimi/MIMI.md`
+- an instruction file that no longer imports `mimi/MIMI.md`
 - a memory file over 150 lines, or in a subfolder of `mimi/memory/` (allowed, but noted)
 - a memory file missing from the index, an index line pointing to a missing file, or index lines
   gone stale since the headings changed
@@ -56,11 +58,11 @@ python memlayer.py selftest      # prints SELFTEST_OK
 - a `## ISS-` issue entry without `Symptom:` or `Cause:` (code blocks inside an entry are ignored)
 - git conflict markers in any layer file
 
-The script keeps each file's own line endings, and only touches `CLAUDE.md` to add its one managed
-import. It writes its own path as `$HOME/...`, so the map works on any machine. Errors are reported as one line, never
+The script keeps each file's own line endings, and only touches instruction files to add its one managed
+block. It writes its own path as `$HOME/...`, so the map works on any machine. Errors are reported as one line, never
 as a traceback.
 
-## Slash commands
+## Skills
 
 | Command | When | What it does |
 |---|---|---|

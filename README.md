@@ -1,6 +1,6 @@
 # mimi
 
-**A memory agent for Claude Code that remembers only what your code can't tell it.**
+**A memory agent for coding agents (Claude Code, OpenCode, Codex, Gemini CLI, Antigravity) that remembers only what your code can't tell it.**
 
 ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
 ![Dependencies: none](https://img.shields.io/badge/dependencies-none-brightgreen)
@@ -46,36 +46,56 @@ The same run found a bug in `/mimi-close`, now fixed but not yet re-measured. Se
 
 ## Install
 
-mimi is four Claude Code skills and one standard-library Python script. There is no
-server, database, background process or package to install.
+mimi is four skills in the open Agent Skills format (one `SKILL.md` folder each) and one standard-library
+Python script. There is no server, database, background process or package to install. It works in any
+agent that reads `SKILL.md` skills, whatever model runs behind it: Claude, GPT, Gemini, DeepSeek or a
+local model.
+
+Copy the four skill folders into your agent's skills folder, `D` below:
 
 ```bash
 git clone https://github.com/CandyButcher27/memory-layer
 cd memory-layer
-mkdir -p ~/.claude/skills/mimi
-cp -r SKILL.md memlayer.py templates ~/.claude/skills/mimi/
-cp -r skills/mimi-* ~/.claude/skills/
-python ~/.claude/skills/mimi/memlayer.py selftest    # prints SELFTEST_OK
+D=~/.claude/skills                    # Claude Code; see the table for other agents
+mkdir -p $D/mimi
+cp -r SKILL.md memlayer.py templates $D/mimi/
+cp -r skills/mimi-* $D/
+python $D/mimi/memlayer.py selftest    # prints SELFTEST_OK
 ```
+
+| Agent | Skills folder `D` | Memory loads from |
+|---|---|---|
+| Claude Code | `~/.claude/skills` | `CLAUDE.md` |
+| OpenCode | `~/.agents/skills` (it also reads `~/.claude/skills` and `~/.config/opencode/skills`) | `AGENTS.md`, or `CLAUDE.md` if there is none |
+| Codex CLI | `~/.agents/skills` | `AGENTS.md` |
+| Gemini CLI | `~/.agents/skills` or `~/.gemini/skills` | `GEMINI.md` |
+| Antigravity | `~/.gemini/antigravity/skills` | `GEMINI.md` or `AGENTS.md` |
+
+Installing into both `~/.claude/skills` and `~/.agents/skills` covers all of these except Antigravity. A
+model such as DeepSeek has no skills folder of its own: install mimi into the agent you run it in.
+
+In Claude Code the skills are slash commands (`/mimi-start`). In other agents, use the agent's own way to
+call a skill, or ask for it by name: "run the mimi-start skill". Only `mimi-logging`'s session numbers
+depend on Claude Code, because they read its transcripts. Everything else works the same everywhere.
 
 ## Usage
 
 | Command | When | What it does |
 |---|---|---|
-| `/mimi-start` | Once per project | Sets the project up: creates `mimi/` and adds one import line to `CLAUDE.md`. Running it again later is optional and only gives a brief of where the last session stopped |
+| `/mimi-start` | Once per project | Sets the project up: creates `mimi/` and adds one import block to `CLAUDE.md`, `AGENTS.md` or `GEMINI.md`. Running it again later is optional and only gives a brief of where the last session stopped |
 | `/mimi-close` | End of a work session | Writes what the session learned to the right file, rewrites the current state, and checks the result |
 | `/mimi-logging` | Any time | Shows what mimi costs and what it is used for in this project, from your Claude Code session logs, and saves the report in `mimi/logs/` |
 
 **Setup, once.** `/mimi-start` picks a mode:
 - **New**, for a project with little history. It creates the files, asks for the project's one-line
   goal, and stops. Memory grows from real bugs and decisions, not from guesses on day one.
-- **Adopt**, for an existing project. It reads your old notes, `CLAUDE.md`, git history, issues and
+- **Adopt**, for an existing project. It reads your old notes, agent instruction files, git history, issues and
   deploy config. It keeps only what passes the one-minute test (below) and files each fact in one
   place. Then it reports what moved and what it dropped. It never deletes project documentation, and it
   deletes old agent notes only with your approval.
 
 **Every session after that.** Nothing to run at the start: the memory loads by itself through
-`CLAUDE.md`. Run `/mimi-close` when you stop:
+your agent's instruction file. Run `/mimi-close` when you stop:
 - a bug goes to `mimi/ISSUES.md`
 - a choice goes to `mimi/decisions.md`
 - a correction is edited in place wherever the old value appears
@@ -88,10 +108,11 @@ It never commits unless you ask.
 Everything mimi keeps is in one folder at the project root:
 
 ```
-CLAUDE.md               your file; mimi adds one managed line: @mimi/MIMI.md
+CLAUDE.md, AGENTS.md    your agent's instruction file(s); mimi adds one managed block: @mimi/MIMI.md
+or GEMINI.md            plus a plain line telling agents without @ imports to read mimi/MIMI.md and STATE.md
 mimi/
   .gitignore            "*"  (git ignores the whole folder)
-  .ignore               "!*" (Claude's Grep uses ripgrep, which skips git-ignored files; this lets it search mimi/)
+  .ignore               "!*" (agent search tools use ripgrep, which skips git-ignored files; this lets them search mimi/)
   MIMI.md               the map: where to look for what, the rules, the memory index
   STATE.md              now only: goal, deployed, broken, open threads, next 3, Last session handoff
   ISSUES.md             every bug: exact symptom, cause, fix commit, test
@@ -108,7 +129,7 @@ mimi/
 | `mimi/decisions.md` | Short entries | Per decision |
 | `mimi/memory/<topic>.md` | 150 lines each | When the topic changes |
 
-`CLAUDE.md` imports `mimi/MIMI.md`, which imports `mimi/STATE.md`. So every session starts with the map
+The instruction file imports `mimi/MIMI.md`, which imports `mimi/STATE.md`. So every session starts with the map
 and the current state already loaded: about 1–2k tokens on a typical project, capped at 16 KB.
 
 **Git.** `mimi/.gitignore` keeps the folder out of git, so your project's own `.gitignore` is never
@@ -120,7 +141,7 @@ code or a command? If yes, it is not written down. The test applies to each fact
 date, decision or constraint that a person states is never "in the code".
 
 **The index replaces grepping.** Each trap in a memory file gets its own heading, named the way a task
-would describe it. `memlayer.py index` copies those headings onto the file's line in `CLAUDE.md`, so a
+would describe it. `memlayer.py index` copies those headings onto the file's line in `mimi/MIMI.md`, so a
 task that mentions duplicate webhooks lands on the file that holds that trap:
 
 ```markdown
@@ -133,10 +154,10 @@ an answer. The agent falls back to `git log --grep` and the code.
 
 ### Script
 
-`memlayer.py` does the mechanical work, and the slash commands call it for you:
+`memlayer.py` does the mechanical work, and the skills call it for you:
 
 ```bash
-python memlayer.py init  [dir]   # create mimi/ and the CLAUDE.md import; never overwrites
+python memlayer.py init  [dir]   # create mimi/ and the instruction-file import; never overwrites
 python memlayer.py index [dir]   # refresh index lines in mimi/MIMI.md, mark empty files; idempotent
 python memlayer.py check [dir]   # report rot, exit 1 if any
 python memlayer.py stats [dir]   # usage and token report; also saved to mimi/logs/stats-<date>.txt
@@ -146,7 +167,7 @@ python memlayer.py selftest      # prints SELFTEST_OK
 `check` reports:
 - files over their line limit
 - more than 16 KB loaded into every session
-- a `CLAUDE.md` that no longer imports `mimi/MIMI.md`
+- an instruction file (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`) that no longer imports `mimi/MIMI.md`
 - a stale or broken index, or a memory file the index doesn't list
 - a missing, malformed, future, duplicated or 90-day-old `Last verified:` date
 - an incomplete issue entry
@@ -158,10 +179,10 @@ one line instead of a traceback.
 ## Usage report
 
 `/mimi-logging` reads the transcripts Claude Code already keeps for the project
-(`~/.claude/projects/<project>/*.jsonl`). mimi installs no hooks and logs nothing while you work. Each
+(`~/.claude/projects/<project>/*.jsonl`). In other agents it reports the memory section only. mimi installs no hooks and logs nothing while you work. Each
 report is printed and saved as `mimi/logs/stats-<date>.txt`. It covers:
 
-- **Cost:** tokens loaded into every session by `CLAUDE.md` and `STATE.md`, and that total across all
+- **Cost:** tokens loaded into every session by the instruction file, `MIMI.md` and `STATE.md`, and that total across all
   sessions since adoption
 - **Activity:** sessions, prompts, `/mimi-close` runs, and tokens processed, with cache reads shown
   separately
