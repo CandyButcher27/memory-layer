@@ -259,6 +259,25 @@ Two results changed the design:
 - **The handoff.** With a `Last session` section, the dead end a user mentioned was recorded in 3 of 3
   closes. Without it, 1 of 3, and one run went on to reopen a decision the user had already made.
 
+### Against other memory tools (pilot)
+
+One repository (rust-lang/cargo), the same five work sessions and five recall questions as above, 3 runs
+each. Each tool ran with its own `HOME`, and every model call was counted, including claude-mem's
+background Haiku worker. Details are in [`eval/public/cargo/pilot/RESULTS.md`](eval/public/cargo/pilot/RESULTS.md).
+
+| | mimi | claude-mem | claude-mem-lite |
+|---|---|---|---|
+| Recall accuracy (mean of 2 judges) | **1.00** | 0.20 | 0.45 |
+| Wrong claims per answer | **0.00** | 0.67 | 0.73 |
+| Context tokens per answer | **74k** | 179k + Haiku worker | 206k |
+| Cost per answer | **$0.035** | $0.089 | $0.097 |
+| Background model calls | none | 117 (Haiku) | none |
+
+claude-mem stored most of the facts, but it injects only observation titles at session start, and those
+titles described code. The agent never fetched the details and answered from the repository instead.
+This is a pilot on mimi's home ground: the questions test facts a person stated. Continuity of work in
+progress, where automatic capture should do better, is untested.
+
 ### Stress tests
 
 The pass conditions were written before any test ran. See [`docs/STRESS_TESTS.md`](docs/STRESS_TESTS.md).
@@ -278,7 +297,8 @@ The pass conditions were written before any test ran. See [`docs/STRESS_TESTS.md
   noise.
 - **Test facts:** the write-and-recall facts were written for the test, and only 5–6 sessions ran per
   arm. Drift over months of real use is untested.
-- **No head-to-head yet:** mimi has not been measured against claude-mem or the other tools above.
+- **Competitors, pilot only:** the comparison with claude-mem and claude-mem-lite covers one repository and
+  five facts, on questions from mimi's own protocol. See [Against other memory tools](#against-other-memory-tools-pilot).
 - **Parallel work:** two sessions closing on separate branches conflict in `STATE.md`. `check` catches
   leftover conflict markers, but the conflict itself comes from having a single current-state file.
 - **Manual close:** memory is only as current as the last `/mimi-close`. `/mimi-logging` shows how many
