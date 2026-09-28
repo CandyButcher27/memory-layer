@@ -36,6 +36,7 @@ right file without searching.
 python memlayer.py init  [dir]   # create missing files, add the CLAUDE.md block; never overwrites
 python memlayer.py index [dir]   # refresh index lines from each memory file's ## headings; idempotent
 python memlayer.py check [dir]   # report rot, exit 1 if any
+python memlayer.py stats [dir]   # usage and token report from the project's Claude Code session logs
 python memlayer.py selftest      # prints SELFTEST_OK
 ```
 
@@ -53,6 +54,14 @@ python memlayer.py selftest      # prints SELFTEST_OK
 The script keeps each file's own line endings, only touches text inside its managed block, and writes
 its own path as `$HOME/...`, so the block works on any machine. Errors are reported as one line, never
 as a traceback.
+
+## Slash commands
+
+| Command | When | What it does |
+|---|---|---|
+| `/mimi-start` | Start of a session | Sets the project up (New or Adopt) if it has no block. Otherwise runs `index` and `check`, compares the `Last session` handoff with the working tree, and briefs where work stopped |
+| `/mimi-close` | End of a session | Writes what the session learned, rewrites `STATE.md`, runs `index` and `check` (below) |
+| `/mimi-logging` | Any time | Runs `stats` and reads the result: tokens loaded per session, per-prompt tokens and searches before and after adoption, memory files never read |
 
 ## Closing a session: `/mimi-close`
 
