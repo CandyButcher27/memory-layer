@@ -1,5 +1,5 @@
 ---
-description: Close a work session by writing what this session learned into the project's memory layer (ISSUES, decisions, memory/, STATE), then index and check it.
+description: Close a work session by writing what this session learned into the project's mimi/ folder (ISSUES, decisions, memory/, STATE), then index and check it.
 allowed-tools: Read, Edit, Write, Grep, Glob, Bash
 ---
 
@@ -11,9 +11,10 @@ section.
 
 ## 0. Preconditions
 
-- Read `CLAUDE.md`. If it has no `<!-- memory-layer:start -->` block, stop and tell the user to set the
-  project up first with `/mimi-start`. Do not create files here.
-- Find `memlayer.py`: its path is on the `Find rot:` line of that block. Call it `$ML` below.
+- If `mimi/MIMI.md` does not exist, stop and tell the user to set the project up first with
+  `/mimi-start`. Do not create files here.
+- Find `memlayer.py`: its path is on the `Find rot:` line of `mimi/MIMI.md`. Call it `$ML` below.
+- Every memory file lives in `mimi/`. Paths below are written from the project root.
 - Leave any legacy `.harness/` directory untouched.
 
 ## 1. Gather what happened
@@ -25,8 +26,8 @@ Collect candidates from three sources:
   server, database, deploy, credentials, people). Numbers measured, with sample size. Traps hit.
   Corrections to anything memory already says.
 - **Git:** `git status --short`, `git diff --stat`, and `git log --oneline` for this session's commits.
-- **Memory as it stands:** `STATE.md`, and the files the work touched, found through the `CLAUDE.md`
-  index.
+- **Memory as it stands:** `mimi/STATE.md`, and the files the work touched, found through the
+  `mimi/MIMI.md` index.
 
 ## 2. Filter
 
@@ -47,25 +48,25 @@ is kept. The code cannot tell a future session that, so it is exactly what memor
 reasons to drop are the three above, the one-minute test, and nothing checkable behind the fact. A fact
 a person states is checkable as "told <date>".
 
-A session with nothing durable in it writes nothing to `ISSUES.md`, `decisions.md` or `memory/`. That is
+A session with nothing durable in it writes nothing to `mimi/ISSUES.md`, `mimi/decisions.md` or `mimi/memory/`. That is
 a correct outcome.
 
 ## 3. Route each surviving fact to exactly one place
 
 | Candidate | Goes to | Form |
 |---|---|---|
-| A bug found or fixed | `ISSUES.md` | Append in the file's existing entry format. With none, use `## ISS-<n> — <title>` with `Symptom:` (exact text), `Cause:`, `Fix:` (commit hash, or `uncommitted: <files>`), `Test:`, `Status:` |
-| A choice someone could argue again | `decisions.md` | Next `DEC-<n>`: `Why:`, `Rejected:`, `Reverse if:`, `Date:`. If it replaces an older entry, mark that one `Superseded by DEC-<n>` and leave its reasoning intact |
+| A bug found or fixed | `mimi/ISSUES.md` | Append in the file's existing entry format. With none, use `## ISS-<n> — <title>` with `Symptom:` (exact text), `Cause:`, `Fix:` (commit hash, or `uncommitted: <files>`), `Test:`, `Status:` |
+| A choice someone could argue again | `mimi/decisions.md` | Next `DEC-<n>`: `Why:`, `Rejected:`, `Reverse if:`, `Date:`. If it replaces an older entry, mark that one `Superseded by DEC-<n>` and leave its reasoning intact |
 | A correction to something memory already says | Wherever the old value lives | Grep every memory file for the old value and fix it in place, in all of them. Never add the new value beside the old one |
-| An external fact, a measurement, a trap, a non-obvious why | `memory/<topic>.md` | Under its own `##` heading, named the way a future task would describe it (error text, library, table, command), not by topic. Cite a commit, issue ID, command, or date with sample size. Set `Last verified:` to today only if this session actually checked the file's facts; otherwise leave the date |
+| An external fact, a measurement, a trap, a non-obvious why | `mimi/memory/<topic>.md` | Under its own `##` heading, named the way a future task would describe it (error text, library, table, command), not by topic. Cite a commit, issue ID, command, or date with sample size. Set `Last verified:` to today only if this session actually checked the file's facts; otherwise leave the date |
 
-- Pick the existing memory file whose index line fits. Create a new `memory/<topic>.md` only when no
-  file fits. Split by external boundary or subsystem, never by code folder, and add its line to the
-  `CLAUDE.md` index.
+- Pick the existing memory file whose index line fits. Create a new `mimi/memory/<topic>.md` only when
+  no file fits. Split by external boundary or subsystem, never by code folder, and add its line to the
+  `mimi/MIMI.md` index.
 - A fact with nothing checkable behind it goes to the user as a question in the report, not into a
   file. The same goes for something only inferred from what the user said: ask, do not edit memory.
 - A short code comment next to the code is also valid memory for a non-obvious why that belongs to one
-  line of code. Do not duplicate it into `memory/`.
+  line of code. Do not duplicate it into `mimi/memory/`.
 
 ## 4. Index
 
@@ -73,10 +74,9 @@ a correct outcome.
 python "$ML" index .
 ```
 
-Run it now, before `STATE.md` is written, so `git status` below already includes the `CLAUDE.md` change
-`index` makes.
+Run it now, before `mimi/STATE.md` is written, so the state is written against the final index.
 
-## 5. Overwrite `STATE.md`
+## 5. Overwrite `mimi/STATE.md`
 
 Rewrite it entirely, keeping the header comment under `# State`. Do not append.
 
@@ -88,7 +88,8 @@ Rewrite it entirely, keeping the header comment under `# State`. Do not append.
 - `Last updated:` today.
 - `## Last session (<today>)`, about 10 lines, rewritten every time:
   - `Branch:` the current branch.
-  - `Uncommitted:` the files from `git status --short`, run now, or `none`.
+  - `Uncommitted:` the project files from `git status --short`, run now, or `none`. `mimi/` is git-ignored
+    by default, so it does not appear there.
   - `Stopped at:` the task in one line: which steps are done and which step is next.
   - `Tried, failed:` approaches that were actually tried this session, or that the user said were
     tried, each with the reason. These are the only record of dead ends, so never drop one the user
@@ -96,8 +97,9 @@ Rewrite it entirely, keeping the header comment under `# State`. Do not append.
   - `Resume with:` the first concrete action for the next session, such as a command or a file to
     open.
 
-`STATE.md` says what is happening, not what is known. A fact already written to `memory/`,
-`decisions.md` or `ISSUES.md` is referenced there by file (`see memory/client-db.md`), not repeated.
+`mimi/STATE.md` says what is happening, not what is known. A fact already written to `mimi/memory/`,
+`mimi/decisions.md` or `mimi/ISSUES.md` is referenced there by file (`see mimi/memory/client-db.md`), not
+repeated.
 Remove anything finished. Stay within 60 lines. Only claim something works if it ran in this session.
 A plan the user gave for multi-step work stays in `Stopped at` and `Next 3` until it is done.
 
@@ -106,10 +108,10 @@ Then run `python "$ML" check .`, fix every line it prints, and run it again unti
 
 ## 6. Verify
 
-- For each fact written, grep a distinctive phrase from it across `*.md`. It must appear in one memory
-  file, plus at most the `CLAUDE.md` index line. Merge any duplicate.
+- For each fact written, grep a distinctive phrase from it across `mimi/`. It must appear in one memory
+  file, plus at most its `mimi/MIMI.md` index line. Merge any duplicate.
 - For each correction, grep the old value and confirm it no longer appears as current.
-- Confirm `STATE.md` holds no finished work.
+- Confirm `mimi/STATE.md` holds no finished work.
 
 ## 7. Report and stop
 
@@ -119,7 +121,6 @@ Tell the user:
 - **Dropped:** each candidate left out, and why (derivable, narration, nothing checkable).
 - **Questions:** facts that need a source before they can be recorded.
 - **Check:** the final output of `check`.
-- **Uncommitted:** `git status --short` for the memory files.
-
-Do not commit unless the user asks. If they do, name the project facts in the commit message, never the
+Do not commit unless the user asks. `mimi/` is git-ignored by default. If the user deleted
+`mimi/.gitignore` to share memory and asks for a commit, name the project facts in the message, never the
 memory file names.
