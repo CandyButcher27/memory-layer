@@ -3,6 +3,10 @@
 Run on 2026-09-28 against the criteria in [`PREREG.md`](PREREG.md), which was committed before any run
 (`6a4a11d`).
 
+> **Follow-up, not yet run.** The `/mimi-close` scope bug described below is fixed in `3bdb281`. A
+> re-run of sqlite-utils with the fix, and 8 more continuity questions (F2b), are pre-registered in
+> [`PREREG-2.md`](PREREG-2.md) with their task files. The Codespace was created but no job was started.
+
 - **Repos:** rust-lang/cargo and simonw/sqlite-utils.
 - **Arms:**
   - A: no memory

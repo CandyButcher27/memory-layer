@@ -12,17 +12,24 @@ small, reviewed memory inside your repository and gives every file one job. It s
 that are not in the code: bugs and their causes, decisions and the options you rejected, quirks of
 external systems, measured numbers, and what people told the agent.
 
-On five large public repositories (git, django, cargo, node and go), mimi recalled what people said
-during work sessions far better than a conventional notes setup, at less than half the cost per answer:
+The baseline to beat is Claude Code's own built-in auto-memory. On two repositories (rust-lang/cargo and
+simonw/sqlite-utils), with the pass criteria committed before the run, mimi led on both jobs tested:
 
-| | Conventional notes | mimi |
-|---|---|---|
-| Recall of facts people stated, mean of 5 public repos | 0.29 | **0.79** |
-| Recall cost per answer | $0.07 | **$0.03** |
-| Memory written for the same work, production project | 100% | **40–52%** |
+| | No memory | Built-in auto-memory | claude-mem | mimi |
+|---|---|---|---|---|
+| Recalling facts people mentioned in passing (48 answers) | 0.09 | 0.51 | 0.15 | **0.83** |
+| Wrong claims per answer on those facts | 0.77 | 0.21 | 0.56 | **0.02** |
+| Resuming unfinished work (20 answers) | 0.39 | 0.80 | 0.42 | **0.97** |
+| Cost per answer | $0.06–0.07 | $0.04 | $0.08–0.09 | **$0.03** |
 
-It does not beat plain `git log` at finding past incidents on repositories whose commit messages
-already explain them. See [Evaluation](#evaluation) for the method and every number.
+Where this is thin:
+- The lead over auto-memory on resuming work rests on only 4 questions.
+- Writing memory costs more: each `/mimi-close` is about $0.48.
+- mimi does not beat plain `git log` at finding past incidents in repositories whose commit messages
+  already explain them.
+
+The same run found a bug in `/mimi-close`, now fixed but not yet re-measured. See
+[Evaluation](#evaluation) for the method and every number.
 
 ---
 
@@ -171,21 +178,21 @@ Most memory tools for coding agents capture sessions automatically and inject su
 records deliberately, at the end of a session, and the result lives in your repository. The table below
 compares designs as the projects describe them. It is not a measured comparison.
 
-| | mimi | [claude-mem](https://github.com/thedotmack/claude-mem) | [claude-mem-lite](https://github.com/sdsrss/claude-mem-lite) | [agentmemory](https://github.com/rohitg00/agentmemory) | [claude-remember](https://github.com/Digital-Process-Tools/claude-remember) |
-|---|---|---|---|---|---|
-| What gets stored | Facts that pass the one-minute test | AI-compressed observations of every tool use | Batched observations, graded by importance | Observations, deduplicated and optionally compressed | Haiku summaries of each session |
-| When it writes | `/mimi-close` | Hooks on every tool call | Hooks | 8 lifecycle hooks | Hooks and session end |
-| Storage | Markdown in your repo, reviewable in a diff | SQLite + Chroma | SQLite (FTS5) | Local KV store | Markdown files |
-| Loaded at start | `CLAUDE.md` block + `STATE.md`, ~1–2k tokens | Configurable injected context | 2,000-token budget | 2,000-token budget | Identity, handoff and daily summaries |
-| Extra LLM calls | None | Every capture is compressed by a model | Batched, on Haiku | Optional compression | Haiku per save |
-| Runtime | Python standard library | Node, Bun, uv, a worker service | Node, SQLite | iii runtime | Python, bash, `jq` |
+| | mimi | Claude Code auto-memory | [claude-mem](https://github.com/thedotmack/claude-mem) | [claude-mem-lite](https://github.com/sdsrss/claude-mem-lite) | [agentmemory](https://github.com/rohitg00/agentmemory) | [claude-remember](https://github.com/Digital-Process-Tools/claude-remember) |
+|---|---|---|---|---|---|---|
+| What gets stored | Facts that pass the one-minute test | Notes the agent decides to save | AI-compressed observations of every tool use | Batched observations, graded by importance | Observations, deduplicated and optionally compressed | Haiku summaries of each session |
+| When it writes | `/mimi-close` | During the session, at the agent's discretion | Hooks on every tool call | Hooks | 8 lifecycle hooks | Hooks and session end |
+| Storage | Markdown in your repo, reviewable in a diff | Markdown in `~/.claude/projects/<project>/memory/`, outside the repo | SQLite + Chroma | SQLite (FTS5) | Local KV store | Markdown files |
+| Loaded at start | `CLAUDE.md` block + `STATE.md`, ~1–2k tokens | A `MEMORY.md` index of the notes | Configurable injected context | 2,000-token budget | 2,000-token budget | Identity, handoff and daily summaries |
+| Extra LLM calls | None | None | Every capture is compressed by a model | Batched, on Haiku | Optional compression | Haiku per save |
+| Runtime | Python standard library | Built in | Node, Bun, uv, a worker service | Node, SQLite | iii runtime | Python, bash, `jq` |
 
 ## Evaluation
 
-Seven experiments on six codebases, a stress-test suite, and every failure fixed and re-tested. The full
-method, per-task results and raw verdicts are in [`docs/EVALUATION.md`](docs/EVALUATION.md). The
-experiments ran before the rename, so the documents call mimi "the memory layer" and its close command
-`/session-close`.
+Eight experiments on seven codebases, a stress-test suite, and every failure fixed and re-tested.
+- The latest, Stage 1, is in [`eval/stage1/RESULTS.md`](eval/stage1/RESULTS.md).
+- The earlier ones are in [`docs/EVALUATION.md`](docs/EVALUATION.md). They ran before the rename, so
+  those documents call mimi "the memory layer" and its close command `/session-close`.
 
 ### Method
 
@@ -200,6 +207,52 @@ experiments ran before the rename, so the documents call mimi "the memory layer"
   the evidence for each key point before giving a verdict. They agree on 95–100% of key points.
 - **Every task runs in a fresh, headless `claude -p` session.** Metrics come from the session stream:
   tool calls, searches, input tokens, cost and time.
+
+### Stage 1: against built-in auto-memory and claude-mem
+
+[`PREREG.md`](eval/stage1/PREREG.md) fixed the arms, tasks and decision rules before any run, and it
+was committed first.
+
+- **Arms:**
+  - no memory
+  - Claude Code's built-in auto-memory
+  - mimi, with each work session ending in `/mimi-close`
+  - claude-mem 13.28.0
+- **Isolation:** each arm had its own `HOME` and a logging proxy, so every model call was counted,
+  including claude-mem's background Haiku worker. Every eval run started from the same saved state.
+- **Repositories:** rust-lang/cargo and simonw/sqlite-utils.
+- **Two task families:**
+  - **Stated facts:** 8 facts per repo, mentioned in passing inside multi-turn work sessions next to
+    noise. One of them is corrected later. 8 questions × 3 runs per repo.
+  - **Continuity:** a feature left half-done and an investigation left mid-way, each resumed in a fresh
+    session. 2 questions × 5 runs per repo.
+
+| | No memory | Auto-memory | claude-mem | mimi |
+|---|---|---|---|---|
+| Stated facts, accuracy | 0.09 | 0.51 | 0.15 | **0.83** |
+| Stated facts, wrong claims per answer | 0.77 | 0.21 | 0.56 | **0.02** |
+| Continuity, accuracy | 0.39 | 0.80 | 0.42 | **0.97** |
+| Context tokens per answer | 160–171k | 84–125k | 170–201k | **63–69k** |
+
+Paired differences, with 95% bootstrap intervals over questions:
+- **mimi − claude-mem:** +0.68 [+0.41, +0.88] on stated facts, +0.55 [+0.21, +0.89] on continuity.
+- **mimi − auto-memory:** +0.32 [+0.10, +0.55] on stated facts, +0.17 [+0.02, +0.33] on continuity.
+
+Every pre-registered rule for a mimi win was met. The continuity interval rests on only 4 questions.
+
+What the transcripts show:
+- **claude-mem kept code, not conversation.** Its observations were descriptions of code the agent had
+  read. It processed an investigation session in over 10 batches and stored nothing ("routine code
+  navigation"), so the user's ruled-out hypotheses were lost.
+- **Auto-memory kept every decision, deadline and review rule.** It missed measurements, people and
+  infrastructure details, and it made the most wrong claims on continuity.
+- **mimi's two misses were its own bug.** `/mimi-close` dropped two facts the user stated as being "about
+  your downstream service, not this repo". Commit `3bdb281` makes scope never a reason to drop.
+  [`PREREG-2.md`](eval/stage1/PREREG-2.md) pre-registers a re-run of that repo, plus 8 more continuity
+  questions. **Neither has run yet.**
+
+Stage 1 cost about $50. An earlier single-repo pilot against claude-mem and claude-mem-lite is in
+[`eval/public/cargo/pilot/RESULTS.md`](eval/public/cargo/pilot/RESULTS.md).
 
 ### Five large public repositories
 
@@ -259,25 +312,6 @@ Two results changed the design:
 - **The handoff.** With a `Last session` section, the dead end a user mentioned was recorded in 3 of 3
   closes. Without it, 1 of 3, and one run went on to reopen a decision the user had already made.
 
-### Against other memory tools (pilot)
-
-One repository (rust-lang/cargo), the same five work sessions and five recall questions as above, 3 runs
-each. Each tool ran with its own `HOME`, and every model call was counted, including claude-mem's
-background Haiku worker. Details are in [`eval/public/cargo/pilot/RESULTS.md`](eval/public/cargo/pilot/RESULTS.md).
-
-| | mimi | claude-mem | claude-mem-lite |
-|---|---|---|---|
-| Recall accuracy (mean of 2 judges) | **1.00** | 0.20 | 0.45 |
-| Wrong claims per answer | **0.00** | 0.67 | 0.73 |
-| Context tokens per answer | **74k** | 179k + Haiku worker | 206k |
-| Cost per answer | **$0.035** | $0.089 | $0.097 |
-| Background model calls | none | 117 (Haiku) | none |
-
-claude-mem stored most of the facts, but it injects only observation titles at session start, and those
-titles described code. The agent never fetched the details and answered from the repository instead.
-This is a pilot on mimi's home ground: the questions test facts a person stated. Continuity of work in
-progress, where automatic capture should do better, is untested.
-
 ### Stress tests
 
 The pass conditions were written before any test ran. See [`docs/STRESS_TESTS.md`](docs/STRESS_TESTS.md).
@@ -297,8 +331,16 @@ The pass conditions were written before any test ran. See [`docs/STRESS_TESTS.md
   noise.
 - **Test facts:** the write-and-recall facts were written for the test, and only 5–6 sessions ran per
   arm. Drift over months of real use is untested.
-- **Competitors, pilot only:** the comparison with claude-mem and claude-mem-lite covers one repository and
-  five facts, on questions from mimi's own protocol. See [Against other memory tools](#against-other-memory-tools-pilot).
+- **Continuity:** the lead over built-in auto-memory rests on 4 questions, with a lower bound of +0.02.
+  Eight more are pre-registered and have not run.
+- **The `/mimi-close` scope fix is not re-measured.** Before the fix, it dropped facts about the user's own
+  systems. The fix (`3bdb281`) passes the self-test but has not been re-run against the tasks that
+  exposed the bug.
+- **Write cost:** each `/mimi-close` costs about $0.48. mimi is the cheapest per answer, but closing every
+  session is not free.
+- **Who wrote the tests:** I wrote the facts and sessions for every experiment. Stage 1 reduced the home
+  advantage (facts come up in passing, and continuity is automatic capture's strength), but did not
+  remove it.
 - **Parallel work:** two sessions closing on separate branches conflict in `STATE.md`. `check` catches
   leftover conflict markers, but the conflict itself comes from having a single current-state file.
 - **Manual close:** memory is only as current as the last `/mimi-close`. `/mimi-logging` shows how many
@@ -312,10 +354,15 @@ commands/     mimi-start.md, mimi-close.md, mimi-logging.md
 AGENTS.md     what the agent does, written for agents
 docs/         EVALUATION.md, STRESS_TESTS.md
 eval/
-  harness/    run.py (runner and dual judge), hygiene.py, build_d.py, handoff.sh
+  harness/    run.py (runner and dual judge), stage1.sh and pilot.sh (drivers), proxy.py (token
+              logging proxy), tokens.py (token accounting), analyze.py (bootstrap analysis),
+              hygiene.py, build_d.py, handoff.sh
+  stage1/     pre-registrations, task files and results for the comparison with auto-memory
+              and claude-mem
   tasks/      retrieval, session, recall and handoff task files with answer keys
   the production project/    production-project runs and reports
-  public/     PROTOCOL.md and per-repository results (git, django, cargo, node, go)
+  public/     PROTOCOL.md, per-repository results (git, django, cargo, node, go), and the
+              cargo competitor pilot
   stress/     S1–S3 suites and results
 ```
 

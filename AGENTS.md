@@ -153,12 +153,30 @@ right task at the right step. With the section, the dead end the user had mentio
 | Recall cost per answer | – | $0.07 | $0.03 |
 
 It is much better at keeping what people tell it. It is slightly worse at finding past incidents on repos
-whose commit history already explains them. Experiment 7 lists the four fixes for that; they are now applied but not yet re-evaluated.
-There is no evidence it is more accurate. The evidence covers one project with small samples.
+whose commit history already explains them. Experiment 7 lists the four fixes for that. They are now
+applied but not yet re-evaluated.
+
+**Stage 1, against Claude Code's built-in auto-memory and claude-mem** (cargo and sqlite-utils,
+pre-registered in `eval/stage1/PREREG.md`; results in `eval/stage1/RESULTS.md`):
+
+| | No memory | Auto-memory | claude-mem | mimi |
+|---|---|---|---|---|
+| Facts mentioned in passing, accuracy (48 answers) | 0.09 | 0.51 | 0.15 | **0.83** |
+| Resuming unfinished work, accuracy (20 answers) | 0.39 | 0.80 | 0.42 | **0.97** |
+| Cost per answer | $0.06–0.07 | $0.04 | $0.08–0.09 | **$0.03** |
+
+- Every pre-registered rule for a mimi win was met. The continuity lead over auto-memory rests on 4
+  questions, with a lower bound of +0.02.
+- `/mimi-close` dropped two person-stated facts as "about your downstream service". Commit `3bdb281`
+  makes scope never a reason to drop.
+- A re-run of that repo and 8 more continuity questions are pre-registered in
+  `eval/stage1/PREREG-2.md`. **Neither has run yet.**
 
 ## Status
 
-Built and evaluated, but not installed and not the default. `/harness` and `/wrapup` still build the old
-setup. Switching means four steps: copy this folder to `~/.claude/skills/mimi/`, copy
-`commands/mimi-*.md` to `~/.claude/commands/`, point `/harness` and `/wrapup` at them, then
-run Adopt project by project.
+Installed as a user-level skill on 2026-09-28:
+- the skill in `~/.claude/skills/mimi/`
+- the commands in `~/.claude/commands/`
+
+It is not the default: `/harness` and `/wrapup` still build the old setup. Switching fully means pointing
+`/harness` and `/wrapup` at mimi, then running `/mimi-start` (Adopt) project by project.
