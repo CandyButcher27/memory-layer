@@ -1,4 +1,5 @@
 ---
+name: mimi-close
 description: Close a work session by writing what this session learned into the project's mimi/ folder (ISSUES, decisions, memory/, STATE), then index and check it.
 allowed-tools: Read, Edit, Write, Grep, Glob, Bash
 ---

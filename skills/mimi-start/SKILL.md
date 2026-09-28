@@ -1,4 +1,5 @@
 ---
+name: mimi-start
 description: Set a project up with mimi, once. Run again later only when you want a brief of where the last session stopped; the memory loads into every session without it.
 allowed-tools: Read, Edit, Write, Grep, Glob, Bash
 ---

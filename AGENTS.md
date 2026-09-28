@@ -70,7 +70,7 @@ as a traceback.
 
 ## Closing a session: `/mimi-close`
 
-`commands/mimi-close.md` is a slash command to run at the end of every work session. It:
+`skills/mimi-close/SKILL.md` is a skill to run at the end of every work session. It:
 
 1. Stops if the project has no `mimi/MIMI.md`. It never creates the files itself.
 2. Gathers candidates from the conversation, git status and diff, this session's commits, and the
@@ -101,7 +101,7 @@ Tested on a scratch copy of a private production project:
 - A second run with nothing new wrote nothing.
 - One close cost about $0.70.
 
-To install it, copy `commands/mimi-*.md` to `~/.claude/commands/`. In Git Bash, `claude -p
+To install it, copy the `skills/mimi-*` folders to `~/.claude/skills/`. In Git Bash, `claude -p
 "/mimi-close"` gets the leading `/` rewritten into a Windows path. Type the command inside Claude
 Code instead, or set `MSYS_NO_PATHCONV=1`.
 
@@ -185,7 +185,7 @@ pre-registered in `eval/stage1/PREREG.md`; results in `eval/stage1/RESULTS.md`):
 
 Installed as a user-level skill on 2026-09-28:
 - the skill in `~/.claude/skills/mimi/`
-- the commands in `~/.claude/commands/`
+- `mimi-start`, `mimi-close` and `mimi-logging` in `~/.claude/skills/`
 
 It is not the default: `/harness` and `/wrapup` still build the old setup. Switching fully means pointing
 `/harness` and `/wrapup` at mimi, then running `/mimi-start` (Adopt) project by project.

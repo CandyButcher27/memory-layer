@@ -44,7 +44,7 @@ setup)
     mkdir -p $W/home/$a
     pgrep -f "proxy.py $(port $a)" > /dev/null || (nohup python3 $P/proxy.py $(port $a) $W/proxy_$a.jsonl > /dev/null 2>&1 < /dev/null &)
   done
-  mkdir -p $W/home/D/.claude/commands && cp $P/ml/commands/mimi-*.md $W/home/D/.claude/commands/
+  mkdir -p $W/home/D/.claude/skills && cp -r $P/ml/skills/mimi-* $W/home/D/.claude/skills/
   has M || exit 0
   cmem install --provider claude
   # the npx installer leaves a marketplace Claude Code cannot read ("cache-miss"); re-register it with the CLI

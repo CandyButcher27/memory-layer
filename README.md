@@ -46,15 +46,15 @@ The same run found a bug in `/mimi-close`, now fixed but not yet re-measured. Se
 
 ## Install
 
-mimi is a Claude Code skill, three slash commands and one standard-library Python script. There is no
+mimi is four Claude Code skills and one standard-library Python script. There is no
 server, database, background process or package to install.
 
 ```bash
 git clone https://github.com/CandyButcher27/memory-layer
 cd memory-layer
-mkdir -p ~/.claude/skills/mimi ~/.claude/commands
+mkdir -p ~/.claude/skills/mimi
 cp -r SKILL.md memlayer.py templates ~/.claude/skills/mimi/
-cp commands/mimi-*.md ~/.claude/commands/
+cp -r skills/mimi-* ~/.claude/skills/
 python ~/.claude/skills/mimi/memlayer.py selftest    # prints SELFTEST_OK
 ```
 
@@ -376,7 +376,7 @@ The pass conditions were written before any test ran. See [`docs/STRESS_TESTS.md
 
 ```
 SKILL.md  memlayer.py  templates/   the skill; installs as one folder (templates/ seeds a project's mimi/)
-commands/     mimi-start.md, mimi-close.md, mimi-logging.md
+skills/       mimi-start/, mimi-close/, mimi-logging/ (one SKILL.md each)
 AGENTS.md     what the agent does, written for agents
 docs/         EVALUATION.md, STRESS_TESTS.md
 eval/

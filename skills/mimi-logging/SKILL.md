@@ -1,4 +1,5 @@
 ---
+name: mimi-logging
 description: Show what mimi costs and saves in this project, from its Claude Code session logs, and save the report under mimi/logs/. Covers memory size, tokens loaded every session, tokens and searches per prompt before and after adoption, and which memory files get read.
 allowed-tools: Bash, Read
 ---
