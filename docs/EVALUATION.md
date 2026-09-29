@@ -152,13 +152,47 @@ has its own documents:
 - the full results, validity checks and deviations: `eval/stage1/RESULTS.md`
 - a single-repo pilot that came first: `eval/public/cargo/pilot/RESULTS.md`
 
-On cargo and sqlite-utils, mimi scored:
-- **Facts mentioned in passing:** 0.83, against 0.51 for auto-memory, 0.15 for claude-mem and 0.09 for no
-  memory.
-- **Resuming unfinished work:** 0.97, against 0.80, 0.42 and 0.39.
+- **Arms:**
+  - no memory
+  - Claude Code's built-in auto-memory
+  - mimi, with each work session ending in `/mimi-close`
+  - claude-mem 13.28.0
+- **Isolation:** each arm had its own `HOME` and a logging proxy, so every model call was counted,
+  including claude-mem's background Haiku worker. Every eval run started from the same saved state.
+- **Repositories:** rust-lang/cargo and simonw/sqlite-utils.
+- **Two task families:**
+  - **Stated facts:** 8 facts per repo, mentioned in passing inside multi-turn work sessions next to
+    noise. One of them is corrected later. 8 questions × 3 runs per repo.
+  - **Continuity:** a feature left half-done and an investigation left mid-way, each resumed in a fresh
+    session. 2 questions × 5 runs per repo.
+- **Judging:** Sonnet and Opus grade every answer against a key written before any memory existed. Each
+  judge quotes the evidence for each key point before its verdict.
+
+| | No memory | Auto-memory | claude-mem | mimi |
+|---|---|---|---|---|
+| Stated facts, accuracy | 0.09 | 0.51 | 0.15 | **0.83** |
+| Stated facts, wrong claims per answer | 0.77 | 0.21 | 0.56 | **0.02** |
+| Continuity, accuracy | 0.39 | 0.80 | 0.42 | **0.97** |
+| Context tokens per answer | 160–171k | 84–125k | 170–201k | **63–69k** |
+| Cost per answer | $0.06–0.07 | $0.04 | $0.08–0.09 | **$0.03** |
+
+Paired differences, with 95% bootstrap intervals over questions:
+- **mimi − claude-mem:** +0.68 [+0.41, +0.88] on stated facts, +0.55 [+0.21, +0.89] on continuity.
+- **mimi − auto-memory:** +0.32 [+0.10, +0.55] on stated facts, +0.17 [+0.02, +0.33] on continuity.
+
+Every pre-registered rule for a mimi win was met. The continuity interval rests on only 4 questions.
+
+What the transcripts show:
+- **claude-mem kept code, not conversation.** Its observations were descriptions of code the agent had
+  read. It processed an investigation session in over 10 batches and stored nothing ("routine code
+  navigation"), so the user's ruled-out hypotheses were lost.
+- **Auto-memory kept every decision, deadline and review rule.** It missed measurements, people and
+  infrastructure details, and it made the most wrong claims on continuity.
+- **mimi's two misses were its own bug.** `/mimi-close` dropped two facts the user stated as being "about
+  your downstream service, not this repo". Commit `3bdb281` makes scope never a reason to drop.
 
 Two follow-ups are pre-registered in `eval/stage1/PREREG-2.md` and have not run: a re-run after the
-`/mimi-close` scope fix (`3bdb281`), and 8 more continuity questions.
+`/mimi-close` scope fix (`3bdb281`), and 8 more continuity questions. Stage 1 cost about $50.
 
 ---
 
@@ -209,7 +243,7 @@ were verified untouched afterwards.
 | Adopt deleted 23 tracked `.docs/` files and edited `README`/`CONTRIBUTING` (S2.1) | `SKILL.md` limits deletion to agent-memory files; project docs are never deleted or edited | S2.1 rerun on a fresh clone, same prompt: 0 tracked files deleted or modified, 28/28 docs kept, `check` clean, 133 lines ($1.29) |
 | `Last verified:` reset without re-testing; a sandbox quirk recorded as a project trap; half-ignored layer files | `SKILL.md` Adopt rules for each | Not separately re-tested |
 
-The S1 suite now has 32 cases (28 original plus 4 for the S4 findings), and all pass:
+The S1 suite now has 34 cases (the 28 original, 4 for the S4 findings, and later additions), and all pass as of 2026-09-29:
 `uv run --no-project --with pytest pytest eval/stress/s1`. S1.04b changed on purpose. Checking before
 `index` now correctly reports a stale index, and the test's real subject, no false missing-file report,
 still holds after `index`.
@@ -264,6 +298,26 @@ still holds after `index`.
 - Experiment 3 used invented facts and only 6 sessions. Drift over months of real use is not tested.
 - Costs are the `total_cost_usd` figures Claude Code reports. The runs themselves were billed to the
   Claude plan.
+
+Open limitations of mimi as it ships today:
+
+- **Retrieval:** on public repositories it was slightly worse than no memory (0.76 against 0.81). The
+  fixes for that are applied but not yet re-measured.
+- **Continuity:** the lead over built-in auto-memory rests on 4 questions, with a lower bound of +0.02.
+  Eight more are pre-registered and have not run.
+- **The `/mimi-close` scope fix is not re-measured.** It passes the self-test but has not been re-run
+  against the tasks that exposed the bug.
+- **Write cost:** each `/mimi-close` costs about $0.48. mimi is the cheapest per answer, but closing every
+  session is not free.
+- **Who wrote the tests:** the author wrote the facts and sessions for every experiment. Stage 1 reduced
+  the home advantage (facts come up in passing, and continuity is automatic capture's strength), but did
+  not remove it.
+- **Parallel work:** two sessions closing on separate branches conflict in `STATE.md`.
+- **Local by default:** `mimi/` is git-ignored, so memory is not shared or backed up by git unless you
+  delete `mimi/.gitignore`. The evaluations tracked the memory files in the repository; agents load
+  imported files either way.
+- **Manual close:** memory is only as current as the last `/mimi-close`. `/mimi-logging` shows how many
+  sessions ended without one.
 
 **Total spend:** about $3.7 for Adopt, $1.4 for the two Check attempts, about $7 for Experiment 1, about
 $2.5 for Experiment 2, about $8.8 for the write sessions, about $2 for recall, about $18 for the Opus reruns (Experiment 6: $6.0 retrieval, $9.3 write sessions, $2.8 recall) and about $1.5 for the `/session-close` smoke

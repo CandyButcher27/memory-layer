@@ -5,7 +5,7 @@ agent that reads `SKILL.md` skills. It gives every session a small, trusted
 place to look before grepping the repository. It sets that place up on a new project, builds it from
 what already exists on an old one, keeps it from rotting, and decides what is worth remembering.
 
-It is four skills (`SKILL.md` and `skills/mimi-*/SKILL.md`), a stdlib-only script (`memlayer.py`) and a set of templates (`templates/`).
+It is four skills in `skills/` (`mimi`, `mimi-start`, `mimi-close`, `mimi-logging`). The `mimi` skill folder also holds a stdlib-only script (`memlayer.py`) and a set of templates (`templates/`). Installation for every agent is in `docs/INSTALL.md`.
 It needs no server, no database and no dependencies.
 
 ## What it maintains in a project
@@ -103,9 +103,8 @@ Tested on a scratch copy of a private production project:
 - A second run with nothing new wrote nothing.
 - One close cost about $0.70.
 
-To install it, copy the `skills/mimi-*` folders to `~/.claude/skills/`. In Git Bash, `claude -p
-"/mimi-close"` gets the leading `/` rewritten into a Windows path. Type the command inside Claude
-Code instead, or set `MSYS_NO_PATHCONV=1`.
+In Git Bash, `claude -p "/mimi-close"` gets the leading `/` rewritten into a Windows path. Type the
+command inside Claude Code instead, or set `MSYS_NO_PATHCONV=1`.
 
 ## Rules the agent follows
 
@@ -182,12 +181,3 @@ pre-registered in `eval/stage1/PREREG.md`; results in `eval/stage1/RESULTS.md`):
   makes scope never a reason to drop.
 - A re-run of that repo and 8 more continuity questions are pre-registered in
   `eval/stage1/PREREG-2.md`. **Neither has run yet.**
-
-## Status
-
-Installed as a user-level skill on 2026-09-28:
-- the skill in `~/.claude/skills/mimi/`
-- `mimi-start`, `mimi-close` and `mimi-logging` in `~/.claude/skills/`
-
-It is not the default: `/harness` and `/wrapup` still build the old setup. Switching fully means pointing
-`/harness` and `/wrapup` at mimi, then running `/mimi-start` (Adopt) project by project.
