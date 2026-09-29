@@ -45,7 +45,7 @@ Then add the slash commands for OpenCode or Gemini CLI if you use them (see
 [below](#slash-commands-in-each-agent)), and check the script:
 
 ```bash
-python ~/.agents/skills/mimi/memlayer.py selftest    # prints SELFTEST_OK
+python ~/.claude/skills/mimi/memlayer.py selftest    # prints SELFTEST_OK; use any agent's skills folder from the table below
 ```
 
 ## By hand
