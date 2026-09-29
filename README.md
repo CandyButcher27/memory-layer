@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/mimi-banner.png" alt="mimi" width="420">
+  <img src="banner/memory-layer-banner.png" alt="mimi" width="420">
 </p>
 
 <h3 align="center">Project memory for coding agents that keeps only what your code can't tell them.</h3>
@@ -93,6 +93,7 @@ skills/
   mimi-logging/     /mimi-logging
 commands/           slash-command files for OpenCode and Gemini CLI
 docs/               INSTALL, HOW_IT_WORKS, EVALUATION, STRESS_TESTS
+banner/             the logo
 eval/               harness, task files, verdicts and results for every experiment
 AGENTS.md           what mimi does, written for agents
 ```
