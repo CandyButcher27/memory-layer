@@ -12,6 +12,7 @@
   <img src="https://img.shields.io/badge/python-3.11%2B-blue" alt="Python 3.11+">
   <img src="https://img.shields.io/badge/dependencies-none-brightgreen" alt="Dependencies: none">
   <img src="https://img.shields.io/badge/storage-markdown%20in%20your%20repo-lightgrey" alt="Storage: markdown in your repo">
+  <img src="https://img.shields.io/badge/license-MIT-yellow" alt="License: MIT">
 </p>
 
 ---
@@ -95,3 +96,7 @@ docs/               INSTALL, HOW_IT_WORKS, EVALUATION, STRESS_TESTS
 eval/               harness, task files, verdicts and results for every experiment
 AGENTS.md           what mimi does, written for agents
 ```
+
+## License
+
+[MIT](LICENSE)
