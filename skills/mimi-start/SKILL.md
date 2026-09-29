@@ -13,7 +13,7 @@ Get the project's memory ready. Follow the steps in order.
 - If `mimi/MIMI.md` exists, the script's path is on its `Find rot:` line.
 - Otherwise it is `memlayer.py` in the `mimi` skill folder, which sits next to this skill's folder:
   `../mimi/memlayer.py` from the folder holding this file. Common skill folders are `~/.claude/skills`,
-  `~/.agents/skills`, `~/.config/opencode/skills` and `~/.gemini/antigravity/skills`.
+  `~/.agents/skills`, `~/.config/opencode/skills`, `~/.gemini/skills`, `~/.gemini/config/skills`, `~/.gemini/antigravity/skills` and `~/.cursor/skills`.
 - If the file does not exist, stop and tell the user mimi is not installed.
 
 Call it `$ML` below. Run it with `python`, or `python3` where `python` is missing.

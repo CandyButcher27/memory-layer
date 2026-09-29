@@ -9,7 +9,8 @@ from pathlib import Path
 
 import pytest
 
-ML_DIR = Path(__file__).resolve().parents[3]
+REPO = Path(__file__).resolve().parents[3]
+ML_DIR = REPO / "skills" / "mimi"
 sys.path.insert(0, str(ML_DIR))
 import memlayer  # noqa: E402
 
@@ -144,7 +145,7 @@ def test_s1_06_nested_memory_file(tmp_path):
     memlayer.index(root)
     rc, out = cli("check", root)
     assert "Traceback" not in out
-    docs = " ".join((ML_DIR / f).read_text(encoding="utf-8") for f in ("SKILL.md", "AGENTS.md", "templates/MIMI.md"))
+    docs = " ".join((ML_DIR / f).read_text(encoding="utf-8") for f in ("SKILL.md", "../../AGENTS.md", "templates/MIMI.md"))
     documented = re.search(r"nested|subdirector|subfolder|sub-folder", docs, re.I)
     assert "sub/x.md" in out or documented, out
 

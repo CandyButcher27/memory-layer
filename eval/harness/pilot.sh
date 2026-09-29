@@ -14,7 +14,7 @@ for a in $ARMS_ALL; do
   export ARM_${a}_ANTHROPIC_BASE_URL=http://127.0.0.1:$(port $a)
 done
 export ARM_D_EXTRA_TOOLS="Skill" ARM_M_EXTRA_TOOLS="Skill mcp__plugin_claude-mem_mcp-search" ARM_L_EXTRA_TOOLS="Skill mcp__mem-lite"
-ADOPT="Follow the skill at $P/ml/SKILL.md in Adopt mode on this project (the current directory). Its script is $P/ml/memlayer.py. No user is available: a claim with nothing checkable behind it is dropped, not asked about. Do not delete any file. Finish when \`python3 $P/ml/memlayer.py check .\` prints \"memory layer clean\", then print a short report."
+ADOPT="Follow the skill at $P/ml/skills/mimi/SKILL.md in Adopt mode on this project (the current directory). Its script is $P/ml/skills/mimi/memlayer.py. No user is available: a claim with nothing checkable behind it is dropped, not asked about. Do not delete any file. Finish when \`python3 $P/ml/skills/mimi/memlayer.py check .\` prints \"memory layer clean\", then print a short report."
 mark() { python3 -c "import json,sys,time;p='$W/phases.json';d=json.load(open(p)) if __import__('os').path.exists(p) else {};i=int(sys.argv[1]);r=d.setdefault('$1',[0,0]);r[i]=r[i] if i==0 and r[0] else time.time();json.dump(d,open(p,'w'))" "$2"; }
 
 case "$1" in
@@ -31,7 +31,7 @@ setup)
 build)
   mark build 0
   (cd $W/wr/D && HOME=$W/home/D ANTHROPIC_BASE_URL=http://127.0.0.1:$(port D) claude -p "$ADOPT" --model opus     --output-format stream-json --verbose --allowedTools "Read Write Edit Grep Glob Bash"     --disallowedTools "Agent Workflow WebFetch WebSearch" < /dev/null > $P/build_D.jsonl)
-  python3 $P/ml/memlayer.py check $W/wr/D
+  python3 $P/ml/skills/mimi/memlayer.py check $W/wr/D
   mark build 1
   ;;
 sessions)

@@ -59,8 +59,8 @@ setup)
   ;;
 build)
   mark build 0
-  (cd $W/wr/D && HOME=$W/home/D ANTHROPIC_BASE_URL=http://127.0.0.1:$(port D) CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 claude -p "Follow the skill at $P/ml/SKILL.md in Adopt mode on this project (the current directory). Its script is $P/ml/memlayer.py. No user is available: a claim with nothing checkable behind it is dropped, not asked about. Do not delete any file. Finish when \`python3 $P/ml/memlayer.py check .\` prints \"memory layer clean\", then print a short report." --model opus --output-format stream-json --verbose --allowedTools "Read Write Edit Grep Glob Bash" --disallowedTools "Agent Workflow WebFetch WebSearch" < /dev/null > $W/build_D.jsonl)
-  python3 $P/ml/memlayer.py check $W/wr/D
+  (cd $W/wr/D && HOME=$W/home/D ANTHROPIC_BASE_URL=http://127.0.0.1:$(port D) CLAUDE_CODE_DISABLE_AUTO_MEMORY=1 claude -p "Follow the skill at $P/ml/skills/mimi/SKILL.md in Adopt mode on this project (the current directory). Its script is $P/ml/skills/mimi/memlayer.py. No user is available: a claim with nothing checkable behind it is dropped, not asked about. Do not delete any file. Finish when \`python3 $P/ml/skills/mimi/memlayer.py check .\` prints \"memory layer clean\", then print a short report." --model opus --output-format stream-json --verbose --allowedTools "Read Write Edit Grep Glob Bash" --disallowedTools "Agent Workflow WebFetch WebSearch" < /dev/null > $W/build_D.jsonl)
+  python3 $P/ml/skills/mimi/memlayer.py check $W/wr/D
   mark build 1
   ;;
 sessions)
