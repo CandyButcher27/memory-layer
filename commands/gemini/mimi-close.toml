@@ -1,0 +1,2 @@
+description = "Write what this session learned into mimi/ memory"
+prompt = "Activate the mimi-close skill and follow it step by step. {{args}}"

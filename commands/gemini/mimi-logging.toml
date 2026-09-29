@@ -1,0 +1,2 @@
+description = "Report what mimi costs and saves in this project"
+prompt = "Activate the mimi-logging skill and follow it step by step. {{args}}"
