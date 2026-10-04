@@ -12,3 +12,8 @@ eval/public/**/*.jsonl
 
 # Stage 1 raw transcripts
 eval/stage1/results/**/*.jsonl
+
+# Local only: the author's mimi memory and its CLAUDE.md import, and the archived private history
+/mimi/
+/CLAUDE.md
+/archive/
