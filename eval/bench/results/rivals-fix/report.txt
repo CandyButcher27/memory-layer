@@ -1,0 +1,29 @@
+# rivals-fix  (model claude-sonnet-5-5; score = mean over available judges; 30 question-runs judged)
+
+## all
+arm     n   score   wrong    tokens  tools    cost
+D      30    0.97    0.00     60334    0.8   0.034
+
+## continuity
+arm     n   score   wrong    tokens  tools    cost
+D       6    0.88    0.00     49328    0.5   0.029
+
+## corrected
+arm     n   score   wrong    tokens  tools    cost
+D       3    1.00    0.00     65773    1.0   0.032
+
+## stated
+arm     n   score   wrong    tokens  tools    cost
+D      21    1.00    0.00     62702    0.9   0.036
+
+## per question (D)
+R1  external                 1.00
+R2  corrected-measurement    1.00
+R3  decision                 1.00
+R4  trap                     1.00
+R5  person                   1.00
+R6  deadline                 1.00
+R7  review-rule              1.00
+R8  infrastructure           1.00
+C1  continuity-feature       1.00
+C2  continuity-investigation 0.75
