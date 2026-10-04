@@ -300,6 +300,22 @@ def test_s4_3_renamed_heading_flags_stale_index(tmp_path):
     assert memlayer.check(root) == [f"{MAP}: index lines are stale, run index"]
 
 
+def test_s4_4_freehand_handoff_missing_fields(tmp_path):
+    root = project(tmp_path)
+    assert memlayer.check(root) == []
+    state = root / "mimi/STATE.md"
+    state.write_text(
+        "# State\n## Last session (2026-10-05)\nCommitted fix (b4c21fa) on branch feat/x.\nUncommitted remains: .venv/\n"
+        "Stopped at: task complete.\n\nLast updated: 2026-10-05\n",
+        encoding="utf-8",
+    )
+    assert memlayer.check(root) == [
+        "mimi/STATE.md: Last session handoff lacks Branch:, Uncommitted:, Tried, failed:, Resume with:; rewrite it with mimi-close"
+    ]
+    state.write_text("# State\n## Last session\nBranch: main\nUncommitted: none\nStopped at: x\nTried, failed: none\nResume with: y\n## Notes\n", encoding="utf-8")
+    assert memlayer.check(root) == []
+
+
 def test_script_path_is_not_machine_absolute(tmp_path):
     root = project(tmp_path)
     block = (root / MAP).read_text(encoding="utf-8")

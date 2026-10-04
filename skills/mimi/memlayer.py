@@ -33,6 +33,8 @@ INDEX_LINE = re.compile(r"^(- .*?→ `(mimi/memory/[^`]+\.md)`)(?: — (?:contai
 TOP_LINE = re.compile(r"^(- .*?→ `(mimi/ISSUES\.md|mimi/decisions\.md)`.*?)(?: — (?:contains: .*|empty))?$", re.M)
 HEADING = re.compile(r"^#{2,3} (.+)$", re.M)
 ISSUE = re.compile(r"^#{2,3} (ISS-.*)$", re.M)
+HANDOFF = ("Branch:", "Uncommitted:", "Stopped at:", "Tried, failed:", "Resume with:")
+LAST_SESSION = re.compile(r"^## Last session[^\n]*\n(.*?)(?=^#{1,2} |\Z)", re.M | re.S)
 CONFLICT = re.compile(r"^(<{7}|>{7})( |$)", re.M)
 SEARCH_CMD = re.compile(r"\b(grep|rg|find|git grep|git log)\b")
 BYTES_PER_TOKEN = 4
@@ -193,6 +195,9 @@ def check(root: Path) -> list[str]:
         m = ISSUE.match(entry)
         if m and ("Symptom:" not in entry or "Cause:" not in entry):
             problems.append(f"{ISSUES}: '{m[1].strip()}' needs Symptom: and Cause:")
+    if last := LAST_SESSION.search(COMMENT.sub("", read(root / STATE))):
+        if missing := [f for f in HANDOFF if not re.search(rf"^{re.escape(f)}", last[1], re.M)]:
+            problems.append(f"{STATE}: Last session handoff lacks {', '.join(missing)}; rewrite it with mimi-close")
     for rel in (MAP, STATE, ISSUES, DECISIONS, *memory_files(root)):
         if CONFLICT.search(read(root / rel)):
             problems.append(f"{rel}: contains git conflict markers")
@@ -375,6 +380,8 @@ def selftest() -> None:
         assert check(root) == [f"{STATE}: 61 lines, cap 60"], check(root)
         (root / STATE).write_text("<<<<<<< HEAD\nx\n", encoding="utf-8")
         assert check(root) == [f"{STATE}: contains git conflict markers"], check(root)
+        (root / STATE).write_text("# State\n## Last session\nBranch: main\nStopped at: done\n\nLast updated: 2026-10-05\n", encoding="utf-8")
+        assert check(root) == [f"{STATE}: Last session handoff lacks Uncommitted:, Tried, failed:, Resume with:; rewrite it with mimi-close"], check(root)
         (root / STATE).write_text("# State\n", encoding="utf-8")
         (root / "CLAUDE.md").write_text("# Mine\n", encoding="utf-8")
         assert check(root) == [f"CLAUDE.md: does not import {MAP}, so memory never loads; run init"], check(root)
