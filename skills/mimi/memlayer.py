@@ -13,6 +13,7 @@ HERE = Path(__file__).resolve().parent
 TEMPLATES = HERE / "templates"
 START = "<!-- memory-layer:start -->"
 END = "<!-- memory-layer:end -->"
+SKIP = "<!-- memory-layer:skip -->"
 DIR = "mimi"
 MAP = f"{DIR}/MIMI.md"
 STATE = f"{DIR}/STATE.md"
@@ -74,7 +75,8 @@ def is_empty(text: str) -> bool:
 
 
 def agent_files(root: Path) -> list[str]:
-    return [n for n in AGENT_FILES if (root / n).exists()] or ["CLAUDE.md"]
+    # a file holding SKIP is a document that happens to share the name, such as a product's own AGENTS.md
+    return [n for n in AGENT_FILES if (root / n).exists() and SKIP not in read(root / n)] or ["CLAUDE.md"]
 
 
 def autoload(root: Path) -> int:
@@ -378,6 +380,9 @@ def selftest() -> None:
         (root / "AGENTS.md").write_text("# Agents\n", encoding="utf-8")
         assert check(root) == [f"AGENTS.md: does not import {MAP}, so memory never loads; run init"], check(root)
         assert init(root) == [f"added the {MAP} import to AGENTS.md"] and check(root) == [], check(root)
+        doc = f"{SKIP}\n# Product\n" + "x" * 20_000 + "\n"
+        (root / "AGENTS.md").write_text(doc, encoding="utf-8")
+        assert check(root) == [] and init(root) == [] and read(root / "AGENTS.md") == doc, check(root)
         saved_env = os.environ.get("CLAUDE_CONFIG_DIR")
         os.environ["CLAUDE_CONFIG_DIR"] = str(root / "cfg")
         try:

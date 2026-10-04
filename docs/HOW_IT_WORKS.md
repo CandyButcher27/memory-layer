@@ -121,7 +121,8 @@ python memlayer.py selftest      # prints SELFTEST_OK
 `check` reports:
 - files over their line limit
 - more than 16 KB loaded into every session
-- an instruction file (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`) that no longer imports `mimi/MIMI.md`
+- an instruction file (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`) that no longer imports `mimi/MIMI.md`. A file
+  holding `<!-- memory-layer:skip -->` is a document, not an instruction file, and is left alone
 - a stale or broken index, or a memory file the index doesn't list
 - a missing, malformed, future, duplicated or 90-day-old `Last verified:` date
 - an incomplete issue entry

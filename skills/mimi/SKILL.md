@@ -118,7 +118,9 @@ Run `python memlayer.py check <project>` and fix each line it prints:
 - over cap → trim. `mimi/STATE.md` over cap usually means finished work was never removed.
 - not in the index → add a "read when" line, or merge the file into another and delete it.
 - stale `Last verified:` → re-check each fact against reality. Fix it or delete it, then bump the date.
-- an instruction file does not import `mimi/MIMI.md` → run `init`, which adds the import back.
+- an instruction file does not import `mimi/MIMI.md` → run `init`, which adds the import back. If the file is
+  a project document that only shares the name, such as a product's own `AGENTS.md`, put
+  `<!-- memory-layer:skip -->` in it instead: `check` and `init` then leave it alone.
 
 The script cannot see these. Look for them yourself:
 

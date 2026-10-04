@@ -1,3 +1,4 @@
+<!-- memory-layer:skip -->
 # mimi, the memory layer agent
 
 A project-memory agent for coding agents: Claude Code, OpenCode, Codex, Gemini CLI, Antigravity, or any
@@ -49,7 +50,8 @@ python memlayer.py selftest      # prints SELFTEST_OK
 - `mimi/MIMI.md` over 100 lines, or `mimi/STATE.md` over 60
 - the largest instruction file + `mimi/MIMI.md` + `mimi/STATE.md` over 16 KB together, since all three load into every
   session
-- an instruction file that no longer imports `mimi/MIMI.md`
+- an instruction file that no longer imports `mimi/MIMI.md` (a file holding `<!-- memory-layer:skip -->`, like
+  this one, is a document and is left alone)
 - a memory file over 150 lines, or in a subfolder of `mimi/memory/` (allowed, but noted)
 - a memory file missing from the index, an index line pointing to a missing file, or index lines
   gone stale since the headings changed
