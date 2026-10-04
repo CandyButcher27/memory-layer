@@ -1,0 +1,20 @@
+===== /home/aryaman/bench/f2b-cargo/home/N/.claude/projects/-home-aryaman-bench-f2b-cargo-wr-N/memory/MEMORY.md
+- [Mirror health-check xtask](mirror-health-check-xtask.md) — parked; blocked on INFRA-4821, token will be CI secret MIRROR_RO_TOKEN (never log)
+
+===== /home/aryaman/bench/f2b-cargo/home/N/.claude/projects/-home-aryaman-bench-f2b-cargo-wr-N/memory/mirror-health-check-xtask.md
+---
+name: mirror-health-check-xtask
+description: "Parked plan for a mirror health-check xtask, blocked on infra's read-only API token (INFRA-4821)"
+metadata:
+  node_type: memory
+  type: project
+  originSessionId: ec5fd411-c46f-4d64-b25e-66a8b155ae94
+  modified: 2026-10-04T13:12:45.815Z
+---
+
+Planned: a mirror health-check xtask (`crates/xtask-mirror-health`, alias `mirror-health` in `.cargo/config.toml`). Parked as of 2026-10-04.
+
+**Why:** blocked on infra issuing the read-only mirror API token, ticket INFRA-4821. Once issued, it will be provided as the CI secret `MIRROR_RO_TOKEN`. The token must never be printed in logs.
+
+**How to apply:** when resuming, check whether INFRA-4821 is resolved. Read the token from the `MIRROR_RO_TOKEN` env var. Never log it, echo it, or include it in error output or Debug-derived output. Layout follows the existing `xtask-*` crates (see [[xtask-crate-layout]]).
+

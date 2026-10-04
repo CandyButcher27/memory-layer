@@ -1,0 +1,40 @@
+/home/aryaman/bench/rivals/home/G/.agentmemory-data:
+total 20
+drwxr-xr-x 4 aryaman aryaman 4096 Oct  3 18:19 .
+drwxr-xr-x 9 aryaman aryaman 4096 Oct  3 23:16 ..
+-rw-r--r-- 1 aryaman aryaman 1844 Oct  3 23:16 iii-config.yaml
+drwxr-xr-x 2 aryaman aryaman 4096 Oct  3 23:17 state_store.db
+drwxr-xr-x 2 aryaman aryaman 4096 Oct  3 23:16 stream_store
+
+/home/aryaman/bench/rivals/home/G/.agentmemory-data/state_store.db:
+total 100
+drwxr-xr-x 2 aryaman aryaman 4096 Oct  3 23:17 .
+drwxr-xr-x 4 aryaman aryaman 4096 Oct  3 18:19 ..
+-rw-r--r-- 1 aryaman aryaman 4000 Oct  3 23:16 mem%3Aaccess.bin
+-rw-r--r-- 1 aryaman aryaman 4252 Oct  3 23:05 mem%3Aaudit.bin
+-rw-r--r-- 1 aryaman aryaman  180 Oct  3 23:05 mem%3Agraph%3Aname-index.bin
+-rw-r--r-- 1 aryaman aryaman   68 Oct  3 23:05 mem%3Agraph%3Anode-degree.bin
+-rw-r--r-- 1 aryaman aryaman  884 Oct  3 23:05 mem%3Agraph%3Anodes.bin
+-rw-r--r-- 1 aryaman aryaman 1088 Oct  3 23:05 mem%3Agraph%3Asnapshot.bin
+-rw-r--r-- 1 aryaman aryaman 6540 Oct  3 23:17 mem%3Ahealth.bin
+-rw-r--r-- 1 aryaman aryaman 3292 Oct  3 21:51 mem%3Aindex%3Abm25%3Abm25%3Aidx_musxg53u_05c745eadaf6%3A00000.bin
+-rw-r--r-- 1 aryaman aryaman  188 Oct  3 21:51 mem%3Aindex%3Abm25.bin
+-rw-r--r-- 1 aryaman aryaman  164 Oct  3 23:16 mem%3Ametrics.bin
+-rw-r--r-- 1 aryaman aryaman 6744 Oct  3 23:05 mem%3Aobs%3A0377082b-12be-4a40-840b-fbc04ba17b3a.bin
+-rw-r--r-- 1 aryaman aryaman 4036 Oct  3 23:16 mem%3Aobs%3A1d323ca3-aa36-4cbd-b203-35aeb5b02c60.bin
+-rw-r--r-- 1 aryaman aryaman 3996 Oct  3 21:52 mem%3Aobs%3A552c876d-dfcd-4eb9-9665-4b0de8207a12.bin
+-rw-r--r-- 1 aryaman aryaman  384 Oct  3 18:20 mem%3Aobs%3A6bb53a38-dc4f-4bcc-a61e-5b92d6bf74e7.bin
+-rw-r--r-- 1 aryaman aryaman  384 Oct  3 18:19 mem%3Aobs%3A98358922-c746-46a6-83eb-d3fff0e3d878.bin
+-rw-r--r-- 1 aryaman aryaman 7212 Oct  3 22:02 mem%3Aobs%3Aa8e51061-4a7e-450d-87d7-701e21a23da3.bin
+-rw-r--r-- 1 aryaman aryaman 5728 Oct  3 22:53 mem%3Aobs%3Ac39b3854-d49a-460d-a57f-a68e7804852b.bin
+-rw-r--r-- 1 aryaman aryaman 3252 Oct  3 23:16 mem%3Asessions.bin
+
+/home/aryaman/bench/rivals/home/G/.agentmemory-data/stream_store:
+total 88
+drwxr-xr-x 2 aryaman aryaman  4096 Oct  3 23:16 .
+drwxr-xr-x 4 aryaman aryaman  4096 Oct  3 18:19 ..
+-rw-r--r-- 1 aryaman aryaman  7032 Oct  3 23:05 stream%3Amem-live%3A0377082b-12be-4a40-840b-fbc04ba17b3a.bin
+-rw-r--r-- 1 aryaman aryaman  4216 Oct  3 23:16 stream%3Amem-live%3A1d323ca3-aa36-4cbd-b203-35aeb5b02c60.bin
+-rw-r--r-- 1 aryaman aryaman  4176 Oct  3 21:52 stream%3Amem-live%3A552c876d-dfcd-4eb9-9665-4b0de8207a12.bin
+-rw-r--r-- 1 aryaman aryaman   420 Oct  3 18:20 stream%3Amem-live%3A6bb53a38-dc4f-4bcc-a61e-5b92d6bf74e7.bin
+-rw-r--r-- 1 aryaman aryaman   420 Oct  3 18:19 stream%3Amem-live%3A98358922-c746-46a6-83eb-d3fff0e3d878.bin

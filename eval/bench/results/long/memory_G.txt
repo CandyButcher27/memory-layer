@@ -1,0 +1,40 @@
+/home/aryaman/bench/long/home/G/.agentmemory-data:
+total 20
+drwxr-xr-x 4 aryaman aryaman 4096 Oct  4 08:04 .
+drwxr-xr-x 9 aryaman aryaman 4096 Oct  4 10:13 ..
+-rw-r--r-- 1 aryaman aryaman 1840 Oct  4 10:12 iii-config.yaml
+drwxr-xr-x 2 aryaman aryaman 4096 Oct  4 10:13 state_store.db
+drwxr-xr-x 2 aryaman aryaman 4096 Oct  4 10:13 stream_store
+
+/home/aryaman/bench/long/home/G/.agentmemory-data/state_store.db:
+total 156
+drwxr-xr-x 2 aryaman aryaman  4096 Oct  4 10:13 .
+drwxr-xr-x 4 aryaman aryaman  4096 Oct  4 08:04 ..
+-rw-r--r-- 1 aryaman aryaman 10300 Oct  4 10:13 mem%3Aaccess.bin
+-rw-r--r-- 1 aryaman aryaman  5308 Oct  4 09:12 mem%3Aaudit.bin
+-rw-r--r-- 1 aryaman aryaman   300 Oct  4 09:12 mem%3Agraph%3Aname-index.bin
+-rw-r--r-- 1 aryaman aryaman   128 Oct  4 09:12 mem%3Agraph%3Anode-degree.bin
+-rw-r--r-- 1 aryaman aryaman  1704 Oct  4 09:12 mem%3Agraph%3Anodes.bin
+-rw-r--r-- 1 aryaman aryaman  1916 Oct  4 09:12 mem%3Agraph%3Asnapshot.bin
+-rw-r--r-- 1 aryaman aryaman  6544 Oct  4 10:13 mem%3Ahealth.bin
+-rw-r--r-- 1 aryaman aryaman 12072 Oct  4 08:22 mem%3Aindex%3Abm25%3Abm25%3Aidx_mutjzlm0_7dc66920088d%3A00000.bin
+-rw-r--r-- 1 aryaman aryaman   192 Oct  4 08:22 mem%3Aindex%3Abm25.bin
+-rw-r--r-- 1 aryaman aryaman   164 Oct  4 10:13 mem%3Ametrics.bin
+-rw-r--r-- 1 aryaman aryaman  1788 Oct  4 10:13 mem%3Aobs%3A1659e00e-0a0a-4df2-a612-1bd5ae02f578.bin
+-rw-r--r-- 1 aryaman aryaman  3828 Oct  4 08:05 mem%3Aobs%3A1c0562fa-279d-4bfa-940a-31c0088dbdf5.bin
+-rw-r--r-- 1 aryaman aryaman  2968 Oct  4 08:23 mem%3Aobs%3A2d42d129-7496-4e6a-84e1-c1cf0994b251.bin
+-rw-r--r-- 1 aryaman aryaman   384 Oct  4 08:04 mem%3Aobs%3A4566edef-e0a9-4d24-b754-cb1056abe129.bin
+-rw-r--r-- 1 aryaman aryaman  2948 Oct  4 09:36 mem%3Aobs%3A54dd9471-5333-48a0-8b13-656ce0db3c06.bin
+-rw-r--r-- 1 aryaman aryaman  6252 Oct  4 09:04 mem%3Aobs%3A72d618e6-0b06-4c97-9bc6-14009cea41a6.bin
+-rw-r--r-- 1 aryaman aryaman  4840 Oct  4 08:37 mem%3Aobs%3A74b1110e-36ae-41fd-a62f-3c39b756fda3.bin
+-rw-r--r-- 1 aryaman aryaman   384 Oct  4 08:04 mem%3Aobs%3A8d4249b6-f43a-4b21-8fb5-bb6c59d3c755.bin
+-rw-r--r-- 1 aryaman aryaman  3896 Oct  4 09:45 mem%3Aobs%3A95521fb3-5526-4fae-8836-e560123a33e9.bin
+-rw-r--r-- 1 aryaman aryaman  5492 Oct  4 10:05 mem%3Aobs%3Aab7ba8fd-06e9-49bd-80e8-fc9339503e76.bin
+-rw-r--r-- 1 aryaman aryaman  2912 Oct  4 09:12 mem%3Aobs%3Abd458d10-6046-4996-9880-49126b5f283e.bin
+-rw-r--r-- 1 aryaman aryaman  5680 Oct  4 09:25 mem%3Aobs%3Abf5f86cb-1019-4303-b45c-587a63713bff.bin
+-rw-r--r-- 1 aryaman aryaman  3136 Oct  4 08:54 mem%3Aobs%3Ad490ab57-b255-48bc-abe4-7d84e43d8e2d.bin
+-rw-r--r-- 1 aryaman aryaman  4948 Oct  4 09:55 mem%3Aobs%3Afa89029d-8cc3-4915-8e86-4aadc2a8a723.bin
+-rw-r--r-- 1 aryaman aryaman  6436 Oct  4 10:13 mem%3Asessions.bin
+
+/home/aryaman/bench/long/home/G/.agentmemory-data/stream_store:
+total 140

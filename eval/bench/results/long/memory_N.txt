@@ -1,0 +1,110 @@
+===== /home/aryaman/bench/long/home/N/.claude/projects/-home-aryaman-bench-long-wr-N/memory/MEMORY.md
+- [Ingest DB WAL off](ingest-db-wal-off.md) — WAL disabled on purpose, DB is on EFS
+- [Ingest DB backups](ingest-db-backups.md) — hourly to s3://acme-ingest-backups, 14-day retention
+- [Vendor CSV feed](vendor-csv-feed.md) — memory-command OOM, ruled-out causes, Inês owns vendor, contract ends 2027-03-31
+- [--since decisions](since-flag-decisions.md) — ISO 8601 only, stdlib parsing, no dateutil (Marta veto)
+- [Nightly batch schedule](nightly-batch-schedule.md) — now 02:30 UTC, was 01:00
+- [Python 3.10 rollback](python-310-rollback.md) — 3.11 upgrade rolled back, C extension won't build; avoid 3.11-only features
+
+===== /home/aryaman/bench/long/home/N/.claude/projects/-home-aryaman-bench-long-wr-N/memory/ingest-db-backups.md
+---
+name: ingest-db-backups
+description: Ingest DB is backed up hourly to s3://acme-ingest-backups with 14-day retention
+metadata:
+  node_type: memory
+  type: reference
+  originSessionId: ea637d36-832b-40d2-b7b4-3c33a7c7f9d8
+  modified: 2026-10-04T09:33:19.010Z
+---
+
+The ingest database is backed up hourly to `s3://acme-ingest-backups`, retained for 14 days.
+
+**Why:** Infra fact stated by the user; not derivable from the repo.
+
+**How to apply:** Relevant when discussing recovery or consistent copies of the live DB. The DB is on EFS with WAL off, see [[ingest-db-wal-off]].
+
+===== /home/aryaman/bench/long/home/N/.claude/projects/-home-aryaman-bench-long-wr-N/memory/ingest-db-wal-off.md
+---
+name: ingest-db-wal-off
+description: WAL mode is deliberately disabled on the ingest database because it lives on EFS
+metadata:
+  node_type: memory
+  type: project
+  originSessionId: c6405e22-c8d3-4449-a2c3-d80efd1dc696
+  modified: 2026-10-04T08:33:27.967Z
+---
+
+WAL mode is intentionally turned off on the ingest database. The file lives on EFS (a network filesystem), and WAL doesn't work there.
+
+**Why:** WAL relies on shared memory and file locking that network filesystems don't support reliably.
+
+**How to apply:** Don't suggest or add `enable_wal()` / `journal_mode=WAL` for the ingest database, and don't flag its absence as a bug. The ingest box also runs Python 3.10, so avoid newer syntax. See [[since-option-plan]].
+
+===== /home/aryaman/bench/long/home/N/.claude/projects/-home-aryaman-bench-long-wr-N/memory/nightly-batch-schedule.md
+---
+name: nightly-batch-schedule
+description: "Nightly batch run time, moved from 01:00 to 02:30 UTC after the DST switch"
+metadata:
+  node_type: memory
+  type: project
+  originSessionId: f909aeaa-7bae-4c30-929b-1723ad843915
+  modified: 2026-10-04T09:21:34.336Z
+---
+
+The nightly batch runs at 02:30 UTC. It moved from 01:00 UTC after the DST switch (reported 2026-10-04).
+
+**How to apply:** use 02:30 UTC when reasoning about when new data lands or when a `--since` window should start. Ignore any older reference to 01:00.
+
+===== /home/aryaman/bench/long/home/N/.claude/projects/-home-aryaman-bench-long-wr-N/memory/python-310-rollback.md
+---
+name: python-310-rollback
+description: Python 3.11 upgrade rolled back; project is on 3.10 until a C extension builds on 3.11
+metadata:
+  node_type: memory
+  type: project
+  originSessionId: 4edecd55-a682-495c-b02c-d9fdb8f82ba0
+  modified: 2026-10-04T09:52:15.455Z
+---
+
+The Python 3.11 upgrade was rolled back (as of 2026-10-04). A C extension the project depends on doesn't build on 3.11 yet, so the project runs on 3.10 until that's fixed.
+
+**Why:** the C extension build failure on 3.11 blocks the upgrade.
+
+**How to apply:** don't use 3.11-only syntax or stdlib (`tomllib`, `ExceptionGroup`, `except*`, `typing.Self`, `datetime.UTC`) in this project, overriding the global 3.11+ default. Revisit when the extension supports 3.11.
+
+===== /home/aryaman/bench/long/home/N/.claude/projects/-home-aryaman-bench-long-wr-N/memory/since-flag-decisions.md
+---
+name: since-flag-decisions
+description: "Review decisions for the --since / --since-column work in sqlite-utils (accepted formats, no dateutil)"
+metadata:
+  node_type: memory
+  type: project
+  originSessionId: f909aeaa-7bae-4c30-929b-1723ad843915
+  modified: 2026-10-04T09:21:32.537Z
+---
+
+`--since` accepts ISO 8601 dates and datetimes only. No relative values like "2 days ago". Parse with the standard library (`datetime.fromisoformat`); do not add python-dateutil (Marta vetoed it).
+
+**Why:** decided in review; keeps the dependency set unchanged and the input format unambiguous.
+
+**How to apply:** step 3 of the --since work should add this validation. Steps 1 (`rows_where` in db.py) and 2 (`rows` CLI options) are done and currently pass `--since` through as a raw string.
+
+===== /home/aryaman/bench/long/home/N/.claude/projects/-home-aryaman-bench-long-wr-N/memory/vendor-csv-feed.md
+---
+name: vendor-csv-feed
+description: "Vendor CSV feed context for the sqlite-utils memory OOM investigation: owner, end date, ruled-out causes"
+metadata:
+  node_type: memory
+  type: project
+  originSessionId: baf66c1c-c1dc-4c82-ab90-3c970a4fc4c0
+  modified: 2026-10-04T10:02:19.497Z
+---
+
+`sqlite-utils memory` on ~40 vendor CSVs reaches ~6 GB RSS and gets OOM-killed. A single 2 GB file does the same. Small `PRAGMA cache_size` changed nothing.
+
+Inês owns the vendor relationship (Tomás has left). The vendor contract ends 2027-03-31, after which their semicolon CSV feed stops.
+
+**Why:** Gives the investigation a deadline and an owner to ask about the feed.
+
+**How to apply:** Next step is trying `--no-detect-types` (skips the TypeTracker and the `transform()` table copy). Don't re-suggest the file count or page cache as causes.
+
