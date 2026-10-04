@@ -3,9 +3,10 @@
 Run on 2026-09-28 against the criteria in [`PREREG.md`](PREREG.md), which was committed before any run
 (`6a4a11d`).
 
-> **Follow-up, not yet run.** The `/mimi-close` scope bug described below is fixed in `3bdb281`. A
-> re-run of sqlite-utils with the fix, and 8 more continuity questions (F2b), are pre-registered in
-> [`PREREG-2.md`](PREREG-2.md) with their task files. The Codespace was created but no job was started.
+> **Follow-up, run 2026-10-03 to 2026-10-04 in the bench.** The `/mimi-close` scope bug described below is
+> fixed in `3bdb281`. PREREG-2's re-run and its 8 more continuity questions (F2b) ran as part of the bench:
+> results in [`../bench/RESULTS.md`](../bench/RESULTS.md). The bench ran on Sonnet 5.5, where this stage ran on
+> Sonnet 5, so its numbers are not pooled with the ones below.
 
 - **Repos:** rust-lang/cargo and simonw/sqlite-utils.
 - **Arms:**
