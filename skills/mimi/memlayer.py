@@ -76,11 +76,13 @@ def is_empty(text: str) -> bool:
 
 def agent_files(root: Path) -> list[str]:
     # a file holding SKIP is a document that happens to share the name, such as a product's own AGENTS.md
-    return [n for n in AGENT_FILES if (root / n).exists() and SKIP not in read(root / n)] or ["CLAUDE.md"]
+    found = [n for n in AGENT_FILES if (root / n).exists() and SKIP not in read(root / n)]
+    # with none, make both: Claude Code reads CLAUDE.md, and Codex, OpenCode, Cursor and Copilot read AGENTS.md
+    return found or [n for n in ("CLAUDE.md", "AGENTS.md") if not (root / n).exists()]
 
 
 def autoload(root: Path) -> int:
-    largest = max(len(read(root / n).encode("utf-8")) for n in agent_files(root))
+    largest = max((len(read(root / n).encode("utf-8")) for n in agent_files(root)), default=0)
     return largest + sum(len(read(root / n).encode("utf-8")) for n in (MAP, STATE))
 
 
@@ -380,9 +382,15 @@ def selftest() -> None:
         (root / "AGENTS.md").write_text("# Agents\n", encoding="utf-8")
         assert check(root) == [f"AGENTS.md: does not import {MAP}, so memory never loads; run init"], check(root)
         assert init(root) == [f"added the {MAP} import to AGENTS.md"] and check(root) == [], check(root)
+        with tempfile.TemporaryDirectory() as fresh:
+            new = Path(fresh)
+            assert init(new)[-2:] == [f"added the {MAP} import to CLAUDE.md", f"added the {MAP} import to AGENTS.md"], init(new)
+            assert read(new / "CLAUDE.md") == POINTER == read(new / "AGENTS.md") and check(new) == [], check(new)
         doc = f"{SKIP}\n# Product\n" + "x" * 20_000 + "\n"
         (root / "AGENTS.md").write_text(doc, encoding="utf-8")
         assert check(root) == [] and init(root) == [] and read(root / "AGENTS.md") == doc, check(root)
+        (root / "CLAUDE.md").unlink()
+        assert init(root) == [f"added the {MAP} import to CLAUDE.md"] and read(root / "AGENTS.md") == doc, init(root)
         saved_env = os.environ.get("CLAUDE_CONFIG_DIR")
         os.environ["CLAUDE_CONFIG_DIR"] = str(root / "cfg")
         try:

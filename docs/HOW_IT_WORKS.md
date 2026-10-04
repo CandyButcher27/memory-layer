@@ -14,7 +14,8 @@ the form each agent uses.
 
 ### `/mimi-start`: once per project
 
-Creates `mimi/` and adds one import block to `CLAUDE.md`, `AGENTS.md` or `GEMINI.md`. It picks a mode:
+Creates `mimi/` and adds one import block to each `CLAUDE.md`, `AGENTS.md` or `GEMINI.md` the project has,
+or to a new `CLAUDE.md` and `AGENTS.md` if it has none. It picks a mode:
 
 - **New**, for a project with little history. It creates the files, asks for the project's one-line
   goal, and stops. Memory grows from real bugs and decisions, not from guesses on day one.

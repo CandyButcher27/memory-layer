@@ -23,10 +23,9 @@ Call it `$ML` below. Run it with `python`, or `python3` where `python` is missin
 Follow the mimi skill (`SKILL.md`, next to `$ML`). Pick **New** if the repo has little history and **Adopt**
 if it has code, commits or notes. Everything goes in `mimi/`: `init` creates the files, adds
 `mimi/.gitignore` so git ignores the folder, and adds one block that loads `mimi/MIMI.md` to each of
-`CLAUDE.md`, `AGENTS.md` and `GEMINI.md` that exists, or to a new `CLAUDE.md` when none does. If the file
-your agent reads at session start does not exist yet, create it empty before `init`: `AGENTS.md` for
-Codex, OpenCode, Cursor and Antigravity, `GEMINI.md` for Gemini CLI. Finish with the skill's report and
-stop. Do not start other work in the same turn.
+`CLAUDE.md`, `AGENTS.md` and `GEMINI.md` that exists, or to a new `CLAUDE.md` and `AGENTS.md` when none
+does, which covers Claude Code, Codex, OpenCode, Cursor and Copilot. Do not create any instruction file
+yourself. Finish with the skill's report and stop. Do not start other work in the same turn.
 
 ## 2. `mimi/` exists: refresh and brief
 

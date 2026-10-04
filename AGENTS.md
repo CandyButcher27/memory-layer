@@ -13,7 +13,7 @@ It needs no server, no database and no dependencies.
 
 Everything lives in `mimi/` at the project root. `mimi/.gitignore` (`*`) keeps the folder out of git.
 Each agent instruction file the project has (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`; a new `CLAUDE.md`
-if none) gets one managed block: `@mimi/MIMI.md` plus a plain line for agents without `@` imports. And `/mimi-logging` reports go to `mimi/logs/`.
+and `AGENTS.md` if none) gets one managed block: `@mimi/MIMI.md` plus a plain line for agents without `@` imports. And `/mimi-logging` reports go to `mimi/logs/`.
 
 | File | Holds | Cap | Updated |
 |---|---|---|---|
