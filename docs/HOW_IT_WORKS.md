@@ -127,6 +127,7 @@ python memlayer.py selftest      # prints SELFTEST_OK
 - a stale or broken index, or a memory file the index doesn't list
 - a missing, malformed, future, duplicated or 90-day-old `Last verified:` date
 - an incomplete issue entry
+- a `Last session` handoff missing one of its five fields
 - leftover git conflict markers
 
 The script keeps each file's line endings, touches only text inside its own block, and reports errors as

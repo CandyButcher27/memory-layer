@@ -58,6 +58,8 @@ python memlayer.py selftest      # prints SELFTEST_OK
 - a `Last verified:` date that is missing, malformed, in the future, duplicated, or more than 90
   days old
 - a `## ISS-` issue entry without `Symptom:` or `Cause:` (code blocks inside an entry are ignored)
+- a `## Last session` handoff in `mimi/STATE.md` missing any of `Branch:`, `Uncommitted:`, `Stopped at:`,
+  `Tried, failed:` or `Resume with:`
 - git conflict markers in any layer file
 
 The script keeps each file's own line endings, and only touches instruction files to add its one managed
