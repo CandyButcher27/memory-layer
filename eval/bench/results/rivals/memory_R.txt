@@ -1,0 +1,305 @@
+===== /home/aryaman/bench/rivals/home/R/.remember/run/summarizers/1791069476.732019-83422.spawn
+pid=83422
+started=1791069476.732019
+done=1
+
+===== /home/aryaman/bench/rivals/home/R/.remember/run/summarizers/1791069495.391748-84517.spawn
+pid=84517
+started=1791069495.391748
+done=1
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/.gitignore
+*
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/.install-marker
+This file marks when remember was first bootstrapped here. Read only by scripts/doctor.sh (#401); do not delete it.
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/logs/autonomous/session-end-221930-51664.log
+22:19:30 [session-end] flush started
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/logs/autonomous/session-end-221937-51960.log
+22:19:37 [session-end] flush started
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/logs/autonomous/session-end-224142-63812.log
+22:41:42 [session-end] flush started
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/logs/autonomous/session-end-224158-64166.log
+22:41:58 [session-end] flush started
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/logs/autonomous/session-end-224211-65376.log
+22:42:11 [session-end] flush started
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/logs/autonomous/session-end-225456-72406.log
+22:54:56 [session-end] flush started
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/logs/autonomous/session-end-225515-72812.log
+22:55:15 [session-end] flush started
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/logs/autonomous/session-end-230802-77713.log
+23:08:02 [session-end] flush started
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/logs/autonomous/session-end-230807-78015.log
+23:08:07 [session-end] flush started
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/logs/autonomous/session-end-231756-83311.log
+23:17:56 [session-end] flush started
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/logs/autonomous/session-end-231806-83610.log
+23:18:06 [session-end] flush started
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/logs/hook-errors.log
+22:42:41 [session-end] WARNING: save-session.sh --force exited 1 at session end -- this session's unsaved tail may be lost. See /home/aryaman/bench/rivals/wr/R/.remember/logs/autonomous/session-end-224211-65376.log for what save-session.sh itself logged.
+23:08:37 [session-end] WARNING: save-session.sh --force exited 1 at session end -- this session's unsaved tail may be lost. See /home/aryaman/bench/rivals/wr/R/.remember/logs/autonomous/session-end-230807-78015.log for what save-session.sh itself logged.
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/logs/memory-2026-10-03.log
+22:19:17 [hook] session-start: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+22:19:17 [hook] session-start took 0s
+22:19:30 [hook] session-end: reason=other session=01a8156a-35fd-439b-8620-8492b213b082
+22:19:31 [hook] save-session: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 PYTHON=python3 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+22:19:31 [force] bypassing cooldown + min msgs
+22:19:31 [extract] session 01a8156a-35fd-439b-8620-8492b213b082
+22:19:31 [extract] 5 exchanges (1 human)
+22:19:31 [haiku] calling (branch: )
+22:19:33 [hook] session-start: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+22:19:33 [hook] session-start took 1s
+22:19:37 [hook] session-end: reason=other session=01a8156a-35fd-439b-8620-8492b213b082
+22:19:37 [hook] save-session: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 PYTHON=python3 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+22:19:48 [tokens] tokens: 9+5919cache->1407out ($0.010840)
+22:19:48 [write] appended (provider: claude): ## 22:19 | 
+22:19:48 [write] position -> 29
+22:19:48 [ndc] now.md -> today-2026-10-03.md
+22:19:48 [ndc] running (PID 52945)
+22:19:48 [force] bypassing cooldown + min msgs
+22:19:48 [extract] session 01a8156a-35fd-439b-8620-8492b213b082
+22:19:49 [extract] 2 exchanges (1 human)
+22:19:49 [haiku] calling (branch: )
+22:20:10 [tokens] tokens: 9+5919cache->2110out ($0.013755)
+22:20:10 [write] appended (provider: claude): ## 22:19 | 
+22:20:10 [write] position -> 37
+22:20:23 [ndc] tokens: 9+5919cache->3595out ($0.019800)
+22:20:23 [ndc] preamble stripped (1 line(s) before the first '## ')
+22:20:23 [ndc] kept 180b appended during compression
+22:20:23 [ndc] 285->250b (-12%)
+22:41:24 [hook] session-start: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+22:41:24 [hook] session-start took 0s
+22:41:42 [hook] session-end: reason=other session=9fb5a6b9-0283-47a2-94ff-0e08e44ed1ae
+22:41:42 [hook] save-session: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 PYTHON=python3 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+22:41:42 [force] bypassing cooldown + min msgs
+22:41:42 [extract] session 9fb5a6b9-0283-47a2-94ff-0e08e44ed1ae
+22:41:42 [extract] 5 exchanges (1 human)
+22:41:42 [haiku] calling (branch: )
+22:41:43 [hook] session-start: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+22:41:43 [hook] session-start took 0s
+22:41:58 [hook] session-end: reason=other session=9fb5a6b9-0283-47a2-94ff-0e08e44ed1ae
+22:41:58 [hook] save-session: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 PYTHON=python3 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+22:41:59 [hook] session-start: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+22:41:59 [hook] session-start took 0s
+22:42:11 [hook] session-end: reason=other session=9fb5a6b9-0283-47a2-94ff-0e08e44ed1ae
+22:42:11 [hook] save-session: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 PYTHON=python3 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+22:42:15 [tokens] tokens: 9+5919cache->3601out ($0.022190)
+22:42:15 [write] appended (provider: claude): ## 22:41 | 
+22:42:15 [write] position -> 34
+22:42:15 [force] bypassing cooldown + min msgs
+22:42:15 [extract] session 9fb5a6b9-0283-47a2-94ff-0e08e44ed1ae
+22:42:15 [extract] 8 exchanges (2 human)
+22:42:15 [haiku] calling (branch: )
+22:42:40 [lock] ERROR: --force waited 30s for save.lock and another save still held it -- nothing was flushed this call
+22:42:41 [session-end] WARNING: save-session.sh --force exited 1 at session end -- this session's unsaved tail may be lost. See /home/aryaman/bench/rivals/wr/R/.remember/logs/autonomous/session-end-224211-65376.log for what save-session.sh itself logged.
+22:43:11 [tokens] tokens: 9+5919cache->5437out ($0.032326)
+22:43:11 [write] appended (provider: claude): ## 22:42 | 
+22:43:11 [write] position -> 63
+22:54:42 [hook] session-start: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+22:54:42 [hook] session-start took 0s
+22:54:56 [hook] session-end: reason=other session=bb7494c0-cc81-49c0-b2dd-24452798f446
+22:54:56 [hook] save-session: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 PYTHON=python3 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+22:54:56 [force] bypassing cooldown + min msgs
+22:54:56 [extract] session bb7494c0-cc81-49c0-b2dd-24452798f446
+22:54:56 [extract] 5 exchanges (1 human)
+22:54:56 [haiku] calling (branch: )
+22:54:57 [hook] session-start: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+22:54:57 [hook] session-start took 0s
+22:55:15 [hook] session-end: reason=other session=bb7494c0-cc81-49c0-b2dd-24452798f446
+22:55:16 [hook] save-session: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 PYTHON=python3 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+22:55:35 [tokens] tokens: 9+5919cache->4680out ($0.027889)
+22:55:35 [write] appended (provider: claude): ## 22:54 | 
+22:55:35 [write] position -> 30
+22:55:36 [force] bypassing cooldown + min msgs
+22:55:36 [extract] session bb7494c0-cc81-49c0-b2dd-24452798f446
+22:55:36 [extract] 6 exchanges (1 human)
+22:55:36 [haiku] calling (branch: )
+22:55:52 [tokens] tokens: 9+5919cache->1567out ($0.011998)
+22:55:53 [write] appended (provider: claude): ## 22:55 | 
+22:55:53 [write] position -> 51
+23:06:26 [hook] session-start: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+23:06:26 [hook] session-start took 0s
+23:08:02 [hook] session-end: reason=other session=dcde27d3-f5f3-4b3f-97f2-e2f92939996f
+23:08:02 [hook] save-session: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 PYTHON=python3 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+23:08:02 [force] bypassing cooldown + min msgs
+23:08:02 [extract] session dcde27d3-f5f3-4b3f-97f2-e2f92939996f
+23:08:02 [extract] 8 exchanges (1 human)
+23:08:03 [haiku] calling (branch: feat/rows-sample)
+23:08:03 [hook] session-start: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+23:08:03 [hook] session-start took 0s
+23:08:07 [hook] session-end: reason=other session=dcde27d3-f5f3-4b3f-97f2-e2f92939996f
+23:08:07 [hook] save-session: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 PYTHON=python3 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+23:08:37 [lock] ERROR: --force waited 30s for save.lock and another save still held it -- nothing was flushed this call
+23:08:37 [session-end] WARNING: save-session.sh --force exited 1 at session end -- this session's unsaved tail may be lost. See /home/aryaman/bench/rivals/wr/R/.remember/logs/autonomous/session-end-230807-78015.log for what save-session.sh itself logged.
+23:08:37 [tokens] tokens: 9+5919cache->3380out ($0.020925)
+23:08:37 [write] appended (provider: claude): ## 23:08 | feat/rows-sample
+23:08:37 [write] position -> 42
+23:17:45 [hook] session-start: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+23:17:45 [hook] session-start took 1s
+23:17:56 [hook] session-end: reason=other session=38306b2f-6c96-4caf-8c89-33de88946daf
+23:17:56 [hook] save-session: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 PYTHON=python3 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+23:17:56 [force] bypassing cooldown + min msgs
+23:17:56 [extract] session 38306b2f-6c96-4caf-8c89-33de88946daf
+23:17:56 [extract] 5 exchanges (1 human)
+23:17:56 [haiku] calling (branch: feat/rows-sample)
+23:17:57 [hook] session-start: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+23:17:57 [hook] session-start took 0s
+23:18:06 [hook] session-end: reason=other session=38306b2f-6c96-4caf-8c89-33de88946daf
+23:18:06 [hook] save-session: PROJECT_DIR=/home/aryaman/bench/rivals/wr/R PIPELINE_DIR=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0 PYTHON=python3 REMEMBER_DIR=/home/aryaman/bench/rivals/wr/R/.remember
+23:18:14 [tokens] tokens: 9+5919cache->1570out ($0.011781)
+23:18:14 [write] appended (provider: claude): ## 23:17 | feat/rows-sample
+23:18:14 [write] position -> 30
+23:18:15 [force] bypassing cooldown + min msgs
+23:18:15 [extract] session 38306b2f-6c96-4caf-8c89-33de88946daf
+23:18:15 [extract] 2 exchanges (1 human)
+23:18:15 [haiku] calling (branch: feat/rows-sample)
+23:18:47 [tokens] tokens: 9+5919cache->2946out ($0.018329)
+23:18:48 [write] appended (provider: claude): ## 23:18 | feat/rows-sample
+23:18:48 [write] position -> 39
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/now.md
+
+## 22:19 | 
+Investigated BOM handling (utf-8-sig, cli.py:1224) and delimiter sniffing (csv.Sniffer, cli.py:1238-1244) for vendor CSVs with semicolons; untested against real files.
+## 22:41 | 
+Investigated --upsert matching (db.py:4420, cli.py:1489): pk-based; SQLite 3.24+ INSERT...ON CONFLICT or INSERT OR IGNORE+UPDATE; NULL pk error; --pk not mandated at CLI; enrichment preserved vs --replace.
+## 22:42 | 
+Investigated batch-size (default 100, db.py:2294): multi-row INSERTs per batch, capped at 999 // num_columns (20-col → 49 rows); user's 1.2M-row CSV 4:10 runtime, perf untested; plugins: pluggy entry points (hookspecs.py: register_commands, prepare_connection).
+## 22:54 | 
+Documented upsert 3.x→4.x breaks (ON CONFLICT/issue 652, pk validation, use_old_upsert opt-out, type detection); reporting svc constraint 3.x until Q1 2027 (dashboard team); nightly insert 6:10.
+## 22:55 | 
+Investigated sqlite-utils SpatiaLite lookup (5 hardcoded paths only, no env vars/LD_LIBRARY_PATH support, incompatible w/ Lambda `/opt` mount); noted ingest db schema freeze 2026-11-01.
+## 23:08 | feat/rows-sample
+Added `sample` kwarg to `Table.rows_where()` (sqlite_utils/db.py) for random rows; conflicts w/ order_by/limit/offset raise ValueError; tests pass (1497/16 skipped); uncommitted.
+## 23:17 | feat/rows-sample
+Found CSV type detection bug root cause: zip codes lose leading zeros (02134→2134) via `ValueTracker.test_integer()` accepting string-integers at sqlite_utils/utils.py:470; fix unstarted.
+## 23:18 | feat/rows-sample
+Shifted root cause suspect to TypeTracker; ruled out `--alter` and column affinity; failing test planned for tomorrow.
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/capture-alive
+38306b2f-6c96-4caf-8c89-33de88946daf
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/capture-alive.d/01a8156a-35fd-439b-8620-8492b213b082
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/capture-alive.d/38306b2f-6c96-4caf-8c89-33de88946daf
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/capture-alive.d/9fb5a6b9-0283-47a2-94ff-0e08e44ed1ae
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/capture-alive.d/bb7494c0-cc81-49c0-b2dd-24452798f446
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/capture-alive.d/dcde27d3-f5f3-4b3f-97f2-e2f92939996f
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/case-divergence
+format=1
+status=not-applicable
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/handoff-path
+/home/aryaman/bench/rivals/wr/R/.remember/remember.md
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/handoff-path.01a8156a-35fd-439b-8620-8492b213b082
+/home/aryaman/bench/rivals/wr/R/.remember/remember.md
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/handoff-path.38306b2f-6c96-4caf-8c89-33de88946daf
+/home/aryaman/bench/rivals/wr/R/.remember/remember.md
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/handoff-path.9fb5a6b9-0283-47a2-94ff-0e08e44ed1ae
+/home/aryaman/bench/rivals/wr/R/.remember/remember.md
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/handoff-path.bb7494c0-cc81-49c0-b2dd-24452798f446
+/home/aryaman/bench/rivals/wr/R/.remember/remember.md
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/handoff-path.dcde27d3-f5f3-4b3f-97f2-e2f92939996f
+/home/aryaman/bench/rivals/wr/R/.remember/remember.md
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/last-ndc.ts
+1791065988
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/last-save-ts
+1791069495
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/last-save.json
+{"sessions": {"01a8156a-35fd-439b-8620-8492b213b082": 37, "9fb5a6b9-0283-47a2-94ff-0e08e44ed1ae": 63, "bb7494c0-cc81-49c0-b2dd-24452798f446": 51, "dcde27d3-f5f3-4b3f-97f2-e2f92939996f": 42, "38306b2f-6c96-4caf-8c89-33de88946daf": 39}, "session": "38306b2f-6c96-4caf-8c89-33de88946daf", "line": 39}
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/ndc-generation
+1
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/now-day
+2026-10-03
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/position.01a8156a-35fd-439b-8620-8492b213b082
+37
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/position.38306b2f-6c96-4caf-8c89-33de88946daf
+39
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/position.9fb5a6b9-0283-47a2-94ff-0e08e44ed1ae
+63
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/position.bb7494c0-cc81-49c0-b2dd-24452798f446
+51
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/position.dcde27d3-f5f3-4b3f-97f2-e2f92939996f
+42
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/post-tool-ran
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/save-session.pid
+83643
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/session-slug
+format=1
+status=ok
+project_dir=/home/aryaman/bench/rivals/wr/R
+slug=-home-aryaman-bench-rivals-wr-R
+sessions_dir=/home/aryaman/bench/rivals/home/R/.claude/projects/-home-aryaman-bench-rivals-wr-R
+memory_dir=/home/aryaman/bench/rivals/wr/R/.remember
+session_id=38306b2f-6c96-4caf-8c89-33de88946daf
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/start-context.cache
+=== MEMORY ===
+--- today-2026-10-03.md ---
+## 22:19 | 
+Investigated CSV reading sqlite-utils (Lambda /tmp); found parsing insert_upsert_implementation (cli.py:1237-1265); confirmed sqlite-utils streams CSV (no tempfiles); SQLite creates temps (TMPDIR/SQLITE_TMPDIR); file opening unchecked
+```
+--- now.md ---
+
+## 22:19 | 
+Investigated BOM handling (utf-8-sig, cli.py:1224) and delimiter sniffing (csv.Sniffer, cli.py:1238-1244) for vendor CSVs with semicolons; untested against real files.
+## 22:41 | 
+Investigated --upsert matching (db.py:4420, cli.py:1489): pk-based; SQLite 3.24+ INSERT...ON CONFLICT or INSERT OR IGNORE+UPDATE; NULL pk error; --pk not mandated at CLI; enrichment preserved vs --replace.
+## 22:42 | 
+Investigated batch-size (default 100, db.py:2294): multi-row INSERTs per batch, capped at 999 // num_columns (20-col → 49 rows); user's 1.2M-row CSV 4:10 runtime, perf untested; plugins: pluggy entry points (hookspecs.py: register_commands, prepare_connection).
+## 22:54 | 
+Documented upsert 3.x→4.x breaks (ON CONFLICT/issue 652, pk validation, use_old_upsert opt-out, type detection); reporting svc constraint 3.x until Q1 2027 (dashboard team); nightly insert 6:10.
+## 22:55 | 
+Investigated sqlite-utils SpatiaLite lookup (5 hardcoded paths only, no env vars/LD_LIBRARY_PATH support, incompatible w/ Lambda `/opt` mount); noted ingest db schema freeze 2026-11-01.
+## 23:08 | feat/rows-sample
+Added `sample` kwarg to `Table.rows_where()` (sqlite_utils/db.py) for random rows; conflicts w/ order_by/limit/offset raise ValueError; tests pass (1497/16 skipped); uncommitted.
+## 23:17 | feat/rows-sample
+Found CSV type detection bug root cause: zip codes lose leading zeros (02134→2134) via `ValueTracker.test_integer()` accepting string-integers at sqlite_utils/utils.py:470; fix unstarted.
+## 23:18 | feat/rows-sample
+Shifted root cause suspect to TypeTracker; ruled out `--alter` and column affinity; failing test planned for tomorrow.
+
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/tmp/start-context.manifest
+VERSION=2
+SRC=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0/identity.md
+SRC=/home/aryaman/bench/rivals/wr/R/.remember/core-memories.md
+SRC=/home/aryaman/bench/rivals/wr/R/.remember/today-2026-10-03.md
+SRC=/home/aryaman/bench/rivals/wr/R/.remember/now.md
+SRC=/home/aryaman/bench/rivals/wr/R/.remember/recent.md
+SRC=/home/aryaman/bench/rivals/wr/R/.remember/archive.md
+SRC=/home/aryaman/bench/rivals/wr/R/.remember
+SRC=/home/aryaman/bench/rivals/home/R/.claude/plugins/cache/dpt-plugins/remember/0.39.0/config.json
+SRC=/home/aryaman/bench/rivals/home/R/.remember/config.json
+SRC=/home/aryaman/bench/rivals/wr/R/.remember/config.json
+
+===== /home/aryaman/bench/rivals/wr/R/.remember/today-2026-10-03.md
+## 22:19 | 
+Investigated CSV reading sqlite-utils (Lambda /tmp); found parsing insert_upsert_implementation (cli.py:1237-1265); confirmed sqlite-utils streams CSV (no tempfiles); SQLite creates temps (TMPDIR/SQLITE_TMPDIR); file opening unchecked
+```

@@ -1,0 +1,235 @@
+===== /home/aryaman/bench/rivals/wr/D/mimi/.gitignore
+*
+
+===== /home/aryaman/bench/rivals/wr/D/mimi/.ignore
+!*
+
+===== /home/aryaman/bench/rivals/wr/D/mimi/ISSUES.md
+# Issues
+<!-- Append-only, one entry per bug:
+"## ISS-<n> — <title>" heading, then
+Symptom: exact error text or observed behavior
+Cause: root cause
+Fix: commit hash
+Test: the test that fails without the fix
+Status: open | fixed -->
+
+## ISS-1 — sqlite-utils 4.2 crashes on import without dev dependencies
+Symptom: sqlite-utils 4.2 crashed on startup (#842) when installed without dev dependencies.
+Cause: `sqlite_utils/db.py` imported `Self` from `typing_extensions`, which is not a runtime dependency.
+Fix: f6d7311 (PR #843), released as 4.2.1 (28dc627). Smoke test moved into the Justfile in 56dd097.
+Test: CI step "Check no accidental dev= dependencies needed" / `just test-no-dev-dependencies` (`uv run --isolated --no-default-groups sqlite-utils --help`)
+Status: fixed
+
+## ISS-2 — Failed db.execute() write leaves a phantom transaction open
+Symptom: after a write via `db.execute()` raised, every later write was captured by an implicit transaction nothing committed (#769 review comment 4900034150).
+Cause: the failing statement opened an implicit transaction and the exception skipped the auto-commit path.
+Fix: 7d86118 (rolls back when the failed statement opened the transaction)
+Test: tests/test_atomic.py::test_execute_failed_write_rolls_back_implicit_transaction
+Status: fixed
+
+## ISS-3 — db.query("/* c */ COMMIT") or "; COMMIT" commits the caller's transaction
+Symptom: inside `db.atomic()`, a comment- or semicolon-prefixed COMMIT committed the outer transaction and surfaced as a "no such savepoint" error instead of ValueError.
+Cause: statement classification used `sql.lstrip().upper().startswith(...)`, defeated by leading comments; then by a leading `;`.
+Fix: 87cf1c5 (first-token scanner `_first_keyword()`), adc10df (leading `;`)
+Test: tests/test_query.py::test_query_prefixed_commit_does_not_commit_transaction
+Status: fixed
+
+## ISS-4 — Writes silently discarded on Python 3.12+ autocommit connections
+Symptom: writes appeared to work in-process but were lost when the connection closed, for connections made with `sqlite3.connect(autocommit=True|False)`.
+Cause: under `autocommit=True` `commit()` is a no-op; under `autocommit=False` the connection is permanently inside a transaction.
+Fix: bcd9a26 (`Database()` raises TransactionError for these connections)
+Test: tests/test_constructor.py::test_autocommit_connections_are_rejected
+Status: fixed
+
+## ISS-5 — Plugins loaded during test runs
+Symptom: installed sqlite-utils plugins were loaded when running the test suite (#713).
+Cause: plugin entrypoints were loaded at module import time.
+Fix: f448b61 (PR #719, lazy-load entrypoints)
+Test: tests/test_plugins.py::test_get_plugins_does_not_load_setuptools_entrypoints_in_tests
+Status: fixed
+
+## ISS-6 — Resource leak warnings from rows_from_file format detection
+Symptom: resource leak warnings under `just test -Wall` in the LLM project.
+Cause: the BufferedReader wrapper used for format detection was not closed on the empty-input and JSON paths.
+Fix: 6bc1d33
+Test: tests/test_rows_from_file.py::test_detect_format_closes_eager_reader
+Status: fixed
+
+## ISS-7 — 'just docs' fails: refusing to fetch into checked-out branch
+Symptom: `fatal: refusing to fetch into branch 'refs/heads/main' checked out at '<repo path>'` when building docs locally.
+Cause: beanbag-docutils' `github_linkcode_resolve` (author did not diagnose further).
+Fix: 5f81752 (own `linkcode_resolve` in docs/conf.py; beanbag-docutils removed in b8aa136)
+Test: none
+Status: fixed
+
+===== /home/aryaman/bench/rivals/wr/D/mimi/MIMI.md
+## Memory (mimi)
+
+Check this before grepping the repo. Everything mimi keeps is in `mimi/`, and the current state loads automatically:
+
+@STATE.md
+
+### Where to look
+- Something broke, or a symptom looks familiar → `mimi/ISSUES.md` (search the exact error text)
+- About to change an existing choice (library, schema, provider, architecture) → `mimi/decisions.md`
+- Touching an external system (API, database, deploy, credentials) → `mimi/memory/external.md` — contains: apt-get install libsqlite3-mod-spatialite 404s in GitHub Actions; Import works in dev but crashes for PyPI users; Cog check fails with older Click; Building a wheel fails on old setuptools
+- Running sqlite-utils in the user's ingest service (Lambda, vendor CSVs) → `mimi/memory/ingest-lambda.md` — contains: Lambda: only /tmp is writable; Vendor CSV exports are semicolon-delimited with a UTF-8 BOM; Nightly 1.2M-row CSV insert takes 6 min 10 s at default settings; Reporting service stays on the 3.x API until Q1 2027; SpatiaLite cannot ship in production (Lambda layer size limit); Ingest database schema freeze is 2026-11-01
+- A plugin problem, or anything about the user's internal sqlite-utils-geo plugin → `mimi/memory/plugins.md` — contains: sqlite-utils-geo is maintained internally by Dmitri
+- A test fails only on an old SQLite version in CI → `mimi/memory/old-sqlite.md` — contains: no such table: sqlite_schema; INSERT ... RETURNING is a syntax error; UTF-8 BOM before the first token rejected; Selecting rowid from a view returns NULL instead of erroring
+
+Every file in `mimi/memory/` gets one line above saying when to read it. A file with no line is never read. `index` appends each file's `##` headings to its line, so a task can match a trap by name, and marks a file that holds nothing yet as `— empty`: skip those.
+
+Memory holds only what someone wrote down. When it has nothing on the question, that is not an answer: search `git log --grep`, the issue tracker and the code before concluding.
+
+### What to write, and where
+- Bug fixed → append to `mimi/ISSUES.md`: exact symptom text, cause, fix commit, test.
+- Choice someone could argue again → append to `mimi/decisions.md`: why, what was rejected, what would reverse it.
+- Fact the code cannot tell you → `mimi/memory/<topic>.md`: external-system quirks, measured numbers with date and sample size, why something non-obvious exists, environment traps. Give each trap its own `##` heading, named the way a task would describe it (error text, library, table, command). Keep one `Last verified:` line per file, dated when its facts were last checked.
+- End of a work session → overwrite `mimi/STATE.md` (or run the `mimi-close` skill). Finished work leaves it.
+- Code change alone → nothing. Git has it.
+- After any memory edit: run `python "$HOME/.claude/skills/mimi/memlayer.py" index .`, then `python "$HOME/.claude/skills/mimi/memlayer.py" check .` and fix what it prints until it says clean.
+
+Before writing any line: could someone learn this in under a minute from the code or a command? If yes, do not write it. Ask it of each fact on its own, not of the message the fact came in: a number, date, measurement, deadline, decision or constraint that a person stated is never in the code, even when the code touches the same topic, and a fact about the user's own systems, team or downstream use of this code is kept even when this repository never touches it. Every fact needs something checkable behind it: a commit, an issue ID, a command, a date. A wrong line gets fixed or deleted, never a correct one added beside it. Split `mimi/memory/` by external boundary or subsystem, not by code folder, and only after a real miss.
+
+`mimi/` is ignored by git through `mimi/.gitignore`, so this memory stays on this machine. Delete that file to share it through git.
+
+Find rot: `python "$HOME/.claude/skills/mimi/memlayer.py" check .`
+
+===== /home/aryaman/bench/rivals/wr/D/mimi/STATE.md
+# State
+Goal: Python CLI utility and library for manipulating SQLite databases (README.md).
+
+## Deployed
+4.2.1 on PyPI, release commit 28dc627 (2026-08-13). Unreleased on top: 56dd097..6bc1d33 (CI fixes, 3.15 RCs, rows_from_file leak fix ISS-6).
+
+## Broken
+- user-reported: `sqlite-utils insert data.db items items.csv --csv` turns zip code `02134` into integer `2134` (type detection on by default). Not yet reproduced by a test here.
+
+## Open threads
+- nightly 1.2M-row CSV insert is slow (6 min 10 s); batch size not yet tested (see mimi/memory/ingest-lambda.md)
+- ingest database schema freeze 2026-11-01; SpatiaLite unavailable in production; reporting service on 3.x until Q1 2027 (see mimi/memory/ingest-lambda.md)
+- leading-zero bug: suspect is `ValueTracker.test_integer`/`test_float` in sqlite_utils/utils.py (`int("02134")` succeeds), applied via `transform(types=tracker.types)` at cli.py:1179 (and cli.py:2200 for `memory`). Unconfirmed: user's debugger showed the value already an int before SQLite, but `TypeTracker.wrap` yields rows unchanged, so that needs rechecking.
+
+## Next 3
+1. Zip-code bug: on its own branch, write the failing test first (CliRunner `insert --csv` with a `02134` column, assert stored value `"02134"` and column type TEXT; plus a `ValueTracker.evaluate("02134")` unit test)
+2. `--sample` step 2: CLI option on `rows`, mutually exclusive with `--order`
+3. `--sample` step 3: tests and docs entry
+
+## Last session (2026-10-03)
+Branch: detached HEAD at 6bc1d33
+Uncommitted: sqlite_utils/db.py (`sample` keyword-only param on Queryable.rows_where, step 1 of --sample), CLAUDE.md untracked
+Stopped at: zip-code bug investigated by reading code only, nothing run or changed; --sample step 1 done and hand-checked, no sample tests or docs yet. `uv run` cannot build the project env (setuptools sees mimi/ as a second top-level package), use `uv run --no-project --with ...`
+Tried, failed: user ruled out the `--alter` path (bug happens without it) and SQLite column affinity (user's debugger showed an int before SQLite; contradicts reading of TypeTracker.wrap, unverified)
+Resume with: zip-code failing test on a new branch (Next 1); --sample work needs a feature branch too (step 2, DEC-5).
+
+Last updated: 2026-10-03
+
+===== /home/aryaman/bench/rivals/wr/D/mimi/decisions.md
+# Decisions
+<!-- One short entry per choice someone might argue again:
+"## DEC-<n> — <choice>" heading, then
+Why:
+Rejected: <alternative> — <reason>
+Reverse if: <condition that would change the answer>
+Date:
+Never edit an old entry's reasoning. Add a new one and mark the old "Superseded by DEC-<m>". -->
+
+## DEC-1 — Database context manager rolls back on exit instead of committing
+Why: exit is equivalent to `close()`; open transactions there can only come from manual transaction control, and auto-committing could silently persist half-finished work. Deliberately differs from `sqlite3.Connection`'s context manager.
+Rejected: commit on exit like sqlite3 — would persist partial work.
+Reverse if: open transactions at exit become possible from library calls, not just manual control.
+Date: 2026-07-04 (6c88067)
+
+## DEC-2 — Rejected write PRAGMAs in db.query() still take effect (documented, not fixed)
+Why: some PRAGMAs refuse to run inside a transaction, so they run outside the savepoint guard; `PRAGMA user_version = 5` takes effect despite the ValueError. A fix would need a hardcoded list of row-returning PRAGMAs.
+Rejected: hardcoded PRAGMA list — maintenance burden.
+Reverse if: SQLite exposes which PRAGMAs return rows, or a maintained list becomes acceptable.
+Date: 2026-07-06 (6693491)
+
+## DEC-3 — sqlean.py support removed
+Why: removed in PR #772 (closes #771, refs #769); reason lives in those GitHub issues.
+Rejected: keeping the sqlite3/sqlean shim.
+Reverse if: see #771.
+Date: 2026-07-05 (afbfd95)
+
+## DEC-4 — Production writes use `--upsert` with an explicit `--pk`, never `--replace`
+Why: told 2026-10-03: `--replace` once wiped the user's enrichment columns in production. `--upsert --pk` is the team rule.
+Rejected: `--replace` — it caused the data loss above.
+Reverse if: the user lifts the rule, or enrichment data stops living in the same table.
+Date: 2026-10-03 (told by user; the incident itself is undated)
+
+## DEC-5 — `--sample N` uses `order by random() limit N`; `--sample` and `--order` are mutually exclusive in the CLI
+Why: told 2026-10-03: the user tried random-offset sampling (`offset abs(random()) % count` per row) the week before; it returns duplicate rows and does not work for WITHOUT ROWID tables. In `rows_where()`, `sample` raises ValueError if combined with order_by, limit or offset; the CLI must error if both `--sample` and `--order` are given.
+Rejected: random offset per row — duplicates, breaks on WITHOUT ROWID tables.
+Reverse if: the user lifts the rule, or a measured need for sampling large tables without a full sort appears.
+Date: 2026-10-03 (the earlier attempt is undated)
+
+===== /home/aryaman/bench/rivals/wr/D/mimi/memory/external.md
+# CI, packaging and docs build traps
+Last verified: 2026-09-01
+
+## apt-get install libsqlite3-mod-spatialite 404s in GitHub Actions
+Runner images ship stale apt package lists; an old `.deb` (e.g. libminizip1t64) gets pulled from the mirror and the install 404s. Always `apt-get update` first. Fixed in test.yml by f7e3174 and in test-coverage.yml by 85b1be1 (2026-09-01).
+
+## Import works in dev but crashes for PyPI users
+Dev dependency groups mask missing runtime dependencies (4.2 shipped importing `typing_extensions`, see ISS-1). Run `just test-no-dev-dependencies` before release.
+
+## Cog check fails with older Click
+Cog output for `--help` text requires `click>=8.4.2` in the dev group (79117b9, #761, 2026-06-24). Click 8.3.1+ also removed the need for the Sentinel workaround (e66e82f, #666).
+
+## Building a wheel fails on old setuptools
+PEP 639 license expression in pyproject.toml needs `setuptools>=77` in build-system requires (397cdcc, 2026-07-04).
+
+===== /home/aryaman/bench/rivals/wr/D/mimi/memory/ingest-lambda.md
+# Downstream use: the ingest service
+Last verified: 2026-10-03
+
+## Lambda: only /tmp is writable
+The user's ingest service runs `sqlite-utils insert` on AWS Lambda, so every database is created under /tmp (told 2026-10-03). No `tempfile` use in `sqlite_utils/` as of 6bc1d33.
+
+## Vendor CSV exports are semicolon-delimited with a UTF-8 BOM
+Told 2026-10-03: the vendor's exports use `;` and start with a BOM. Forgetting `--delimiter ';'` has landed the whole row in one column more than once. `--delimiter` also implies `--csv`; the default `utf-8-sig` encoding strips the BOM (cli.py, 6bc1d33).
+
+## Nightly 1.2M-row CSV insert takes 6 min 10 s at default settings
+Read by the user off a dashboard (corrected 2026-10-03 from an earlier misread of 4 min 10 s); sample size and run date not recorded. Default settings (default --batch-size is 100, cli.py, 6bc1d33). No profile of where the time goes; no other batch size tried.
+
+## Reporting service stays on the 3.x API until Q1 2027
+Told 2026-10-03: the reporting service stays on sqlite-utils 3.x until Q1 2027 because the dashboard team's code depends on the old upsert behaviour. Upsert changes in 4.x: see docs/changelog.rst (4.0a0 `INSERT ... ON CONFLICT DO UPDATE`, `use_old_upsert=True` opt-out).
+
+## SpatiaLite cannot ship in production (Lambda layer size limit)
+Told 2026-10-03: the SpatiaLite extension cannot be shipped to production because of the Lambda layer size limit. `find_spatialite()` only checks the fixed SPATIALITE_PATHS in sqlite_utils/utils.py (6bc1d33), so it returns None on Lambda unless a layer places the .so at one of them.
+
+## Ingest database schema freeze is 2026-11-01
+Told 2026-10-03: the schema freeze for the ingest database is 2026-11-01.
+
+===== /home/aryaman/bench/rivals/wr/D/mimi/memory/old-sqlite.md
+# Tests failing only on old SQLite versions
+Last verified: 2026-08-11
+
+CI (test-sqlite-support.yml) runs the suite against SQLite back to 3.23.1. Traps found there, all in #769 review / follow-ups:
+
+## no such table: sqlite_schema
+The `sqlite_schema` alias does not exist on old SQLite; use `sqlite_master` (b432e68, 2026-08-11).
+
+## INSERT ... RETURNING is a syntax error
+RETURNING needs SQLite 3.35+; tests using it must skip on older versions (2582446, 2026-07-06).
+
+## UTF-8 BOM before the first token rejected
+SQLite 3.23.1 rejects a leading BOM in SQL; BOM test variants skip there (c2a1774, 2026-07-06).
+
+## Selecting rowid from a view returns NULL instead of erroring
+Before 3.36, `select rowid` from a view returned NULL; tests must accept either behavior (c2a1774, 2026-07-06).
+
+===== /home/aryaman/bench/rivals/wr/D/mimi/memory/plugins.md
+# Plugins: the user's internal sqlite-utils-geo
+Last verified: 2026-10-03
+
+## sqlite-utils-geo is maintained internally by Dmitri
+Told 2026-10-03: the user's team has an internal plugin, sqlite-utils-geo, maintained by Dmitri. Plugin problems go to him, not to this repo. Hooks are in sqlite_utils/hookspecs.py; entry-point group `sqlite_utils`.
+
+===== CLAUDE.md
+<!-- memory-layer:start -->
+@mimi/MIMI.md
+If mimi/MIMI.md is not already in your context, read it and mimi/STATE.md before starting any task.
+<!-- memory-layer:end -->

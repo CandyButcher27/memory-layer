@@ -1,0 +1,111 @@
+[
+ {
+  "id": "L01",
+  "turns": [
+   "Morning. Quick orientation question: where does sqlite-utils define the `insert` CLI command and its options? Context for later: Priyanka runs the on-call rotation for our ingest service, so anything that pages goes to her first.",
+   "Thanks. What's the default batch size for inserts in the Python API? Just the number and where it's set."
+  ]
+ },
+ {
+  "id": "L02",
+  "plant": [
+   {
+    "path": "/tmp/incoming/ingest-2026-09-30.log",
+    "content": "2026-09-30T01:00:02Z INFO  ingest starting run_id=7c1e\n2026-09-30T01:00:03Z INFO  fetching orders from partner API\n2026-09-30T01:04:49Z INFO  fetched 96 pages from partner API (47,850 rows)\n2026-09-30T01:04:51Z INFO  loading vendor file orders_0930.csv into orders\n2026-09-30T01:05:37Z ERROR insert failed at row 48211 of orders_0930.csv\nTraceback (most recent call last):\n  File \"/var/task/ingest/load.py\", line 88, in load_orders\n    db[\"orders\"].insert_all(rows, pk=\"order_id\", batch_size=1000)\n  File \"/var/task/sqlite_utils/db.py\", line 3528, in insert_all\n    self.insert_chunk(\n  File \"/var/task/sqlite_utils/db.py\", line 3294, in insert_chunk\n    result = self.db.execute(query, params)\nsqlite3.IntegrityError: UNIQUE constraint failed: orders.order_id\n2026-09-30T01:05:37Z INFO  offending order_id=A-559301 (already loaded from partner API page 41)\n2026-09-30T01:05:38Z ERROR run 7c1e aborted, 0 rows committed from orders_0930.csv\n"
+   }
+  ],
+  "turns": [
+   "Last night's ingest run failed. The log is at /tmp/incoming/ingest-2026-09-30.log. What went wrong, and is it a sqlite-utils bug or our data?",
+   "OK, makes sense. Some background for the fix: the partner API we pull orders from returns at most 500 rows per page, so the loader pages through it, and the nightly batch kicks off at 01:00 UTC. Does `insert --pk` with `--ignore` skip duplicates silently, or does it report them?"
+  ]
+ },
+ {
+  "id": "L03",
+  "turns": [
+   "Let's add a `--since` option to `sqlite-utils rows` that filters on a timestamp column. Plan: (1) add keyword-only `since` and `since_column` parameters to `Table.rows_where()` in sqlite_utils/db.py, (2) wire `--since` and `--since-column` into the `rows` command in sqlite_utils/cli.py, (3) tests and docs. Do step 1 only. Our ingest box runs Python 3.10, so nothing newer than 3.10 syntax.",
+   "Good. Unrelated: we turned WAL mode off on the ingest database on purpose, because the database file lives on EFS and WAL doesn't work on a network filesystem. Stop here for today."
+  ]
+ },
+ {
+  "id": "L04",
+  "turns": [
+   "Different problem. `sqlite-utils memory` on our 40 vendor CSVs grows to about 6 GB RSS and gets OOM-killed. Where does the memory command load each file?",
+   "Two things I've ruled out: it isn't the number of files, a single 2 GB file does the same; and it isn't SQLite's page cache, setting `PRAGMA cache_size` small changed nothing. My next suspect is that the CSV is read fully into Python before the insert. Let's stop; next time I want to try it with `--no-detect-types`. For context, Tomás owns the vendor relationship, and the vendor contract ends on 2027-03-31, after which their semicolon CSV feed stops."
+  ]
+ },
+ {
+  "id": "L05",
+  "plant": [
+   {
+    "path": "/tmp/incoming/lambda.toml",
+    "content": "[function.ingest]\nruntime = \"python3.10\"\nhandler = \"ingest.main.handler\"\nmemory_mb = 2048\ntimeout_seconds = 300\nephemeral_storage_mb = 4096\nreserved_concurrency = 1\n"
+   }
+  ],
+  "turns": [
+   "Our nightly insert takes about 6 minutes now. Can the Lambda as configured in /tmp/incoming/lambda.toml actually finish it? Just check the config, don't change anything.",
+   "Hm, OK. Process note: any change to sqlite_utils/cli.py in our fork needs two approvals, and one of them has to be Marta. What's the smallest place in cli.py where we could add a `--max-rows` guard to insert? Don't write it, just point me to it."
+  ]
+ },
+ {
+  "id": "L06",
+  "plant": [
+   {
+    "path": "/tmp/incoming/batch-bench.txt",
+    "content": "insert benchmark, orders_0930.csv (1,203,550 rows), m6i.large, 3 runs each, median shown\n\nbatch_size   wall_s   peak_rss_mb\n100          96.4     310\n500          58.9     402\n1000         47.3     515\n2000         41.2     760\n5000         43.8     1890\n"
+   }
+  ],
+  "turns": [
+   "I ran an insert benchmark over the weekend, the output is in /tmp/incoming/batch-bench.txt. Which batch size came out best?",
+   "Thanks. Two updates: the dedupe job now processes 340k rows per minute on the m6i.large, measured Friday over 5 runs. And we're upgrading the ingest box from Python 3.10 to 3.11 this week. Does sqlite-utils have anything 3.11-specific I should know about? Short answer."
+  ]
+ },
+ {
+  "id": "L07",
+  "turns": [
+   "Back to the `--since` work. Do step 2 now: wire `--since` and `--since-column` into the `rows` command.",
+   "Good. Two decisions from review: `--since` accepts ISO 8601 dates and datetimes only, no relative values like '2 days ago', and Marta vetoed adding python-dateutil, so parse with the standard library. Also, a schedule change: the nightly batch moved from 01:00 to 02:30 UTC after the DST switch. Stop here, step 3 next time."
+  ]
+ },
+ {
+  "id": "L08",
+  "plant": [
+   {
+    "path": "/tmp/incoming/partner_sample.csv",
+    "encoding": "latin-1",
+    "content": "id,name,city\n1,Jürgen Müller,Köln\n2,Zoë Brontë,Genève\n3,Ana Peña,Málaga\n4,Søren Åberg,Århus\n"
+   }
+  ],
+  "turns": [
+   "The partner sent /tmp/incoming/partner_sample.csv and when we import it the names come out mangled. What's going on with the file, and what flag fixes the import?",
+   "Thanks. Infra note while I think of it: the ingest database is backed up hourly to s3://acme-ingest-backups with 14-day retention. Is there a sqlite-utils command that gives a consistent copy of a live database? Short answer."
+  ]
+ },
+ {
+  "id": "L09",
+  "turns": [
+   "Where is `transform` implemented, both the CLI command and the Python method, and which function generates the SQL it runs?",
+   "Trap to be aware of: never run `sqlite-utils transform` on our `events` table. It has an audit trigger, transform recreates the table, and last time the trigger silently disappeared and we lost a week of audit rows. Is there a flag that keeps triggers?"
+  ]
+ },
+ {
+  "id": "L10",
+  "turns": [
+   "Update on the `memory` OOM: with `--no-detect-types` RSS stayed under 1 GB. So it's the type detection path, not a leak. Where does the memory command run type detection, and does it hold all rows while doing it?",
+   "OK. Next step is to write a failing test that shows the type detection path buffering the whole file, then fix it to stream. Also: the Python 3.11 upgrade got rolled back, a C extension we depend on doesn't build on 3.11 yet, so we're on 3.10 again until that's fixed. Stop here."
+  ]
+ },
+ {
+  "id": "L11",
+  "turns": [
+   "Small thing: how does `sqlite-utils insert` handle a CSV with duplicate column names?",
+   "Heads-up: Tomás has left, the vendor relationship is now with Inês. Also, does `--detect-types` look at every row or only a sample?"
+  ]
+ },
+ {
+  "id": "L12",
+  "turns": [
+   "What does `sqlite-utils optimize` do, in two sentences?",
+   "And `sqlite-utils analyze-tables`: what does it report for each column?"
+  ]
+ }
+]

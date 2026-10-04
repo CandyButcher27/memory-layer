@@ -1,0 +1,173 @@
+===== /home/aryaman/bench/f2b-cargo/wr/D/mimi/.gitignore
+*
+
+===== /home/aryaman/bench/f2b-cargo/wr/D/mimi/.ignore
+!*
+
+===== /home/aryaman/bench/f2b-cargo/wr/D/mimi/ISSUES.md
+# Issues
+<!-- Append-only, one entry per bug:
+"## ISS-<n> — <title>" heading, then
+Symptom: exact error text or observed behavior
+Cause: root cause
+Fix: commit hash
+Test: the test that fails without the fix
+Status: open | fixed -->
+
+## ISS-1 — `cargo clean` double-counts hardlinked files in its size summary
+Symptom: `cargo clean --dry-run` printed `Summary 2 files, 2.0KiB total` for a 1 KiB file and its hardlink
+Cause: size total summed every path, so hardlinks to the same inode were counted once per link
+Fix: 5651d3ce4
+Test: tests/testsuite/clean.rs `clean_accounts_for_hardlinks` (expects `1.0KiB total`)
+Status: fixed
+
+## ISS-2 — `write_atomic` mishandles a relative symlink target
+Symptom: writing through a symlink whose target is relative placed the temp file relative to the cwd instead of the symlink's directory
+Cause: relative symlink target was not resolved against the directory containing the symlink
+Fix: 70ce89528 (merged in #17362)
+Test: none added in the fix commit
+Status: fixed
+
+===== /home/aryaman/bench/f2b-cargo/wr/D/mimi/MIMI.md
+## Memory (mimi)
+
+Check this before grepping the repo. Everything mimi keeps is in `mimi/`, and the current state loads automatically:
+
+@STATE.md
+
+### Where to look
+- Something broke, or a symptom looks familiar → `mimi/ISSUES.md` (search the exact error text)
+- About to change an existing choice (library, schema, provider, architecture) → `mimi/decisions.md`
+- Writing or running tests (snapshots, nightly-only, cross, build-std, network, container) → `mimi/memory/testing.md` — contains: Snapshot assertion mismatch after changing output; Test silently ignored on stable; Cross-compile tests fail without a 32-bit target; build-std, network and container tests never run by default; Running target/debug/cargo directly picks the wrong rustc under rustup overrides
+- Preparing a PR, commit layout, typos CI, LLM policy → `mimi/memory/contributing.md` — contains: PR ignored because the issue is not accepted; LLM-assisted contributions; CI typos job fails; Reviewers want test commits before behavior commits; Reviewer asks for a changelog entry
+- Touching an external system (API, database, deploy, credentials) → `mimi/memory/external.md` — contains: MIRROR_RO_TOKEN (mirror read-only API token)
+
+Every file in `mimi/memory/` gets one line above saying when to read it. A file with no line is never read. `index` appends each file's `##` headings to its line, so a task can match a trap by name, and marks a file that holds nothing yet as `— empty`: skip those.
+
+Memory holds only what someone wrote down. When it has nothing on the question, that is not an answer: search `git log --grep`, the issue tracker and the code before concluding.
+
+### What to write, and where
+- Bug fixed → append to `mimi/ISSUES.md`: exact symptom text, cause, fix commit, test.
+- Choice someone could argue again → append to `mimi/decisions.md`: why, what was rejected, what would reverse it.
+- Fact the code cannot tell you → `mimi/memory/<topic>.md`: external-system quirks, measured numbers with date and sample size, why something non-obvious exists, environment traps. Give each trap its own `##` heading, named the way a task would describe it (error text, library, table, command). Keep one `Last verified:` line per file, dated when its facts were last checked.
+- End of a work session → overwrite `mimi/STATE.md` (or run the `mimi-close` skill). Finished work leaves it.
+- Code change alone → nothing. Git has it.
+- After any memory edit: run `python "$HOME/.claude/skills/mimi/memlayer.py" index .`, then `python "$HOME/.claude/skills/mimi/memlayer.py" check .` and fix what it prints until it says clean.
+
+Before writing any line: could someone learn this in under a minute from the code or a command? If yes, do not write it. Ask it of each fact on its own, not of the message the fact came in: a number, date, measurement, deadline, decision or constraint that a person stated is never in the code, even when the code touches the same topic, and a fact about the user's own systems, team or downstream use of this code is kept even when this repository never touches it. Every fact needs something checkable behind it: a commit, an issue ID, a command, a date. A wrong line gets fixed or deleted, never a correct one added beside it. Split `mimi/memory/` by external boundary or subsystem, not by code folder, and only after a real miss.
+
+`mimi/` is ignored by git through `mimi/.gitignore`, so this memory stays on this machine. Delete that file to share it through git.
+
+Find rot: `python "$HOME/.claude/skills/mimi/memlayer.py" check .`
+
+===== /home/aryaman/bench/f2b-cargo/wr/D/mimi/STATE.md
+# State
+Goal: Cargo, the Rust package manager (rust-lang/cargo); PRs target `master` via merge queue
+
+## Deployed
+unknown
+
+## Broken
+- Reported by a user (told 2026-10-04, not reproduced): `cargo fetch` hangs forever behind their corporate proxy, never on a direct connection. `http.multiplexing = false` fixes it; `CARGO_HTTP_TIMEOUT=30` does not.
+
+## Open threads
+- Proxy hang investigation: waiting on a trace log from the reporting user. Their libcurl version (`cargo -V -v`) is not known yet.
+- `net.retry` docs PR (doc/book/src/reference/config.md): Weihang's review item (a) "default is 3" is done in the working tree, uncommitted. Item (b), Retry-After capped at 10 seconds, is being written by the user (told 2026-10-04). Item (c) changelog dropped, see mimi/memory/contributing.md.
+- Mirror health-check xtask (parked, told 2026-10-04): blocked on INFRA-4821, see mimi/memory/external.md. Planned as a new `crates/xtask-mirror-check/` with a `mirror-check` alias in `.cargo/config.toml`, following the existing `xtask-*` crates. Nothing scaffolded.
+
+## Next 3
+1. Get the user's `cargo -V -v` output and a trace log taken with `CARGO_LOG=cargo::util::network=trace` plus `cargo::context=info`; `CARGO_LOG=network=trace` is unverified as a valid target.
+2. If libcurl is not 7.87.0/7.88.0/7.88.1, look at why `disables_multiplexing_for_bad_curl` (src/context/mod.rs) does not cover their case, and whether `network::proxy::http_proxy_exists` detects their proxy setup.
+3. Decide on a fix only after the log points at a cause.
+
+## Last session (2026-10-04)
+Branch: HEAD (detached)
+Uncommitted: doc/book/src/reference/config.md (net.retry "Defaults to 3 retries if not set."), CLAUDE.md (untracked)
+Stopped at: `net.retry` docs review item (a) done; (b) is with the user; (c) dropped. Proxy hang unchanged (multiplexing is decided at src/util/network/http.rs:83 default true; src/context/mod.rs `disables_multiplexing_for_bad_curl`; applied at http.rs:231 and http_async.rs:235); user is messaging the reporter for logs. Mirror health-check mapped and parked until INFRA-4821 resolves.
+Tried, failed: `CARGO_HTTP_TIMEOUT=30` as a workaround (user's finding): no effect on the hang
+Resume with: for the docs PR, check that (b) landed in config.md; for the proxy, read the reporter's log, then `CARGO_HTTP_MULTIPLEXING=false cargo fetch` vs default to compare; for the mirror check, ask whether INFRA-4821 is resolved before scaffolding
+Last updated: 2026-10-04
+
+===== /home/aryaman/bench/f2b-cargo/wr/D/mimi/decisions.md
+# Decisions
+<!-- One short entry per choice someone might argue again:
+"## DEC-<n> — <choice>" heading, then
+Why:
+Rejected: <alternative> — <reason>
+Reverse if: <condition that would change the answer>
+Date:
+Never edit an old entry's reasoning. Add a new one and mark the old "Superseded by DEC-<m>". -->
+
+## DEC-1 — `cargo install` uses the package's `Cargo.lock` by default
+Why: build/test used the lockfile while install re-resolved, so installs could pick untested versions and fail. Cargo team decision on rust-lang/cargo#7169; landed in #17388 (7941be6fb).
+Rejected: keep lockfile opt-in via `--locked` — maintainers end up supporting untested dep versions
+Reverse if: Cargo team revisits #7169. `--locked` is now accepted as a no-op; missing-lockfile warning still fires when passed explicitly.
+Date: 2026-09 (commit 7941be6fb)
+
+## DEC-2 — profile `trim-paths` accepts only `none|object|all`
+Why: stabilization prep for `-Ztrim-paths`; other scopes and booleans deferred until needed. See rust-lang/cargo#12137 and #17432 (3c0b53475). Default is `none` (a82d93f0e).
+Rejected: keeping the full scope list and boolean values — not needed for stabilization
+Reverse if: a concrete need for another scope or boolean appears
+Date: 2026-09 (commit 3c0b53475)
+
+## DEC-3 — retry sleep constants in `src/util/network/retry.rs` keep raw integer units
+Why: `MAX_RETRY_SLEEP_S` is `pub` and, per Ana on the cargo team, used by other crates, so changing its type would break them. Unit is already in each name suffix and doc comment, so no further change. In this repo the only user is `src/sources/git/utils.rs:1277`; external users were not checked.
+Rejected: converting `MAX_RETRY_SLEEP_S`, `INITIAL_RETRY_SLEEP_BASE_MS` and the jitter to `Duration` — public API break
+Reverse if: the external users are confirmed gone, or the cargo team accepts the break
+Date: 2026-10-04 (told by user, no commit)
+
+===== /home/aryaman/bench/f2b-cargo/wr/D/mimi/memory/contributing.md
+# Contribution process traps
+
+Last verified: 2026-10-04
+
+## PR ignored because the issue is not accepted
+Only issues labeled `S-accepted` are reviewed. Source: CONTRIBUTING.md.
+
+## LLM-assisted contributions
+Cargo follows the rust-lang/rust LLM usage policy (https://forge.rust-lang.org/policies/llm-usage.html), including later updates. Source: doc/contrib/src/process/llm-usage.md.
+
+## CI typos job fails
+CI runs `typos`; check locally with `cargo spellcheck`, fix with `cargo spellcheck --write-changes`. Source: working-on-cargo.md.
+
+## Reviewers want test commits before behavior commits
+Prefer atomic commits, with tests added in their own commit first showing current behavior (e.g. #13910, #14006). See git log 2c14149ce..694054f34 for the pattern. Source: working-on-cargo.md.
+
+## Reviewer asks for a changelog entry
+Not needed: Weihang said (2026-10-04, on the `net.retry` docs PR) that changelog entries are generated at release time. Do not add one in PRs.
+
+===== /home/aryaman/bench/f2b-cargo/wr/D/mimi/memory/external.md
+# External systems
+<!-- Only what the code cannot tell you: provider quirks, deferred constraints, what the deploy runs,
+which credentials reach what, environment traps. Move a topic to its own file once it passes ~40 lines. -->
+
+## MIRROR_RO_TOKEN (mirror read-only API token)
+Told 2026-10-04: not issued yet, blocked on infra ticket INFRA-4821. Once issued it is provided as the CI secret `MIRROR_RO_TOKEN`. It must never be printed in logs, including error and debug output.
+
+Last verified: 2026-10-04
+
+===== /home/aryaman/bench/f2b-cargo/wr/D/mimi/memory/testing.md
+# Testing traps
+
+Last verified: 2026-10-04
+
+## Snapshot assertion mismatch after changing output
+Update file-backed and inline snapshots with `SNAPSHOTS=overwrite cargo test`, then review the diff. Source: doc/contrib/src/tests/writing.md "Updating Snapshots".
+
+## Test silently ignored on stable
+`#[cargo_test(nightly, reason = ...)]` tests are skipped off nightly; Cargo-only unstable features use `masquerade_as_nightly_cargo(&[...])` instead. Some nightly tests need `rustup component add rustc-dev llvm-tools-preview --toolchain=nightly`. Source: doc/contrib/src/tests/running.md, writing.md.
+
+## Cross-compile tests fail without a 32-bit target
+Install the 32-bit host target (e.g. `rustup target add i686-unknown-linux-gnu`, plus `gcc-multilib` on Ubuntu) or set `CFG_DISABLE_CROSS_TESTS=1`. Windows cross tests support MSVC only. Source: running.md.
+
+## build-std, network and container tests never run by default
+Opt in with `CARGO_RUN_BUILD_STD_TESTS=1` (nightly + rust-src, `--test build-std`), `CARGO_PUBLIC_NETWORK_TESTS=1`, `CARGO_CONTAINER_TESTS=1` (Docker; mostly broken on Windows, not run on macOS CI). Source: running.md.
+
+## Running target/debug/cargo directly picks the wrong rustc under rustup overrides
+Cargo changes directory per compilation, so a non-rustup-launched cargo can hit different toolchains. Use `rustup run nightly target/debug/cargo` or set `RUSTC`. Source: doc/contrib/src/process/working-on-cargo.md "Running Cargo".
+
+===== CLAUDE.md
+<!-- memory-layer:start -->
+@mimi/MIMI.md
+If mimi/MIMI.md is not already in your context, read it and mimi/STATE.md before starting any task.
+<!-- memory-layer:end -->

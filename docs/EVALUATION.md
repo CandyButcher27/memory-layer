@@ -1,6 +1,7 @@
 # Evaluation
 
-Eight experiments, a stress-test suite, and every failure fixed and re-tested. Experiments 1–7 ran before the
+Nine experiments, a stress-test suite, and every failure fixed and re-tested. How the evaluations work, in
+one place: [`eval/README.md`](../eval/README.md). Experiments 1–7 ran before the
 rename, so they call mimi "the memory layer" or "this layer", and its close command `/session-close`.
 
 **Short answer:**
@@ -8,6 +9,9 @@ rename, so they call mimi "the memory layer" or "this layer", and its close comm
   conventional notes setup, at about half the cost per answer.
 - **Against Claude Code's built-in auto-memory and claude-mem:** mimi led on stated facts (0.83 vs 0.51 and
   0.15) and on resuming unfinished work (0.97 vs 0.80 and 0.42). See Experiment 8.
+- **Against six memory tools, over 12 sessions:** mimi scored 0.94 on the rivals track and 0.94 on the long
+  track, against at most 0.56 and 0.61 for any rival. Without `/mimi-close` it fell to 0.43, a tie with
+  auto-memory. See Experiment 9.
 - **Finding past incidents:** mimi is no better, and slightly worse, than plain `git log --grep` in repositories
   whose commit history already explains them (0.76 against 0.81).
 
@@ -191,8 +195,43 @@ What the transcripts show:
 - **mimi's two misses were its own bug.** `/mimi-close` dropped two facts the user stated as being "about
   your downstream service, not this repo". Commit `3bdb281` makes scope never a reason to drop.
 
-Two follow-ups are pre-registered in `eval/stage1/PREREG-2.md` and have not run: a re-run after the
-`/mimi-close` scope fix (`3bdb281`), and 8 more continuity questions. Stage 1 cost about $50.
+Two follow-ups were pre-registered in `eval/stage1/PREREG-2.md`: a re-run after the `/mimi-close` scope fix
+(`3bdb281`), and 8 more continuity questions. Both ran in Experiment 9. Stage 1 cost about $50.
+
+---
+
+## Experiment 9: the bench, against six memory tools and over 12 sessions
+
+Its own documents:
+- the design and decision rules, committed before the run: `eval/bench/PREREG-3.md`
+- the full results, validity notes and costs: `eval/bench/RESULTS.md`
+- how every experiment works: `eval/README.md`
+
+- **Arms:** no memory, built-in auto-memory, mimi with `/mimi-close`, mimi never closed (D0), claude-mem,
+  agentmemory, claude-remember, claude-mem-lite and recall.
+- **Tracks:** Stage 1's sqlite-utils sessions against the rivals; PREREG-2's F2b continuity questions on
+  sqlite-utils and cargo; and a 12-session track with 18 questions on stated, corrected, discovered and
+  continuity facts.
+- **Run:** headless on a Claude Pro token, one arm at a time, Sonnet 5.5 as task model and judge, 2 to 3 runs
+  per question. About $70 API-equivalent.
+
+| | mimi | Auto-memory | claude-mem | Best other rival | No memory |
+|---|---|---|---|---|---|
+| Rivals track, 10 questions | **0.94** | 0.11 | 0.47 | recall 0.56 | — |
+| F2b continuity, 8 questions on two repos | **0.89** | 0.17 | 0.25 | — | 0.21 |
+| Long track, 18 questions | **0.94** | 0.44 | 0.40 | recall 0.61 | 0.21 |
+
+- mimi beat every rival under PREREG-3's rule, and beat auto-memory on continuity by +0.72 (95% interval
+  +0.46 to +0.94).
+- **mimi's lead depends on `/mimi-close`.** Never closed, it scored 0.43, a tie with auto-memory, with the most
+  wrong claims of any arm.
+- **Automatic capture wins on facts the agent read in files:** claude-mem and recall 0.88, mimi 0.75.
+- **The scope fix works** (both dropped facts now 1.00), **but Run 1 fails its no-regression rule:** a decision
+  stored in `decisions.md` was missed (1.00 → 0.33), because `index` lists headings for memory files but not
+  for `decisions.md`. Open bug.
+- **The task model changed.** Stage 1 ran Sonnet 5, the bench Sonnet 5.5. On Sonnet 5.5, auto-memory saved
+  something in only 6 of 25 write sessions, so its low scores here say more about the model than about Stage
+  1's result.
 
 ---
 
@@ -303,10 +342,11 @@ Open limitations of mimi as it ships today:
 
 - **Retrieval:** on public repositories it was slightly worse than no memory (0.76 against 0.81). The
   fixes for that are applied but not yet re-measured.
-- **Continuity:** the lead over built-in auto-memory rests on 4 questions, with a lower bound of +0.02.
-  Eight more are pre-registered and have not run.
-- **The `/mimi-close` scope fix is not re-measured.** It passes the self-test but has not been re-run
-  against the tasks that exposed the bug.
+- **Continuity:** on Sonnet 5.5 the lead over auto-memory is large (+0.72 on 8 questions), but auto-memory
+  saved little on that model. On Sonnet 5 the lead rested on 4 questions, with a lower bound of +0.02.
+- **Index of decisions and issues:** `index` lists headings only for `mimi/memory/` files, so a decision can
+  be missed when another file looks like the answer (bench R7, 1.00 → 0.33).
+- **Discovered facts:** tools that record automatically keep more of what the agent read in files.
 - **Write cost:** each `/mimi-close` costs about $0.48. mimi is the cheapest per answer, but closing every
   session is not free.
 - **Who wrote the tests:** the author wrote the facts and sessions for every experiment. Stage 1 reduced
@@ -316,8 +356,8 @@ Open limitations of mimi as it ships today:
 - **Local by default:** `mimi/` is git-ignored, so memory is not shared or backed up by git unless you
   delete `mimi/.gitignore`. The evaluations tracked the memory files in the repository; agents load
   imported files either way.
-- **Manual close:** memory is only as current as the last `/mimi-close`. `/mimi-logging` shows how many
-  sessions ended without one.
+- **Manual close:** memory is only as current as the last `/mimi-close`. Never closed, mimi tied auto-memory
+  (bench D0). `/mimi-logging` shows how many sessions ended without one.
 
 **Total spend:** about $3.7 for Adopt, $1.4 for the two Check attempts, about $7 for Experiment 1, about
 $2.5 for Experiment 2, about $8.8 for the write sessions, about $2 for recall, about $18 for the Opus reruns (Experiment 6: $6.0 retrieval, $9.3 write sessions, $2.8 recall) and about $1.5 for the `/session-close` smoke
@@ -334,4 +374,5 @@ not captured; resumes $1.65). Judging is extra. That comes to roughly $55–65, 
 | `eval/harness/stage1.sh`, `pilot.sh`, `proxy.py`, `tokens.py`, `analyze.py` | Experiment 8 driver, token-logging proxy, token accounting and bootstrap analysis |
 | `eval/public/` | Experiment 7: `PROTOCOL.md`, and per repository the task files, `RESULTS.md`, verdicts and memory snapshots |
 | `eval/stage1/` | Experiment 8: pre-registrations, task files and results |
+| `eval/bench/` | Experiment 9: runner, pre-registration, long-track tasks, answers, memory dumps and results |
 | `eval/stress/s1/` | The script stress suite (`uv run --no-project --with pytest pytest eval/stress/s1`) |

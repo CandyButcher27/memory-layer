@@ -1,0 +1,27 @@
+# f2b-sqlite  (model sonnet; score = mean over available judges; 12 question-runs judged)
+
+## all
+arm     n   score   wrong    tokens  tools    cost
+D      12    0.92    0.00     57127    0.8   0.038
+N      12    0.08    0.25     92442    2.0   0.044
+M      12    0.25    0.00     57182    0.8   0.057
+A      12    0.17    0.33    111308    2.9   0.053
+D-N: +0.83  95% CI [+0.50, +1.00]  (4 questions)
+D-M: +0.67  95% CI [+0.25, +1.00]  (4 questions)
+D-A: +0.75  95% CI [+0.50, +1.00]  (4 questions)
+
+## continuity
+arm     n   score   wrong    tokens  tools    cost
+D      12    0.92    0.00     57127    0.8   0.038
+N      12    0.08    0.25     92442    2.0   0.044
+M      12    0.25    0.00     57182    0.8   0.057
+A      12    0.17    0.33    111308    2.9   0.053
+D-N: +0.83  95% CI [+0.50, +1.00]  (4 questions)
+D-M: +0.67  95% CI [+0.25, +1.00]  (4 questions)
+D-A: +0.75  95% CI [+0.50, +1.00]  (4 questions)
+
+## per question (D / N / M / A)
+C3  continuity-changed-decis 1.00 / 0.00 / 0.00 / 0.67
+C4  continuity-experiments   1.00 / 0.00 / 0.00 / 0.00
+C5  continuity-review        0.67 / 0.33 / 0.00 / 0.00
+C6  continuity-blocked       1.00 / 0.00 / 1.00 / 0.00

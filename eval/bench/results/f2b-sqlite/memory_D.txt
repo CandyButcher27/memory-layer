@@ -1,0 +1,175 @@
+===== /home/aryaman/bench/f2b-sqlite/wr/D/mimi/.gitignore
+*
+
+===== /home/aryaman/bench/f2b-sqlite/wr/D/mimi/.ignore
+!*
+
+===== /home/aryaman/bench/f2b-sqlite/wr/D/mimi/ISSUES.md
+# Issues
+<!-- Append-only, one entry per bug:
+"## ISS-<n> — <title>" heading, then
+Symptom: exact error text or observed behavior
+Cause: root cause
+Fix: commit hash
+Test: the test that fails without the fix
+Status: open | fixed -->
+
+## ISS-1 — sqlite-utils 4.2 crashes on startup without dev dependencies
+Symptom: `sqlite-utils` 4.2 crashed on import when installed without the dev group (issue #842); `typing_extensions` was imported in `sqlite_utils/db.py` but is not a runtime dependency.
+Cause: `from typing_extensions import Self` for `Database.__enter__` annotation; dev group masked the missing dependency in tests.
+Fix: f6d7311 (released 4.2.1, 28dc627). CI smoke test `uv run --no-default-groups sqlite-utils --help`, also `just test-no-dev-dependencies` (56dd097).
+Test: CI step "Check no accidental dev= dependencies needed" in `.github/workflows/test.yml`
+Status: fixed
+
+## ISS-2 — SpatialLite apt install 404s in CI
+Symptom: CI `apt-get install libsqlite3-mod-spatialite` failed with a 404 fetching libminizip1t64 from security.ubuntu.com.
+Cause: stale apt package lists on the runner image; the old .deb was pulled from the mirror.
+Fix: f7e3174 (test.yml), 85b1be1 (test-coverage.yml): `apt-get update && apt-get install -y`.
+Test: CI SpatialLite install step
+Status: fixed
+
+## ISS-3 — ResourceWarning from buffered readers in rows_from_file
+Symptom: unclosed-file ResourceWarnings under `pytest -Wall` (spotted in a downstream project's `just test -Wall`).
+Cause: format-detection buffered wrapper in `sqlite_utils/utils.py` was never closed.
+Fix: 6bc1d33
+Test: tests/test_rows_from_file.py
+Status: fixed
+
+## ISS-4 — transaction cleanup masked IntegrityError
+Symptom: `OperationalError: no such savepoint` / `cannot rollback - no transaction is active` raised instead of the original `sqlite3.IntegrityError` after a RAISE(ROLLBACK) trigger or INSERT OR ROLLBACK in `atomic()`/`query()`.
+Cause: those errors destroy the whole transaction and its savepoints; cleanup tried to roll back anyway.
+Fix: d9a0fd2 (cleanup checks `conn.in_transaction` first)
+Test: tests/test_query.py
+Status: fixed
+
+## ISS-5 — tests catching stdlib sqlite3 exceptions fail under sqlean
+Symptom: test_create_table_compound_foreign_key_enforced failed with sqlean installed.
+Cause: sqlean's IntegrityError is not a subclass of stdlib `sqlite3.IntegrityError`.
+Fix: 658185d (import sqlite3 from `sqlite_utils.utils` in tests). sqlean support later removed in afbfd95.
+Test: tests/test_foreign_keys.py
+Status: fixed
+
+===== /home/aryaman/bench/f2b-sqlite/wr/D/mimi/MIMI.md
+## Memory (mimi)
+
+Check this before grepping the repo. Everything mimi keeps is in `mimi/`, and the current state loads automatically:
+
+@STATE.md
+
+### Where to look
+- Something broke, or a symptom looks familiar → `mimi/ISSUES.md` (search the exact error text)
+- About to change an existing choice (library, schema, provider, architecture) → `mimi/decisions.md`
+- Touching an external system (API, database, deploy, credentials) → `mimi/memory/external.md` — contains: Tests fail on old SQLite 3.23.1 in the SQLite-version CI matrix; Runtime import of a dev-only package crashes the installed CLI; Cog check fails with older click; `just docs` fails with "refusing to fetch into branch 'refs/heads/main'"; Nightly analyze-tables job to Slack is blocked on prod access (SEC-2210); Reviewer asks for a changelog entry on a PR
+
+Every file in `mimi/memory/` gets one line above saying when to read it. A file with no line is never read. `index` appends each file's `##` headings to its line, so a task can match a trap by name, and marks a file that holds nothing yet as `— empty`: skip those.
+
+Memory holds only what someone wrote down. When it has nothing on the question, that is not an answer: search `git log --grep`, the issue tracker and the code before concluding.
+
+### What to write, and where
+- Bug fixed → append to `mimi/ISSUES.md`: exact symptom text, cause, fix commit, test.
+- Choice someone could argue again → append to `mimi/decisions.md`: why, what was rejected, what would reverse it.
+- Fact the code cannot tell you → `mimi/memory/<topic>.md`: external-system quirks, measured numbers with date and sample size, why something non-obvious exists, environment traps. Give each trap its own `##` heading, named the way a task would describe it (error text, library, table, command). Keep one `Last verified:` line per file, dated when its facts were last checked.
+- End of a work session → overwrite `mimi/STATE.md` (or run the `mimi-close` skill). Finished work leaves it.
+- Code change alone → nothing. Git has it.
+- After any memory edit: run `python "$HOME/.claude/skills/mimi/memlayer.py" index .`, then `python "$HOME/.claude/skills/mimi/memlayer.py" check .` and fix what it prints until it says clean.
+
+Before writing any line: could someone learn this in under a minute from the code or a command? If yes, do not write it. Ask it of each fact on its own, not of the message the fact came in: a number, date, measurement, deadline, decision or constraint that a person stated is never in the code, even when the code touches the same topic, and a fact about the user's own systems, team or downstream use of this code is kept even when this repository never touches it. Every fact needs something checkable behind it: a commit, an issue ID, a command, a date. A wrong line gets fixed or deleted, never a correct one added beside it. Split `mimi/memory/` by external boundary or subsystem, not by code folder, and only after a real miss.
+
+`mimi/` is ignored by git through `mimi/.gitignore`, so this memory stays on this machine. Delete that file to share it through git.
+
+Find rot: `python "$HOME/.claude/skills/mimi/memlayer.py" check .`
+
+===== /home/aryaman/bench/f2b-sqlite/wr/D/mimi/STATE.md
+# State
+Goal: sqlite-utils — CLI tool and Python library for manipulating SQLite databases (pyproject.toml)
+
+## Deployed
+Latest release: 4.2.1 (28dc627, 2026-08-13); published to PyPI via .github/workflows/publish.yml
+
+## Broken
+- User report (told 2026-10-04): `sqlite-utils memory data.csv "select ..."` is very slow on a 2 GB CSV. Not reproduced here.
+
+## Open threads
+- Slow `memory` on 2 GB CSV: code read only, no profile yet. Suspects at sqlite_utils/cli.py:2192-2200 (TypeTracker, then transform() rebuilds the table) and the in-memory db at cli.py:2158. User reports: `--no-detect-types` roughly halves the time, `--encoding utf-8` changes nothing, on-disk `sqlite-utils insert` of the same file is fast.
+- Add type hints to `insert_upsert_implementation` signature in sqlite_utils/cli.py (not started; see DEC-4 in mimi/decisions.md)
+- User's `rows` docs PR (docs/cli.rst): the user is writing the `--offset`-without-`--limit` (`LIMIT -1`) note themselves; the `--where` with `-p` example already exists at docs/cli.rst:714 (3b632f0). Nothing for the agent to do unless asked.
+- Nightly analyze-tables to Slack: parked (told 2026-10-04) until SEC-2210 is approved; see mimi/memory/external.md. Nothing to do until the user says it cleared.
+
+## Next 3
+1. Ask the user for a py-spy profile: `py-spy record -o profile.svg --native -- sqlite-utils memory data.csv "select ..."`, plus one with `--no-detect-types` to explain the remaining half
+2. Add type hints to `insert_upsert_implementation` (36 params), keeping the signature otherwise unchanged
+3. none
+
+## Last session (2026-10-04)
+Branch: detached HEAD at 6bc1d33
+Uncommitted: CLAUDE.md (untracked)
+Stopped at: read-only look at `analyze-tables` (cli.py:3029-3137, db.py:5299) for the nightly Slack job; no code or docs changed; job parked on SEC-2210
+Tried, failed: none (earlier: dataclass for insert_upsert_implementation params, rejected, see DEC-4)
+Resume with: send the py-spy request to the user, then read the profile; otherwise open sqlite_utils/cli.py:1061 and annotate the parameters
+
+Last updated: 2026-10-04
+
+===== /home/aryaman/bench/f2b-sqlite/wr/D/mimi/decisions.md
+# Decisions
+<!-- One short entry per choice someone might argue again:
+"## DEC-<n> — <choice>" heading, then
+Why:
+Rejected: <alternative> — <reason>
+Reverse if: <condition that would change the answer>
+Date:
+Never edit an old entry's reasoning. Add a new one and mark the old "Superseded by DEC-<m>". -->
+
+## DEC-1 — Database() rejects Python 3.12+ autocommit= connections
+Why: with `autocommit=True` commit() is a no-op and with `autocommit=False` the connection is always in a transaction; library writes looked fine in-process but were discarded on close. Raising TransactionError beats silent data loss.
+Rejected: supporting both modes — writes silently lost.
+Reverse if: the library adapts its transaction handling to the PEP 249 autocommit attribute.
+Date: 2026-07-04 (bcd9a26)
+
+## DEC-2 — Database context manager rolls back on exit instead of committing
+Why: open transactions only come from manual transaction control; auto-committing could persist half-finished work. Deliberately differs from sqlite3.Connection's context manager.
+Rejected: commit on exit like sqlite3.Connection — persists partial work.
+Reverse if: none recorded.
+Date: 2026-07-04 (6c88067)
+
+## DEC-3 — rejected write PRAGMAs in db.query() are documented, not fixed
+Why: some PRAGMAs cannot run inside a transaction, so they run outside the savepoint guard; e.g. `PRAGMA user_version = 5` takes effect despite the ValueError. A fix would need a hardcoded list of row-returning PRAGMAs.
+Rejected: hardcoded PRAGMA list — maintenance burden.
+Reverse if: SQLite exposes a reliable way to tell row-returning PRAGMAs apart.
+Date: 2026-07-06 (6693491, refs issue #769)
+
+## DEC-4 — insert_upsert_implementation keeps its 36-parameter signature; only type hints get added
+Why: plugins call `insert_upsert_implementation` directly, so it is effectively public API; replacing the parameters with a dataclass would break them. Decided with Simon (maintainer), 2026-10-04.
+Rejected: dataclass for the parameters — breaks plugin callers.
+Reverse if: a deprecation path for plugin callers is agreed.
+Date: 2026-10-04
+
+===== /home/aryaman/bench/f2b-sqlite/wr/D/mimi/memory/external.md
+# External systems
+<!-- Only what the code cannot tell you: provider quirks, deferred constraints, what the deploy runs,
+which credentials reach what, environment traps. Move a topic to its own file once it passes ~40 lines. -->
+
+Last verified: 2026-09-01
+
+## Tests fail on old SQLite 3.23.1 in the SQLite-version CI matrix
+`test-sqlite-support.yml` runs against SQLite 3.46 and 3.23.1 (2018, before UPSERT). 3.23.1 has no RETURNING (needs 3.35; 2582446), rejects a UTF-8 BOM before the first token, and before 3.36 selecting rowid from a view returns NULL instead of erroring (c2a1774). Use `sqlite_master`, not `sqlite_schema`, for older SQLite (b432e68).
+
+## Runtime import of a dev-only package crashes the installed CLI
+Dev dependency groups hide missing runtime deps in tests (4.2 crash, ISS-1). Check with `just test-no-dev-dependencies` (`uv run --isolated --no-default-groups sqlite-utils --help`).
+
+## Cog check fails with older click
+`cog --check` in `just lint` needs click>=8.4.2, pinned in dev deps (79117b9, issue #761).
+
+## `just docs` fails with "refusing to fetch into branch 'refs/heads/main'"
+Fixed by a workaround in `docs/conf.py` (5f81752); the author notes they do not understand why it works, so do not simplify it away.
+
+## Nightly analyze-tables job to Slack is blocked on prod access (SEC-2210)
+User plans a nightly `sqlite-utils analyze-tables` on the production ingest database, posting to Slack. Parked 2026-10-04 until security approves read access to the prod bucket (ticket SEC-2210). Credentials will come from the IAM role `ingest-analyzer-ro`; keys must never be hardcoded in the job. The command only takes a local file path (`exists=True`, cli.py:3032), so the job must fetch a copy first. Output is plain text, no JSON mode (cli.py:3074-3137); do not use `--save` on prod, it writes `_analyze_tables_` into the DB.
+
+## Reviewer asks for a changelog entry on a PR
+Do not add one: the changelog is written at release time, not per PR (Alex, the reviewer, told 2026-10-04 on the `rows` docs PR).
+
+===== CLAUDE.md
+<!-- memory-layer:start -->
+@mimi/MIMI.md
+If mimi/MIMI.md is not already in your context, read it and mimi/STATE.md before starting any task.
+<!-- memory-layer:end -->

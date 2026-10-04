@@ -1,0 +1,276 @@
+===== /home/aryaman/bench/long/wr/K/.recall/.capture.json
+{"d6f3b792-0adc-4cec-99fd-ebad579ffd1a": 179464, "da1ea942-1ec7-4e7c-8c98-d586efce5197": 176899, "4367d76f-a095-4ee7-a743-d31a2fc57e67": 285882, "c2452f67-5458-4350-b133-581e99d0a640": 199984, "68209fac-0f87-4590-aac2-faaaf32eb029": 187188, "95e569b6-e319-413a-81c5-1c383c22fa0b": 172300, "3e752cc8-6b4f-44df-9339-71fc69b32735": 222642, "6bb61fe5-99f6-4380-8572-f2fd8da4fb38": 179439, "f9548c02-7c54-4a06-b635-5b275c473157": 187743, "b3ed8d8f-5fcb-447d-a939-4a3ff8b23670": 236632, "d79216e4-7af2-408e-88af-127d2cb96918": 198732, "bd4075c6-e447-42e0-b31f-44de65f0ba2c": 173126}
+===== /home/aryaman/bench/long/wr/K/.recall/history.md
+# Recall History — K
+
+
+## Session d6f3b792 — 2026-10-04 08:16
+
+**You:** Morning. Quick orientation question: where does sqlite-utils define the `insert` CLI command and its options? Context for later: Priyanka runs the on-call rotation for our ingest service, so anything that pages goes to her first.
+  - `Bash: grep -rn "def insert\b\|def insert_upsert_options\|def insert_upsert_implementation\|^def insert" sqlite_utils/cli.py`
+  - `Bash: sed -n 975,1000p sqlite_utils/cli.py; echo ----; sed -n 1295,1400p sqlite_utils/cli.py`
+
+**Claude:** The `insert` command lives in `sqlite_utils/cli.py`.
+
+- **Command definition:** `insert()` is at `sqlite_utils/cli.py:1355`. It's registered with `@cli.command()` and carries three options of its own: `--ignore`, `--replace` and `--truncate`.
+- **Shared options:** `insert_upsert_options()` at `cli.py:979` is a decorator factory. It adds the `path`, `table` and `file` arguments plus most of the options (`--pk`, `--code`, `--flatten`, `--nl`, `--csv`, `--tsv`, `--convert`, `--batch-size`, `--alter` and so on). `upsert` reuses it with `require_pk=True`.
+- **Implementation:** the real work is in `insert_upsert_implementation()` at `cli.py:1061`. It does the format sniffing, runs `--convert`, and inserts the documents.
+
+Related: `insert_files` at `cli.py:2906` is a separate command.
+
+I've noted that Priyanka is first on the page for the ingest service's on-call rotation.
+
+**You:** Thanks. What's the default batch size for inserts in the Python API? Just the number and where it's set.
+  - `Bash: grep -n "batch_size" sqlite_utils/db.py | head -30`
+
+**Claude:** **100**, set as the default `batch_size: int = 100` in the `Database` constructor at `sqlite_utils/db.py:2294`. `Table.insert_all` picks it up through `value_or_default` at `db.py:4706`.
+
+The effective size can be lower. It's capped at `SQLITE_MAX_VARS // num_columns` (`db.py:4816-4819`).
+
+
+## Session da1ea942 — 2026-10-04 08:26
+
+**You:** Last night's ingest run failed. The log is at /tmp/incoming/ingest-2026-09-30.log. What went wrong, and is it a sqlite-utils bug or our data?
+  - `Bash: wc -l /tmp/incoming/ingest-2026-09-30.log; tail -n 60 /tmp/incoming/ingest-2026-09-30.log`
+
+**Claude:** **It's our data, not a sqlite-utils bug.**
+
+**What happened:**
+- The run pulled 96 pages (47,850 rows) from the partner API and loaded them into `orders`.
+- It then loaded the vendor file `orders_0930.csv` into the same table with `db["orders"].insert_all(rows, pk="order_id", batch_size=1000)` (`ingest/load.py:88`).
+- At row 48211 of the CSV it hit `order_id=A-559301`. That order had already been loaded from partner API page 41.
+- SQLite raised `UNIQUE constraint failed: orders.order_id`. The run aborted with 0 rows committed from the CSV.
+
+**Why it isn't sqlite-utils:**
+- `insert_all` is a plain `INSERT`. Unless you pass `ignore=True` or `replace=True`, or use `upsert_all`, it is meant to raise on a primary-key collision.
+- The traceback is the library passing the `sqlite3.IntegrityError` straight through.
+
+**The cause is on our side.** The two sources overlap, and the loader assumes they don't. I only have the log, so I haven't confirmed what the overlap looks like.
+
+**Possible fixes in `load_orders`:**
+- Switch to `upsert_all(rows, pk="order_id", batch_size=1000)` if the CSV should win or the rows are equivalent.
+- Use `insert_all(..., ignore=True)` if the API copy should win.
+- Dedupe the CSV against existing IDs before loading, if you want to inspect the conflicts.
+
+**Before rerunning:**
+- The log only reports the first collision. There are probably more, since the CSV has at least 48k rows against a 47,850-row API load.
+- It's worth checking how many `order_id`s overlap and whether the overlapping rows differ. That decides between upsert and ignore.
+- The log doesn't show whether the 47,850 API rows were committed. Check the table before rerunning, so you don't double-process them.
+
+I can look at `ingest/load.py` and the CSV if you point me at them. They aren't in this repo (`/home/aryaman/bench/long/wr/K`).
+
+**You:** OK, makes sense. Some background for the fix: the partner API we pull orders from returns at most 500 rows per page, so the loader pages through it, and the nightly batch kicks off at 01:00 UTC. Does `insert --pk` with `--ignore` skip duplicates silently, or does it report them?
+
+**Claude:** It skips them silently. `--ignore` makes sqlite-utils issue `INSERT OR IGNORE`, so rows that collide on the primary key are dropped. It doesn't log them, warn, or print a skipped count, and the exit code is 0. The Python equivalent, `insert_all(..., ignore=True)`, behaves the same way.
+
+- **Counting skipped rows:** Compare `select count(*)` before and after the load, or compare the CSV row count against the number of rows added. Or pre-check the overlap with a join or `NOT IN` against existing `order_id`s.
+- **Existing rows win:** `--ignore` keeps the existing row untouched. If the vendor CSV has newer or corrected data for the same `order_id`, it's discarded. Use `--replace` (or `upsert`) if the CSV should win.
+- **Other constraint violations:** `OR IGNORE` also swallows `NOT NULL` and `CHECK` violations, not just PK collisions. A malformed row would be dropped just as quietly.
+
+Your background figures fit the log: 95 full pages of 500 plus a final page of 350 gives 47,850. So the API pull looks complete. Overlap between API and CSV is the only problem I can see.
+
+Because `--ignore` hides the overlap, I'd count the collisions in the first rerun (or log them in the loader), so a change in the overlap shows up.
+
+
+## Session 4367d76f — 2026-10-04 08:44
+
+**You:** Let's add a `--since` option to `sqlite-utils rows` that filters on a timestamp column. Plan: (1) add keyword-only `since` and `since_column` parameters to `Table.rows_where()` in sqlite_utils/db.py, (2) wire `--since` and `--since-column` into the `rows` command in sqlite_utils/cli.py, (3) tests and docs. Do step 1 only. Our ingest box runs Python 3.10, so nothing newer than 3.10 syntax.
+  - `Bash: git branch --show-current; grep -n "def rows_where" -A 60 sqlite_utils/db.py`
+  - `Bash: python - <<'EOF' p = "sqlite_utils/db.py" s = open(p).read() old_sig = """ limit: int | None = None, offset: int | None = None, ) -> Generator[dict[str, Any], N`
+  - `Bash: which python3 uv; ls`
+
+**Claude:** I'll rerun using `uv run` (the project uses uv).
+  - `Bash: cat > /tmp/edit.py <<'EOF' p = "sqlite_utils/db.py" s = open(p).read() old_sig = """ limit: int | None = None, offset: int | None = None, ) -> Generator[dict[st`
+  - `Bash: sleep 60; cat /tmp/claude-1001/-home-aryaman-bench-long-wr-K/4367d76f-a095-4ee7-a743-d31a2fc57e67/tasks/b08fh4g6h.output; cd /home/aryaman/bench/long/wr/K && gi`
+  - `Monitor: until [ -s /tmp/claude-1001/-home-aryaman-bench-long-wr-K/4367d76f-a095-4ee7-a743-d31a2fc57e67/tasks/b08fh4g6h.output ] && grep -qE "passed|failed|error" /tmp/c`
+  - `Bash: git diff --stat; cat /tmp/claude-1001/-home-aryaman-bench-long-wr-K/4367d76f-a095-4ee7-a743-d31a2fc57e67/tasks/b08fh4g6h.output`
+  - `Monitor: until grep -qE "[0-9]+ (passed|failed)|error" /tmp/claude-1001/-home-aryaman-bench-long-wr-K/4367d76f-a095-4ee7-a743-d31a2fc57e67/tasks/b08fh4g6h.output; do sle`
+  - `Bash: tail -5 /tmp/claude-1001/-home-aryaman-bench-long-wr-K/4367d76f-a095-4ee7-a743-d31a2fc57e67/tasks/b08fh4g6h.output`
+
+**Claude:** Step 1 is edited and passing my smoke test. I'm waiting on the full pytest run to finish.
+  - `Monitor: until grep -qE "[0-9]+ (passed|failed)|rror" /tmp/claude-1001/-home-aryaman-bench-long-wr-K/4367d76f-a095-4ee7-a743-d31a2fc57e67/tasks/b08fh4g6h.output | tail -`
+
+**Claude:** The full pytest run is still going. I'll report when the monitor fires.
+
+**You:** <task-notification>
+<task-id>bh8u01m93</task-id>
+<tool-use-id>toolu_01WoZWe1k7LjScGBXKrw1GhV</tool-use-id>
+<output-file>/tmp/claude-1001/-home-aryaman-bench-long-wr-K/4367d76f-a095-4ee7-a743-d31a2fc57e67/tasks/bh8u01m93.output</output-file>
+<status>completed</status>
+<summary>Monitor "pytest final result" stream ended</summary>
+<event>[2, 3]
+[3]
+[3]
+[1, 2, 3]
+since requires since_column</event>
+</task-notification>
+
+**Claude:** That monitor ended early because of a bug in my loop, not because pytest finished. The output still has no pytest summary, so I'm checking whether it's still running.
+  - `Bash: pgrep -af "pytest" | head -3; tail -3 /tmp/claude-1001/-home-aryaman-bench-long-wr-K/4367d76f-a095-4ee7-a743-d31a2fc57e67/tasks/b08fh4g6h.output`
+
+**Claude:** Pytest is still running (PID 183039), so the notification doesn't mean it finished. I'll watch for the process to exit, then read the result.
+  - `Bash: while kill -0 183039 2>/dev/null; do sleep 3; done; tail -4 /tmp/claude-1001/-home-aryaman-bench-long-wr-K/4367d76f-a095-4ee7-a743-d31a2fc57e67/tasks/b08fh4g6h.`
+
+**Claude:** Step 1 is edited and passes my smoke test, but the full pytest run hasn't finished. I'm waiting on it and will report the result.
+
+**What changed** in `sqlite_utils/db.py`: `Table.rows_where()` now takes keyword-only `since` and `since_column`. There are no new imports, and `str | None` was already used in the file and works on 3.10.
+- **Filter:** it adds `quote_identifier(since_column) >= <since>`.
+- **Existing `where`:** this is wrapped in parentheses, so a `where` containing `or` still behaves.
+- **Bind parameters:** with a dict `where_args` it binds `:_since` on a copy of the dict. With a sequence or `None` it appends the value to a new list and uses `?`. The caller's `where_args` is not mutated.
+- **Missing column:** passing `since` without `since_column` raises `ValueError`.
+
+**Smoke test** on an in-memory table with 3 rows:
+- `since` alone: `[2, 3]`
+- `since` with a positional `where`: `[3]`
+- `since` with a named `where` containing `or`: `[3]`
+- no `since`: `[1, 2, 3]` (unchanged)
+- `since` without `since_column`: raises the `ValueError`
+
+**Notes:**
+- The `uv run` environment uses CPython 3.12, not your 3.10, so I haven't run it on 3.10.
+- I also haven't run the tests on 3.10. I used no syntax newer than 3.10.
+- I haven't added tests or docs for this yet, since those are step 3.
+
+I'm working on `HEAD`, which is detached, and nothing is committed.
+
+**You:** <task-notification>
+<task-id>b08fh4g6h</task-id>
+<tool-use-id>toolu_014y1MhHHfssQw59Nx9kMci1</tool-use-id>
+<output-file>/tmp/claude-1001/-home-aryaman-bench-long-wr-K/4367d76f-a095-4ee7-a743-d31a2fc57e67/tasks/b08fh4g6h.output</output-file>
+<status>completed</status>
+<summary>Background command "cat &gt; /tmp/edit.py &lt;&lt;'EOF'
+p = "sqlite_utils/db.py"
+s = open(p).read()
+old_sig = """        limit: int | None = None,
+        offset: int | None = None,
+    ) -&gt; Generator[dict[str, Any], None, None]:
+        \"\"\"
+        Iterate over every row in this table or view that matches the specified where clause.
+"""
+new_sig = """        limit: int | None = None,
+        offset: int | None = None,
+        *,
+        since: str | None = None,
+        since_column: str | None = None,
+    ) -&gt; Generator[dict[str, Any], None, None]:
+        \"\"\"
+        Iterate over every row in this table or view that matches the specified where clause.
+"""
+assert s.count(old_sig) == 1
+s = s.replace(old_sig, new_sig)
+old_doc = """        :param offset: Integer for SQL offset
+        \"\"\"
+        if not self.exists():
+            return
+        sql = f"select {select} from {quote_identifier(self.name)}"
+        if where is not None:
+            sql += " where " + where
+"""
+new_doc = """        :param offset: Integer for SQL offset
+        :param since: Only return rows where ``since_column`` is greater than or equal to this value
+        :param since_column: Timestamp column that ``since`` is compared against
+        \"\"\"
+        if since is not None and since_column is None:
+            raise ValueError("since requires since_column")
+        if not self.exists():
+            return
+        sql = f"select {select} from {quote_identifier(self.name)}"
+        if since is not None:
+            since_sql = f"{quote_identifier(since_column)} &gt;= "
+            if isinstance(where_args, dict):
+                where_args = {**where_args, "_since": since}
+                since_sql += ":_since"
+            else:
+                where_args = [*(where_args or []), since]
+                since_sql += "?"
+            where = since_sql if where is None else f"({where}) and {since_sql}"
+        if where is not None:
+            sql += " where " + where
+"""
+assert s.count(old_doc) == 1
+s = s.replace(old_doc, new_doc)
+open(p, "w").write(s)
+EOF
+python3 /tmp/edit.py &amp;&amp; cat &gt; /tmp/t.py &lt;&lt;'EOF'
+import sqlite_utils
+db = sqlite_utils.Database(memory=True)
+db["t"].insert_all([{"id":1,"ts":"2026-01-01"},{"id":2,"ts":"2026-06-01"},{"id":3,"ts":"2026-09-01"}])
+t = db["t"]
+print([r["id"] for r in t.rows_where(since="2026-05-01", since_column="ts")])
+print([r["id"] for r in t.rows_where("id &gt; ?", [1], since="2026-07-01", since_column="ts")])
+print([r["id"] for r in t.rows_where("id &gt; :i or id = 1", {"i": 1}, since="2026-07-01", since_column="ts")])
+print([r["id"] for r in t.rows_where()])
+try: list(t.rows_where(since="x"))
+except ValueError as e: print(e)
+EOF
+uv run python /tmp/t.py; uv run pytest tests -q -x 2&gt;&amp;1 | tail -3; git diff --stat" completed (exit code 0)</summary>
+</task-notification>
+  - `Bash: tail -8 /tmp/claude-1001/-home-aryaman-bench-long-wr-K/4367d76f-a095-4ee7-a743-d31a2fc57e67/tasks/b08fh4g6h.output`
+
+**Claude:** Step 1 is done: the full suite passes (1497 passed, 16 skipped, 0 failed). That was on CPython 3.12 under `uv run`, not your 3.10. I used no syntax newer than 3.10.
+
+The only change is 16 added lines in `sqlite_utils/db.py`. `Table.rows_where()` now takes keyword-only `since` and `since_column`. Passing `since` without `since_column` raises `ValueError`.
+
+I haven't added tests for the new parameters yet, so the existing suite only shows nothing broke. My smoke test did exercise `since` on its own, with a positional `where`, and with a named `where` containing `or`.
+
+Nothing is committed, and I'm on a detached `HEAD`. Your workflow wants a feature branch, so I'll create one (e.g. `feat/rows-since`) before committing. I'm stopping here until you say to go on to step 2.
+
+**You:** Good. Unrelated: we turned WAL mode off on the ingest database on purpose, because the database file lives on EFS and WAL doesn't work on a network filesystem. Stop here for today.
+
+**Claude:** Noted: WAL stays off on the ingest database because the file lives on EFS. I haven't touched any WAL or journal-mode setting in this work, and `since` and `since_column` don't interact with it.
+
+Stopping here. State for next time:
+- Step 1 is edited in `sqlite_utils/db.py` and uncommitted, on a detached `HEAD`.
+- Steps 2 (CLI `--since` and `--since-column`) and 3 (tests and docs) are not started.
+- Recall is logging this session to `.recall/history.md`. Run `/recall:save` if you want the context saved for next time.
+
+
+## Session c2452f67 — 2026-10-04 08:58
+
+**You:** Different problem. `sqlite-utils memory` on our 40 vendor CSVs grows to about 6 GB RSS and gets OOM-killed. Where does the memory command load each file?
+  - `Bash: grep -n "def memory\|def file_paths_from_args\|def _load_files\|def _import_csv\|rows = \|list(\|\.read()\|tracker\|memory_one\|:memory:" sqlite_utils/cli.py |`
+  - `Read: /home/aryaman/bench/long/wr/K/sqlite_utils/cli.py`
+  - `Bash: grep -n "def rows_from_file" -A60 sqlite_utils/utils.py | grep -n "CSV\|csv\|read\|list\|yield\|return"`
+  - `Read: /home/aryaman/bench/long/wr/K/sqlite_utils/utils.py`
+
+**Claude:** Each file is loaded in the `memory` command in `sqlite_utils/cli.py:2105`, in the loop at lines 2167–2213.
+
+For each path, the loop does three things:
+
+- **Open and parse:** it opens the file with `file_path.open("rb")` and calls `rows_from_file(fp, ...)` (`utils.py:347-359`). For CSV this is a lazy `csv.DictReader`, so the file is streamed row by row.
+- **Insert:** it runs `db.table(file_table).insert_all(rows, alter=True)` (line 2198). This inserts in batches, so it doesn't hold a whole file in Python memory either.
+- **Type tracking:** unless you pass `--no-detect-types`, `TypeTracker` wraps the rows and then calls `.transform(types=...)` at the end (lines 2192–2200). I haven't checked what `TypeTracker` retains per row.
+
+The likely cause is line 2158, `db = sqlite_utils.Database(memory=True)`. All 40 files go into that one in-memory SQLite database and stay there until the process exits. RSS therefore scales with the combined size of the data, plus indexes and SQLite page overhead.
+
+The `transform(types=...)` step is also a candidate. It rebuilds each table by copying it into a new one, so peak memory can briefly be about double that table's size. That would add to the total, but it wouldn't be the main cause.
+
+I haven't profiled this, so the above is from reading the code. I also haven't checked the `.recall/` or modified `db.py` state in this repo. If you want to confirm it, run one file with `--no-detect-types` and compare RSS.
+
+Some ways to avoid the problem:
+
+- **Use `--save`:** the data still passes through the in-memory database first, so this doesn't help.
+- **Use a file-backed database:** `sqlite-utils insert vendors.db <table> file.csv --csv` per file, then query with `sqlite-utils vendors.db "..."`. This keeps memory flat.
+- **Add a flag to `memory`:** a change to back the database with a temp file instead of `memory=True` would fix it in the tool. I haven't made that change.
+
+**You:** Two things I've ruled out: it isn't the number of files, a single 2 GB file does the same; and it isn't SQLite's page cache, setting `PRAGMA cache_size` small changed nothing. My next suspect is that the CSV is read fully into Python before the insert. Let's stop; next time I want to try it with `--no-detect-types`. For context, Tomás owns the vendor relationship, and the vendor contract ends on 2027-03-31, after which their semicolon CSV feed stops.
+
+**Claude:** Stopping here. Two notes for when you pick it back up.
+
+- **Your 2 GB result fits the in-memory database too.** With `Database(memory=True)`, the SQLite pages are the storage, so `PRAGMA cache_size` doesn't cap them. A 2 GB CSV landing in that database would use multiple GB whether or not it's read fully into Python first. So `--no-detect-types` won't separate "CSV read fully into Python" from "data held in the in-memory DB". To separate them, run the same file through `sqlite-utils insert test.db t file.csv --csv` (file-backed) and compare RSS.
+- **The semicolon feed may be a separate issue.** From what I read of `rows_from_file`, the explicit `:csv` path uses a plain `csv.DictReader` with the default comma delimiter. I didn't read the detection branch. If the vendor files really are semicolon-delimited, each row may come through as a single wide column. That would affect memory and the schema, and I haven't tested it. Check `sqlite-utils memory file.csv --schema` on a small sample before trusting the results.
+
+I didn't change anything in the repo.
+
+
+## Session 68209fac — 2026-10-04 09:07
+
+**You:** Our nightly insert takes about 6 minutes now. Can the Lambda as configured in /tmp/incoming/lambda.toml actually finish it? Just check the config, don't change anything.
+  - `Read: /tmp/incoming/lambda.toml`
+
+**Claude:** No. The Lambda can't finish a 6-minute insert as configured.
+
+- `timeout_seconds = 300` is 5 minutes, and your insert takes about 6. Lambda kills the invocation at the timeout, so it would be cut off with roughly a minute of work left.
+- If the insert is a single transaction, the kill would roll it back and you'd get nothing.
+- The hard ceiling for Lambda is 900 seconds (15 minutes). Raising the timeout to something like 600–900 would fit the current runtime, with some headroom.
+- The runtime has more room to grow than the config shows. If the insert keeps getting slower, a single Lambda invocation will
