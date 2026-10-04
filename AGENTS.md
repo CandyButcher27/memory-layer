@@ -24,7 +24,7 @@ if none) gets one managed block: `@mimi/MIMI.md` plus a plain line for agents wi
 
 The instruction file imports `mimi/MIMI.md`, which imports `STATE.md`, so each session starts with the map and
 the current state already loaded. The index lines in `mimi/MIMI.md` say which file answers which question, and `memlayer.py index`
-appends each memory file's `##` headings to its line. That lets a task that names a symptom find the
+appends the `##` headings of each memory file and of `mimi/decisions.md` to its line. That lets a task that names a symptom find the
 right file without searching.
 
 ## Modes
@@ -39,7 +39,7 @@ right file without searching.
 
 ```bash
 python memlayer.py init  [dir]   # create mimi/ and the instruction-file import; never overwrites
-python memlayer.py index [dir]   # refresh index lines in mimi/MIMI.md from each memory file's ## headings; idempotent
+python memlayer.py index [dir]   # refresh index lines in mimi/MIMI.md from the ## headings of memory files and decisions.md; idempotent
 python memlayer.py check [dir]   # report rot, exit 1 if any
 python memlayer.py stats [dir]   # usage and token report from session logs, saved to mimi/logs/
 python memlayer.py selftest      # prints SELFTEST_OK

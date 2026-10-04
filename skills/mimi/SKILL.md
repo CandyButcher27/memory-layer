@@ -64,8 +64,9 @@ the topic, so the symptom words come from the file itself:
 
 - Each trap in a memory file gets its own `##` heading, named the way a task would describe it:
   `## Stripe sends the same webhook event twice`, not `## Webhooks`.
-- `python memlayer.py index <project>` appends every file's headings to its index line as
-  `— contains: …`. It marks a memory file, `mimi/ISSUES.md` or `mimi/decisions.md` that holds nothing
+- `python memlayer.py index <project>` appends the headings of every memory file and of `mimi/decisions.md`
+  to its index line as `— contains: …`. `mimi/ISSUES.md` is append-only and found by its symptom text, so
+  its line gets no headings. It marks a memory file, `mimi/ISSUES.md` or `mimi/decisions.md` that holds nothing
   yet as `— empty`, so a task skips it. Run it after any memory edit, then `check`. It is idempotent.
 - The map tells the agent that a memory miss is not an answer: with nothing recorded, it falls back to
   `git log --grep` and the code. A thin memory must never read as "no known issue".
