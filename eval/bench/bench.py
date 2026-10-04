@@ -296,6 +296,9 @@ def write(t: str, arm: str, s: dict) -> None:
 
 def freeze(t: str, arm: str) -> None:
     arm_do(t, arm, "down")
+    # raw session transcripts are not any tool's memory, but eval answers grep them (A, G, N and K did in the 2026-10-04 run)
+    for p in (ROOT / t / "home" / arm / ".claude" / "projects").rglob("*.jsonl"):
+        p.unlink()
     snap(t, arm, "eval")
     out = ROOT / t / "results" / f"memory_{arm}.txt"
     out.write_text(arm_do(t, arm, "dump"), encoding="utf-8")

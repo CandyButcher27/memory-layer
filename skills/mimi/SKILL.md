@@ -64,8 +64,9 @@ the topic, so the symptom words come from the file itself:
 
 - Each trap in a memory file gets its own `##` heading, named the way a task would describe it:
   `## Stripe sends the same webhook event twice`, not `## Webhooks`.
-- `python memlayer.py index <project>` appends every file's headings to its index line as
-  `— contains: …`. It marks a memory file, `mimi/ISSUES.md` or `mimi/decisions.md` that holds nothing
+- `python memlayer.py index <project>` appends the headings of every memory file and of `mimi/decisions.md`
+  to its index line as `— contains: …`. `mimi/ISSUES.md` is append-only and found by its symptom text, so
+  its line gets no headings. It marks a memory file, `mimi/ISSUES.md` or `mimi/decisions.md` that holds nothing
   yet as `— empty`, so a task skips it. Run it after any memory edit, then `check`. It is idempotent.
 - The map tells the agent that a memory miss is not an answer: with nothing recorded, it falls back to
   `git log --grep` and the code. A thin memory must never read as "no known issue".
@@ -117,7 +118,9 @@ Run `python memlayer.py check <project>` and fix each line it prints:
 - over cap → trim. `mimi/STATE.md` over cap usually means finished work was never removed.
 - not in the index → add a "read when" line, or merge the file into another and delete it.
 - stale `Last verified:` → re-check each fact against reality. Fix it or delete it, then bump the date.
-- an instruction file does not import `mimi/MIMI.md` → run `init`, which adds the import back.
+- an instruction file does not import `mimi/MIMI.md` → run `init`, which adds the import back. If the file is
+  a project document that only shares the name, such as a product's own `AGENTS.md`, put
+  `<!-- memory-layer:skip -->` in it instead: `check` and `init` then leave it alone.
 
 The script cannot see these. Look for them yourself:
 

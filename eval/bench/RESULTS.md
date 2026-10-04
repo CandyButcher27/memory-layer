@@ -180,8 +180,8 @@ do not.
 **Some answers read raw session transcripts.** Claude Code keeps every session's transcript under
 `HOME/.claude/projects/`, and the eval snapshot keeps them. In 30 of 598 answers, an agent grepped those
 transcripts for the answer: no memory (A) 14 times, agentmemory 9, auto-memory 6, recall 1. mimi never did. This
-can only raise the other arms' scores, so mimi's leads are, if anything, understated. A future run should
-remove the transcripts from the eval snapshot.
+can only raise the other arms' scores, so mimi's leads are, if anything, understated. The runner now
+deletes the transcripts before the eval snapshot, so a future run is free of this.
 
 **Capture checks halted the long track three times, all false alarms.** PREREG-3 checks that each rival's store
 holds something after a track's first session. The long track's first session is read-only, and three tools

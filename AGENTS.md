@@ -1,3 +1,4 @@
+<!-- memory-layer:skip -->
 # mimi, the memory layer agent
 
 A project-memory agent for coding agents: Claude Code, OpenCode, Codex, Gemini CLI, Antigravity, or any
@@ -24,7 +25,7 @@ if none) gets one managed block: `@mimi/MIMI.md` plus a plain line for agents wi
 
 The instruction file imports `mimi/MIMI.md`, which imports `STATE.md`, so each session starts with the map and
 the current state already loaded. The index lines in `mimi/MIMI.md` say which file answers which question, and `memlayer.py index`
-appends each memory file's `##` headings to its line. That lets a task that names a symptom find the
+appends the `##` headings of each memory file and of `mimi/decisions.md` to its line. That lets a task that names a symptom find the
 right file without searching.
 
 ## Modes
@@ -39,7 +40,7 @@ right file without searching.
 
 ```bash
 python memlayer.py init  [dir]   # create mimi/ and the instruction-file import; never overwrites
-python memlayer.py index [dir]   # refresh index lines in mimi/MIMI.md from each memory file's ## headings; idempotent
+python memlayer.py index [dir]   # refresh index lines in mimi/MIMI.md from the ## headings of memory files and decisions.md; idempotent
 python memlayer.py check [dir]   # report rot, exit 1 if any
 python memlayer.py stats [dir]   # usage and token report from session logs, saved to mimi/logs/
 python memlayer.py selftest      # prints SELFTEST_OK
@@ -49,7 +50,8 @@ python memlayer.py selftest      # prints SELFTEST_OK
 - `mimi/MIMI.md` over 100 lines, or `mimi/STATE.md` over 60
 - the largest instruction file + `mimi/MIMI.md` + `mimi/STATE.md` over 16 KB together, since all three load into every
   session
-- an instruction file that no longer imports `mimi/MIMI.md`
+- an instruction file that no longer imports `mimi/MIMI.md` (a file holding `<!-- memory-layer:skip -->`, like
+  this one, is a document and is left alone)
 - a memory file over 150 lines, or in a subfolder of `mimi/memory/` (allowed, but noted)
 - a memory file missing from the index, an index line pointing to a missing file, or index lines
   gone stale since the headings changed

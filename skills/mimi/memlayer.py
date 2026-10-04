@@ -13,6 +13,7 @@ HERE = Path(__file__).resolve().parent
 TEMPLATES = HERE / "templates"
 START = "<!-- memory-layer:start -->"
 END = "<!-- memory-layer:end -->"
+SKIP = "<!-- memory-layer:skip -->"
 DIR = "mimi"
 MAP = f"{DIR}/MIMI.md"
 STATE = f"{DIR}/STATE.md"
@@ -29,7 +30,7 @@ VERIFIED = re.compile(r"Last verified:\s*(\S+)")
 COMMENT = re.compile(r"<!--.*?-->", re.S)
 FENCE = re.compile(r"^```.*?^```[^\n]*$", re.S | re.M)
 INDEX_LINE = re.compile(r"^(- .*?→ `(mimi/memory/[^`]+\.md)`)(?: — (?:contains: .*|empty))?$", re.M)
-TOP_LINE = re.compile(r"^(- .*?→ `(mimi/ISSUES\.md|mimi/decisions\.md)`.*?)(?: — empty)?$", re.M)
+TOP_LINE = re.compile(r"^(- .*?→ `(mimi/ISSUES\.md|mimi/decisions\.md)`.*?)(?: — (?:contains: .*|empty))?$", re.M)
 HEADING = re.compile(r"^#{2,3} (.+)$", re.M)
 ISSUE = re.compile(r"^#{2,3} (ISS-.*)$", re.M)
 CONFLICT = re.compile(r"^(<{7}|>{7})( |$)", re.M)
@@ -74,7 +75,8 @@ def is_empty(text: str) -> bool:
 
 
 def agent_files(root: Path) -> list[str]:
-    return [n for n in AGENT_FILES if (root / n).exists()] or ["CLAUDE.md"]
+    # a file holding SKIP is a document that happens to share the name, such as a product's own AGENTS.md
+    return [n for n in AGENT_FILES if (root / n).exists() and SKIP not in read(root / n)] or ["CLAUDE.md"]
 
 
 def autoload(root: Path) -> int:
@@ -115,16 +117,17 @@ def init(root: Path) -> list[str]:
 
 def indexed(root: Path, text: str) -> str:
     def fill(m: re.Match) -> str:
-        body = COMMENT.sub("", read(root / m[2]))
+        body = FENCE.sub("", COMMENT.sub("", read(root / m[2])))
         heads = HEADING.findall(body)
         if heads:
             return m[1] + f" — contains: {'; '.join(h.strip() for h in heads)}"
         return m[1] + (" — empty" if is_empty(body) else "")
 
-    def mark(m: re.Match) -> str:
-        return m[1] + (" — empty" if is_empty(read(root / m[2])) else "")
+    # ISSUES.md is append-only and found by grepping the symptom, so only decisions.md lists its headings
+    def top(m: re.Match) -> str:
+        return fill(m) if m[2] == DECISIONS else m[1] + (" — empty" if is_empty(read(root / m[2])) else "")
 
-    return TOP_LINE.sub(mark, INDEX_LINE.sub(fill, text))
+    return TOP_LINE.sub(top, INDEX_LINE.sub(fill, text))
 
 
 def index(root: Path) -> bool | None:
@@ -355,6 +358,11 @@ def selftest() -> None:
         assert check(root) == [f"{ISSUES}: 'ISS-2 — z' needs Symptom: and Cause:"], check(root)
         (root / ISSUES).write_text("# Issues\n", encoding="utf-8")
         assert index(root) and "(search the exact error text) — empty" in read(root / MAP)
+        (root / DECISIONS).write_text("# Decisions\n## DEC-1 — Production writes use --upsert, never --replace\n", encoding="utf-8")
+        assert index(root) and "`mimi/decisions.md` — contains: DEC-1 — Production writes use --upsert, never --replace\n" in read(root / MAP)
+        assert not index(root) and check(root) == [], check(root)
+        (root / DECISIONS).write_text("# Decisions\n", encoding="utf-8")
+        assert index(root) and "`mimi/decisions.md` — empty\n" in read(root / MAP)
         ext = root / "mimi/memory/external.md"
         ext.write_text(read(ext) + "\n## stripe sends duplicate webhooks\n", encoding="utf-8")
         assert check(root) == [f"{MAP}: index lines are stale, run index"], check(root)
@@ -372,6 +380,9 @@ def selftest() -> None:
         (root / "AGENTS.md").write_text("# Agents\n", encoding="utf-8")
         assert check(root) == [f"AGENTS.md: does not import {MAP}, so memory never loads; run init"], check(root)
         assert init(root) == [f"added the {MAP} import to AGENTS.md"] and check(root) == [], check(root)
+        doc = f"{SKIP}\n# Product\n" + "x" * 20_000 + "\n"
+        (root / "AGENTS.md").write_text(doc, encoding="utf-8")
+        assert check(root) == [] and init(root) == [] and read(root / "AGENTS.md") == doc, check(root)
         saved_env = os.environ.get("CLAUDE_CONFIG_DIR")
         os.environ["CLAUDE_CONFIG_DIR"] = str(root / "cfg")
         try:
