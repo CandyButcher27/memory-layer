@@ -61,27 +61,31 @@ How the folder, index and script work: **[docs/HOW_IT_WORKS.md](docs/HOW_IT_WORK
 
 ## Results
 
-Against Claude Code's built-in auto-memory and claude-mem, on rust-lang/cargo and simonw/sqlite-utils,
-with the pass criteria committed before the run:
+Against Claude Code's built-in auto-memory and five other memory tools, with the questions and pass criteria
+committed before the run (Sonnet 5.5, 2026-10-04):
 
-| | No memory | Built-in auto-memory | claude-mem | mimi |
-|---|---|---|---|---|
-| Recalling facts people mentioned in passing (48 answers) | 0.09 | 0.51 | 0.15 | **0.83** |
-| Wrong claims per answer on those facts | 0.77 | 0.21 | 0.56 | **0.02** |
-| Resuming unfinished work (20 answers) | 0.39 | 0.80 | 0.42 | **0.97** |
-| Cost per answer | $0.06–0.07 | $0.04 | $0.08–0.09 | **$0.03** |
+| | No memory | Built-in auto-memory | claude-mem | Best other tool | mimi |
+|---|---|---|---|---|---|
+| Facts and unfinished work from earlier sessions (10 questions, 7 tools) | — | 0.11 | 0.47 | recall 0.56 | **0.94** |
+| Resuming unfinished work, on sqlite-utils and cargo (8 questions) | 0.21 | 0.17 | 0.25 | — | **0.89** |
+| 12 sessions: facts stated, corrected, found in files, and work in progress (18 questions) | 0.21 | 0.44 | 0.40 | recall 0.61 | **0.94** |
+| The same 12 sessions, but `/mimi-close` never run | | | | | 0.43 |
+| Cost per answer | $0.05 | $0.03–0.05 | $0.06 | $0.04–0.05 | **$0.04** |
 
-On five large public repositories (git, django, cargo, node, go), recall of stated facts was 0.79 against
-0.29 for a conventional notes setup.
+An earlier round on Sonnet 5 (Stage 1) gave the same order with a stronger auto-memory: on facts mentioned in
+passing, 0.83 for mimi against 0.51 for auto-memory and 0.15 for claude-mem.
 
 Where this is thin:
-- The lead over auto-memory on resuming work rests on only 4 questions.
-- Each `/mimi-close` costs about $0.48.
+- **mimi only works if you close the session.** Without `/mimi-close`, it tied built-in auto-memory.
+- Tools that record everything automatically kept more of what the agent read in files (0.88 against 0.75).
+- On Sonnet 5.5, auto-memory rarely chose to save anything, which makes its scores here low.
+- Each `/mimi-close` costs about $0.20–0.50.
 - mimi does not beat plain `git log` at finding past incidents in repositories whose commit messages
   already explain them.
 
-Method, every number and all limitations: **[docs/EVALUATION.md](docs/EVALUATION.md)**. Stress tests:
-**[docs/STRESS_TESTS.md](docs/STRESS_TESTS.md)**.
+How the evaluation works: **[eval/README.md](eval/README.md)**. Every number, decision rule and limitation:
+**[eval/bench/RESULTS.md](eval/bench/RESULTS.md)** and **[docs/EVALUATION.md](docs/EVALUATION.md)**.
+Stress tests: **[docs/STRESS_TESTS.md](docs/STRESS_TESTS.md)**.
 
 ## Repository layout
 
@@ -94,7 +98,7 @@ skills/
 commands/           slash-command files for OpenCode and Gemini CLI
 docs/               INSTALL, HOW_IT_WORKS, EVALUATION, STRESS_TESTS
 banner/             the logo
-eval/               harness, task files, verdicts and results for every experiment
+eval/               how it is evaluated, harnesses, task files, verdicts and results
 AGENTS.md           what mimi does, written for agents
 ```
 

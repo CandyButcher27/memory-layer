@@ -179,5 +179,17 @@ pre-registered in `eval/stage1/PREREG.md`; results in `eval/stage1/RESULTS.md`):
   questions, with a lower bound of +0.02.
 - `/mimi-close` dropped two person-stated facts as "about your downstream service". Commit `3bdb281`
   makes scope never a reason to drop.
-- A re-run of that repo and 8 more continuity questions are pre-registered in
-  `eval/stage1/PREREG-2.md`. **Neither has run yet.**
+- Both follow-ups pre-registered in `eval/stage1/PREREG-2.md` ran in the bench, on Sonnet 5.5 (results in
+  `eval/bench/RESULTS.md`). The scope fix works, but a decision in `decisions.md` was missed (R7, 1.00 → 0.33).
+  On continuity mimi scored 0.89 against 0.17 for auto-memory, which rarely saved anything on that model.
+
+**The bench, against six memory tools and over 12 sessions** (`eval/bench/`, how it works in `eval/README.md`):
+
+| | No memory | Auto-memory | claude-mem | Best other tool | mimi |
+|---|---|---|---|---|---|
+| Rivals track, 10 questions | – | 0.11 | 0.47 | recall 0.56 | **0.94** |
+| 12 sessions, 18 questions | 0.21 | 0.44 | 0.40 | recall 0.61 | **0.94** |
+| 12 sessions, never closed | | | | | 0.43 |
+
+mimi's lead depends on `/mimi-close`. Tools that record automatically keep more of what the agent read in
+files.
