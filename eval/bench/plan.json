@@ -1,5 +1,5 @@
 {
- "model": "sonnet",
+ "model": "claude-sonnet-5-5",
  "build_model": "opus",
  "judges": ["sonnet"],
  "tracks": {
@@ -34,7 +34,15 @@
    "sessions": "../stage1/cargo-f2b/sessions.json",
    "eval": "../stage1/cargo-f2b/eval.json",
    "reps": {"default": 3}
+  },
+  "rivals-fix": {
+   "repo": "https://github.com/simonw/sqlite-utils",
+   "sha": "6bc1d33d583c54bd69fbdd2071117e2d38c354a1",
+   "arms": ["D"],
+   "sessions": "../stage1/sqlite-utils/sessions.json",
+   "eval": "../stage1/sqlite-utils/eval.json",
+   "reps": {"default": 3}
   }
  },
- "order": ["rivals", "f2b-sqlite", "long", "f2b-cargo"]
+ "order": ["rivals", "f2b-sqlite", "long", "f2b-cargo", "rivals-fix"]
 }

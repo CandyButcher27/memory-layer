@@ -226,9 +226,10 @@ Its own documents:
 - **mimi's lead depends on `/mimi-close`.** Never closed, it scored 0.43, a tie with auto-memory, with the most
   wrong claims of any arm.
 - **Automatic capture wins on facts the agent read in files:** claude-mem and recall 0.88, mimi 0.75.
-- **The scope fix works** (both dropped facts now 1.00), **but Run 1 fails its no-regression rule:** a decision
-  stored in `decisions.md` was missed (1.00 → 0.33), because `index` lists headings for memory files but not
-  for `decisions.md`. Open bug.
+- **The scope fix works** (both dropped facts now 1.00), **but Run 1 first failed its no-regression rule:** a
+  decision stored in `decisions.md` was missed (1.00 → 0.33), because `index` listed headings for memory files
+  but not for `decisions.md`. After the fix (`4b4ab9c`), a pre-registered re-run (`eval/bench/PREREG-4.md`)
+  scored R7 1.00 and 0.97 overall, and Run 1 passes.
 - **The task model changed.** Stage 1 ran Sonnet 5, the bench Sonnet 5.5. On Sonnet 5.5, auto-memory saved
   something in only 6 of 25 write sessions, so its low scores here say more about the model than about Stage
   1's result.
@@ -344,8 +345,9 @@ Open limitations of mimi as it ships today:
   fixes for that are applied but not yet re-measured.
 - **Continuity:** on Sonnet 5.5 the lead over auto-memory is large (+0.72 on 8 questions), but auto-memory
   saved little on that model. On Sonnet 5 the lead rested on 4 questions, with a lower bound of +0.02.
-- **Index of decisions and issues:** `index` lists headings only for `mimi/memory/` files, so a decision can
-  be missed when another file looks like the answer (bench R7, 1.00 → 0.33).
+- **Index of issues:** `index` lists headings for memory files and `decisions.md`, but not for `ISSUES.md`,
+  which is found by grepping the symptom. The `decisions.md` gap cost bench R7 (1.00 → 0.33) until it was
+  fixed; R7 then scored 1.00 in a 3-run re-run.
 - **Discovered facts:** tools that record automatically keep more of what the agent read in files.
 - **Write cost:** each `/mimi-close` costs about $0.48. mimi is the cheapest per answer, but closing every
   session is not free.
