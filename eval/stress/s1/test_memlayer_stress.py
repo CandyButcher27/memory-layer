@@ -341,4 +341,4 @@ def test_mimi_folder_is_git_ignored_and_imported(tmp_path):
     assert f"@{MAP}" in (root / "CLAUDE.md").read_text(encoding="utf-8")
     if subprocess.run(["git", "init", "-q", str(root)]).returncode == 0:
         status = subprocess.run(["git", "status", "--short", "--untracked-files=all"], cwd=root, capture_output=True, text=True).stdout
-        assert status.split() == ["??", "CLAUDE.md"], status
+        assert status.split() == ["??", "AGENTS.md", "??", "CLAUDE.md"], status

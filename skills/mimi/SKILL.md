@@ -19,7 +19,7 @@ one of each:
 `mimi/logs/` holds the reports the `mimi-logging` skill saves.
 
 **How it loads.** Each agent instruction file the project has (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`;
-a new `CLAUDE.md` if none) gets one managed block between `<!-- memory-layer:start -->` markers. The block
+a new `CLAUDE.md` and `AGENTS.md` if none) gets one managed block between `<!-- memory-layer:start -->` markers. The block
 holds `@mimi/MIMI.md`, which Claude Code and Gemini CLI expand, and a plain line telling any other agent
 to read `mimi/MIMI.md` and `mimi/STATE.md`. `MIMI.md` imports `STATE.md`. So every session starts with the
 map and the current state already loaded, and an index saying which file answers which question. That
