@@ -67,7 +67,7 @@ On Windows PowerShell, use `$D = "$HOME\.claude\skills"` and
 | Claude Code | `~/.claude/skills` | `CLAUDE.md` |
 | Codex CLI | `~/.agents/skills` | `AGENTS.md` |
 | OpenCode | `~/.config/opencode/skills` (also reads `~/.claude/skills` and `~/.agents/skills`) | `AGENTS.md`, or `CLAUDE.md` if there is none |
-| Gemini CLI | `~/.gemini/skills` or `~/.agents/skills` | `GEMINI.md` |
+| Gemini CLI | `~/.gemini/skills` or `~/.agents/skills` | `GEMINI.md`: in a project that has no instruction file, create an empty `GEMINI.md` before `/mimi-start` |
 | Antigravity | `~/.gemini/config/skills` | `GEMINI.md` or `AGENTS.md` |
 | Cursor | `~/.cursor/skills` | `AGENTS.md` |
 | GitHub Copilot | `~/.copilot/skills` | `AGENTS.md` |
