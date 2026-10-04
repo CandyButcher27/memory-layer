@@ -1,0 +1,40 @@
+{
+ "model": "sonnet",
+ "build_model": "opus",
+ "judges": ["sonnet"],
+ "tracks": {
+  "rivals": {
+   "repo": "https://github.com/simonw/sqlite-utils",
+   "sha": "6bc1d33d583c54bd69fbdd2071117e2d38c354a1",
+   "arms": ["D", "N", "M", "G", "R", "L", "K"],
+   "sessions": "../stage1/sqlite-utils/sessions.json",
+   "eval": "../stage1/sqlite-utils/eval.json",
+   "reps": {"default": 3}
+  },
+  "f2b-sqlite": {
+   "repo": "https://github.com/simonw/sqlite-utils",
+   "sha": "6bc1d33d583c54bd69fbdd2071117e2d38c354a1",
+   "arms": ["D", "N", "M", "A"],
+   "sessions": "../stage1/sqlite-utils-f2b/sessions.json",
+   "eval": "../stage1/sqlite-utils-f2b/eval.json",
+   "reps": {"default": 3}
+  },
+  "long": {
+   "repo": "https://github.com/simonw/sqlite-utils",
+   "sha": "6bc1d33d583c54bd69fbdd2071117e2d38c354a1",
+   "arms": ["D", "D0", "N", "M", "G", "R", "K", "A"],
+   "sessions": "tracks/long/sessions.json",
+   "eval": "tracks/long/eval.json",
+   "reps": {"default": 2}
+  },
+  "f2b-cargo": {
+   "repo": "https://github.com/rust-lang/cargo",
+   "sha": "694054f34bcb04025b16d0eaf075038c0e58a15d",
+   "arms": ["D", "N", "M", "A"],
+   "sessions": "../stage1/cargo-f2b/sessions.json",
+   "eval": "../stage1/cargo-f2b/eval.json",
+   "reps": {"default": 3}
+  }
+ },
+ "order": ["rivals", "f2b-sqlite", "long", "f2b-cargo"]
+}
