@@ -78,9 +78,26 @@ dropped as "about your downstream service".
 
 **Verdict: Run 1 does not pass as written.** The scope fix works, but R7 regressed. In 2 of 3 runs the agent
 answered "technically yes". The rule was stored in `decisions.md`, but the index line for `decisions.md` lists
-no headings, while memory files' lines do. The agent read a memory file that matched and stopped there. This
-is an open bug in `memlayer.py index`. The model also changed between the two runs, so part of any difference
-may be the model.
+no headings, while memory files' lines do. The agent read a memory file that matched and stopped there. The
+model also changed between the two runs, so part of any difference may be the model.
+
+### Re-run with the index fix (PREREG-4)
+
+`index` now lists `decisions.md`'s headings (commit `4b4ab9c`). [`PREREG-4.md`](PREREG-4.md) re-ran this track's
+arm D with that fix on 2026-10-04: same sessions, same 10 questions, 3 runs each, the model pinned to
+`claude-sonnet-5-5`, the same judge. Report: `results/rivals-fix/report.txt`.
+
+| Question | Rivals track D | Re-run D | Rule |
+|---|---|---|---|
+| R7 never `--replace` in production | 0.33 | 1.00 | ≥ 0.67: **met** |
+| R1 Lambda, only /tmp writable | 1.00 | 1.00 | ≥ 0.67: **met** |
+| R4 vendor CSVs use semicolons | 1.00 | 1.00 | ≥ 0.67: **met** |
+| C2 resume the investigation | 1.00 | 0.75 | no drop over 0.25: **met, at the limit** |
+| All other questions | 0.96–1.00 | 1.00 | no drop over 0.25: met |
+
+Overall 0.97 with no wrong claims, at $0.034 per answer; the run cost $4.52. **Verdict: with the fix, PREREG-2 Run 1
+passes.** C2 dropped by exactly the allowed 0.25. With 3 runs, that is one weaker answer, not a measured
+regression.
 
 ## Follow-up Run 2: resuming unfinished work (F2b)
 

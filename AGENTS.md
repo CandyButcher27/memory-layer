@@ -182,7 +182,8 @@ pre-registered in `eval/stage1/PREREG.md`; results in `eval/stage1/RESULTS.md`):
 - `/mimi-close` dropped two person-stated facts as "about your downstream service". Commit `3bdb281`
   makes scope never a reason to drop.
 - Both follow-ups pre-registered in `eval/stage1/PREREG-2.md` ran in the bench, on Sonnet 5.5 (results in
-  `eval/bench/RESULTS.md`). The scope fix works, but a decision in `decisions.md` was missed (R7, 1.00 → 0.33).
+  `eval/bench/RESULTS.md`). The scope fix works. A decision in `decisions.md` was first missed (R7, 1.00 → 0.33),
+  and scored 1.00 after the `index` fix (`eval/bench/PREREG-4.md`).
   On continuity mimi scored 0.89 against 0.17 for auto-memory, which rarely saved anything on that model.
 
 **The bench, against six memory tools and over 12 sessions** (`eval/bench/`, how it works in `eval/README.md`):
